@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+ Copyright (c) 2016 acmi
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in
+ all copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ THE SOFTWARE.
+-->
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane minHeight="0.0" minWidth="0.0" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.65"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="acmi.l2.clientmod.xdat.Controller">
+    <top>
+        <AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+            <children>
+                <MenuBar AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+                         AnchorPane.topAnchor="0.0" BorderPane.alignment="CENTER" xmlns:fx="http://javafx.com/fxml">
+                    <menus>
+                        <Menu text="%file" mnemonicParsing="false">
+                            <items>
+                                <MenuItem fx:id="open" onAction="#open" text="%file.open" accelerator="CTRL+O"
+                                          mnemonicParsing="false"/>
+                                <MenuItem fx:id="save" onAction="#save" text="%file.save" accelerator="CTRL+S"
+                                          mnemonicParsing="false"/>
+                                <MenuItem fx:id="saveAs" onAction="#saveAs" text="%file.save_as"
+                                          accelerator="CTRL+ALT+S" mnemonicParsing="false"/>
+                                <SeparatorMenuItem/>
+                                <MenuItem onAction="#exit" text="%exit" accelerator="ALT+F4" mnemonicParsing="false"/>
+                            </items>
+                        </Menu>
+                        <Menu fx:id="versionMenu" text="%version" mnemonicParsing="false"/>
+                        <Menu text="%help" mnemonicParsing="false">
+                            <items>
+                                <MenuItem onAction="#about" text="%about" accelerator="F1" mnemonicParsing="false"/>
+                            </items>
+                        </Menu>
+                    </menus>
+                </MenuBar>
+                <ProgressBar fx:id="progressBar" layoutX="600.0" prefWidth="200.0" AnchorPane.bottomAnchor="3.0"
+                             AnchorPane.rightAnchor="3.0" AnchorPane.topAnchor="3.0"/>
+            </children>
+        </AnchorPane>
+    </top>
+    <center>
+        <TabPane fx:id="tabs" minHeight="0.0" minWidth="0.0" tabClosingPolicy="UNAVAILABLE"
+                 AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+                 AnchorPane.topAnchor="0.0" BorderPane.alignment="CENTER"/>
+    </center>
+</BorderPane>

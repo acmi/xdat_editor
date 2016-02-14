@@ -1,0 +1,10 @@
+import $pckg.*
+import javafx.scene.paint.Color
+import acmi.l2.clientmod.util.ScriptMethods
+
+import static javafx.scene.paint.Color.*
+
+Object.class.mixin(ScriptMethods)
+ArrayList.class.mixin(ScriptMethods)
+
+$text
