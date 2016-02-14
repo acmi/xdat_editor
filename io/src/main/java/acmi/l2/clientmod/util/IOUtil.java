@@ -24,6 +24,7 @@ package acmi.l2.clientmod.util;
 import javafx.scene.paint.Color;
 
 import java.io.*;
+import java.util.stream.IntStream;
 
 public class IOUtil {
     public static String readString(InputStream buffer) throws IOException {
@@ -34,8 +35,12 @@ public class IOUtil {
         return StreamsHelper.readCompactInt(buffer);
     }
 
-    public static int readInt(InputStream buffer) throws IOException {
-        return Integer.reverseBytes(new DataInputStream(buffer).readInt());
+    public static int readInt(InputStream buffer, int... posibleValues) throws IOException {
+        int val = Integer.reverseBytes(new DataInputStream(buffer).readInt());
+        if (posibleValues.length != 0 &&
+                !IntStream.of(posibleValues).anyMatch(value -> value == val))
+            throw new IllegalStateException("Unexpected value: " + val);
+        return val;
     }
 
     public static Color readColor(InputStream buffer) throws IOException {
