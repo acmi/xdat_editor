@@ -1,4 +1,4 @@
 package etoa2_4
 
-class PropertyController extends BaseUI {
+class PropertyController extends DefaultProperty {
 }

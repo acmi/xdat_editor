@@ -2,7 +2,7 @@ package etoa2_2_ru
 
 import acmi.l2.clientmod.util.IOUtil
 
-class MultiEdit extends BaseUI {
+class MultiEdit extends DefaultProperty {
     int unk100
     int unk101
     int unk102

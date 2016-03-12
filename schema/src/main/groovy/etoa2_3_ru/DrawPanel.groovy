@@ -2,11 +2,11 @@ package etoa2_3_ru
 
 import acmi.l2.clientmod.util.IOUtil
 
-class DrawPanel extends BaseUI {
+class DrawPanel extends DefaultProperty {
     int unk100
 
     @Override
-    BaseUI read(InputStream input) {
+    DefaultProperty read(InputStream input) {
         super.read(input)
 
         use(IOUtil) {
@@ -17,7 +17,7 @@ class DrawPanel extends BaseUI {
     }
 
     @Override
-    BaseUI write(OutputStream output) {
+    DefaultProperty write(OutputStream output) {
         super.write(output)
 
         use(IOUtil) {

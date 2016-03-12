@@ -2,7 +2,7 @@ package god3
 
 import acmi.l2.clientmod.util.IOUtil
 
-class FishViewportWindow extends BaseUI {
+class FishViewportWindow extends DefaultProperty {
     String texBack
     String texClock
     String texFishHPBar

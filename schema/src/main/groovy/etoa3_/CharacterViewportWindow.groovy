@@ -1,62 +1,60 @@
 package etoa3_
 
-import acmi.l2.clientmod.util.IOUtil
+import acmi.l2.clientmod.util.Tex
+import acmi.l2.clientmod.util.defaultio.DefaultIO
+import groovy.transform.CompileStatic
 
-class CharacterViewportWindow extends BaseUI {
-    float unk100
-    int unk101
-    int unk102
-    int unk103
-    int unk104
-    int unk105
-    int unk106
-    int unk107
-    int unk108
-    String unk109
-    String unk1091
-    int unk110
+@DefaultIO
+@CompileStatic
+class CharacterViewportWindow extends DefaultProperty {
+    float characterScale = 1f
+    int characterOffsetX = -2
+    int characterOffsetY = -6
+    int cameraDistMax = 300
+    int cameraDistMin = 250
+    int defaultCameraPitch = -800
+    int defaultCameraYaw = 34000
+    int zoomRate = 3
+    int rotationRate = 700
+    @Tex
+    String backgroundTex
+    @Tex
+    String maskTex
+    int npcID
 
-    @Override
-    CharacterViewportWindow read(InputStream input) {
-        super.read(input)
+    @Deprecated float getUnk100() { return characterScale }
+    @Deprecated void setUnk100(float unk100) { this.characterScale = unk100 }
 
-        use(IOUtil) {
-            unk100 = input.readFloat()
-            unk101 = input.readInt()
-            unk102 = input.readInt()
-            unk103 = input.readInt()
-            unk104 = input.readInt()
-            unk105 = input.readInt()
-            unk106 = input.readInt()
-            unk107 = input.readInt()
-            unk108 = input.readInt()
-            unk109 = input.readString()
-            unk1091 = input.readString()
-            unk110 = input.readInt()
-        }
+    @Deprecated int getUnk101() { return characterOffsetX }
+    @Deprecated void setUnk101(int unk101) { this.characterOffsetX = unk101 }
 
-        this
-    }
+    @Deprecated int getUnk102() { return characterOffsetY }
+    @Deprecated void setUnk102(int unk102) { this.characterOffsetY = unk102 }
 
-    @Override
-    CharacterViewportWindow write(OutputStream output) {
-        super.write(output)
+    @Deprecated int getUnk103() { return cameraDistMax }
+    @Deprecated void setUnk103(int unk103) { this.cameraDistMax = unk103 }
 
-        use(IOUtil) {
-            output.writeFloat(unk100)
-            output.writeInt(unk101)
-            output.writeInt(unk102)
-            output.writeInt(unk103)
-            output.writeInt(unk104)
-            output.writeInt(unk105)
-            output.writeInt(unk106)
-            output.writeInt(unk107)
-            output.writeInt(unk108)
-            output.writeString(unk109)
-            output.writeString(unk1091)
-            output.writeInt(unk110)
-        }
+    @Deprecated int getUnk104() { return cameraDistMin }
+    @Deprecated void setUnk104(int unk104) { this.cameraDistMin = unk104 }
 
-        this
-    }
+    @Deprecated int getUnk105() { return defaultCameraPitch }
+    @Deprecated void setUnk105(int unk105) { this.defaultCameraPitch = unk105 }
+
+    @Deprecated int getUnk106() { return defaultCameraYaw }
+    @Deprecated void setUnk106(int unk106) { this.defaultCameraYaw = unk106 }
+
+    @Deprecated int getUnk107() { return zoomRate }
+    @Deprecated void setUnk107(int unk107) { this.zoomRate = unk107 }
+
+    @Deprecated int getUnk108() { return rotationRate }
+    @Deprecated void setUnk108(int unk108) { this.rotationRate = unk108 }
+
+    @Deprecated String getUnk109() { return backgroundTex }
+    @Deprecated void setUnk109(String unk109) { this.backgroundTex = unk109 }
+
+    @Deprecated String getUnk1091() { return maskTex }
+    @Deprecated void setUnk1091(String unk1091) { this.maskTex = unk1091 }
+
+    @Deprecated int getUnk110() { return npcID }
+    @Deprecated void setUnk110(int unk110) { this.npcID = unk110 }
 }

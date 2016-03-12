@@ -5,7 +5,7 @@ import acmi.l2.clientmod.util.IOEntity
 import acmi.l2.clientmod.util.IOUtil
 import acmi.l2.clientmod.util.Type
 
-class Tab extends BaseUI {
+class Tab extends DefaultProperty {
     @Type(TabElement.class)
     List<TabElement> tabs = []
 

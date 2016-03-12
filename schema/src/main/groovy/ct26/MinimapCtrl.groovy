@@ -1,46 +1,17 @@
 package ct26
 
-import acmi.l2.clientmod.util.IOUtil
+import acmi.l2.clientmod.util.defaultio.DefaultIO
+import groovy.transform.CompileStatic
 
-class MinimapCtrl extends BaseUI {
-    boolean showTime
-    boolean showTown
-    boolean showGrid
-    boolean showMyLocMark
-    boolean showMyLocText
-    boolean showSSQText
-
-    @Override
-    MinimapCtrl read(InputStream input) {
-        super.read(input)
-
-        use(IOUtil) {
-            showTime = input.readBoolean()
-            showTown = input.readBoolean()
-            showGrid = input.readBoolean()
-            showMyLocMark = input.readBoolean()
-            showMyLocText = input.readBoolean()
-            showSSQText = input.readBoolean()
-        }
-
-        this
-    }
-
-    @Override
-    MinimapCtrl write(OutputStream output) {
-        super.write(output)
-
-        use(IOUtil) {
-            output.writeBoolean(showTime)
-            output.writeBoolean(showTown)
-            output.writeBoolean(showGrid)
-            output.writeBoolean(showMyLocMark)
-            output.writeBoolean(showMyLocText)
-            output.writeBoolean(showSSQText)
-        }
-
-        this
-    }
+@DefaultIO
+@CompileStatic
+class MinimapCtrl extends DefaultProperty {
+    boolean showTime = true
+    boolean showTown = true
+    boolean showGrid = true
+    boolean showMyLocMark = true
+    boolean showMyLocText = true
+    boolean showSSQText = true
 
     @Deprecated boolean getUnk100() { showTime }
     @Deprecated void setUnk100(boolean unk100) { this.showTime = unk100 }

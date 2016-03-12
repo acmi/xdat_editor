@@ -1,4 +1,7 @@
 package etoa3_
 
-class PropertyController extends BaseUI {
+import groovy.transform.CompileStatic
+
+@CompileStatic
+class PropertyController extends DefaultProperty {
 }

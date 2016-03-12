@@ -1,4 +1,4 @@
 package ct0
 
-class Radar extends BaseUI {
+class Radar extends DefaultProperty {
 }

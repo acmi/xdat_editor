@@ -2,7 +2,7 @@ package ct22
 
 import acmi.l2.clientmod.util.IOUtil
 
-class ItemWindow extends BaseUI {
+class ItemWindow extends DefaultProperty {
     int col
     int row
     int maxItemNum

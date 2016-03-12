@@ -4,7 +4,7 @@ import acmi.l2.clientmod.util.IOEntity
 import acmi.l2.clientmod.util.IOUtil
 import acmi.l2.clientmod.util.Type
 
-class Window extends BaseUI implements Iterable<BaseUI> {
+class Window extends DefaultProperty implements Iterable<DefaultProperty> {
     String unk100
     String unk101
     String unk102
@@ -57,11 +57,11 @@ class Window extends BaseUI implements Iterable<BaseUI> {
     List<State> unk147 = []
     int unk149
     int unk150
-    @Type(BaseUI.class)
-    List<BaseUI> children = []
+    @Type(DefaultProperty.class)
+    List<DefaultProperty> children = []
 
     @Override
-    Iterator<BaseUI> iterator() {
+    Iterator<DefaultProperty> iterator() {
         children.iterator()
     }
 
@@ -150,7 +150,7 @@ class Window extends BaseUI implements Iterable<BaseUI> {
             unk150 = input.readInt()
             count = input.readInt()
             for (int i = 0; i < count; i++)
-                children.add(input.readObject(Window.class.package.name, getClass().classLoader) as BaseUI)
+                children.add(input.readUIEntity(Window.class.package.name, getClass().classLoader) as DefaultProperty)
         }
 
         this
@@ -215,8 +215,8 @@ class Window extends BaseUI implements Iterable<BaseUI> {
             output.writeInt(unk149)
             output.writeInt(unk150)
             output.writeInt(children.size())
-            for (BaseUI baseUI : children)
-                output.writeObject(baseUI)
+            for (DefaultProperty DefaultProperty : children)
+                output.writeUIEntity(DefaultProperty)
         }
 
         this

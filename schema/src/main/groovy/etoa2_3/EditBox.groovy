@@ -2,7 +2,7 @@ package etoa2_3
 
 import acmi.l2.clientmod.util.IOUtil
 
-class EditBox extends BaseUI {
+class EditBox extends DefaultProperty {
     Type type = Type.NORMAL
     int maxLength
     int showCursor = -1

@@ -1,4 +1,4 @@
 package etoa2_3_ru
 
-class NameCtrl extends BaseUI {
+class NameCtrl extends DefaultProperty {
 }

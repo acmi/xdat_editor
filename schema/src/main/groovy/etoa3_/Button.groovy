@@ -2,62 +2,31 @@ package etoa3_
 
 import acmi.l2.clientmod.util.Description
 import acmi.l2.clientmod.util.IOUtil
+import acmi.l2.clientmod.util.Sysstr
+import acmi.l2.clientmod.util.Tex
+import acmi.l2.clientmod.util.defaultio.DefaultIO
+import groovy.transform.CompileStatic
 
-class Button extends BaseUI {
+@DefaultIO
+@CompileStatic
+class Button extends DefaultProperty {
+    @Tex
     String normalTex = 'undefined'
+    @Tex
     String pushedTex = 'undefined'
+    @Tex
     String highlightTex = 'undefined'
-    @Description('undefined')
+    @Tex
     String dropTex = 'undefined'
+    @Sysstr
     int buttonName = -9999
     String buttonNameText
-    @Description('-1')
-    int noHighlight = -1
-    @Description('-1')
-    int defaultSoundOn = -1
+    Boolean noHighlight
+    Boolean defaultSoundOn
     @Description('-9999/5000')
     int disableTime = -9999
+    @Tex
     String disableTex = 'undefined'
-
-    @Override
-    Button read(InputStream input) {
-        super.read(input)
-
-        use(IOUtil) {
-            normalTex = input.readString()
-            pushedTex = input.readString()
-            highlightTex = input.readString()
-            dropTex = input.readString()
-            buttonName = input.readInt()
-            buttonNameText = input.readString()
-            noHighlight = input.readInt()
-            defaultSoundOn = input.readInt()
-            disableTime = input.readInt()
-            disableTex = input.readString()
-        }
-
-        this
-    }
-
-    @Override
-    Button write(OutputStream output) {
-        super.write(output)
-
-        use(IOUtil) {
-            output.writeString(normalTex)
-            output.writeString(pushedTex)
-            output.writeString(highlightTex)
-            output.writeString(dropTex)
-            output.writeInt(buttonName)
-            output.writeString(buttonNameText)
-            output.writeInt(noHighlight)
-            output.writeInt(defaultSoundOn)
-            output.writeInt(disableTime)
-            output.writeString(disableTex)
-        }
-
-        this
-    }
 
     @Deprecated String getTexture() { normalTex }
     @Deprecated void setTexture(String texture) { this.normalTex = texture }
@@ -77,11 +46,11 @@ class Button extends BaseUI {
     @Deprecated String getTextStringValue() { buttonNameText }
     @Deprecated void setTextStringValue(String textStringValue) { this.buttonNameText = textStringValue }
 
-    @Deprecated int getUnk106() { noHighlight }
-    @Deprecated void setUnk106(int unk106) { this.noHighlight = unk106 }
+    @Deprecated int getUnk106() { IOUtil.boolToInt(noHighlight) }
+    @Deprecated void setUnk106(int unk106) { this.noHighlight = IOUtil.intToBool(unk106) }
 
-    @Deprecated int getUnk107() { defaultSoundOn }
-    @Deprecated void setUnk107(int unk107) { this.defaultSoundOn = unk107 }
+    @Deprecated int getUnk107() { IOUtil.boolToInt(defaultSoundOn) }
+    @Deprecated void setUnk107(int unk107) { this.defaultSoundOn = IOUtil.intToBool(unk107) }
 
     @Deprecated int getUnk108() { disableTime }
     @Deprecated void setUnk108(int unk108) { this.disableTime = unk108 }

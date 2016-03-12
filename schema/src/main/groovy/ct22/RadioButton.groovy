@@ -2,7 +2,7 @@ package ct22
 
 import acmi.l2.clientmod.util.IOUtil
 
-class RadioButton extends BaseUI {
+class RadioButton extends DefaultProperty {
     int sysstring
     int radioGroupID
     int isChecked

@@ -4,7 +4,7 @@ import acmi.l2.clientmod.util.IOEntity
 import acmi.l2.clientmod.util.IOUtil
 import acmi.l2.clientmod.util.Type
 
-class Window extends BaseUI {
+class Window extends DefaultProperty {
     String unk100
     String unk101
     String unk102
@@ -54,8 +54,8 @@ class Window extends BaseUI {
     int unk146
     @Type(State.class)
     List<State> unk147 = []
-    @Type(BaseUI.class)
-    List<BaseUI> children = []
+    @Type(DefaultProperty.class)
+    List<DefaultProperty> children = []
 
     static class State implements IOEntity {
         String unk148
@@ -139,7 +139,7 @@ class Window extends BaseUI {
                 unk147.add(new State().read(input))
             count = input.readInt()
             for (int i = 0; i < count; i++)
-                children.add(input.readObject(Window.class.package.name, getClass().classLoader) as BaseUI)
+                children.add(input.readUIEntity(Window.class.package.name, getClass().classLoader) as DefaultProperty)
         }
 
         this
@@ -201,8 +201,8 @@ class Window extends BaseUI {
             for (State state : unk147)
                 state.write(output)
             output.writeInt(children.size())
-            for (BaseUI baseUI : children)
-                output.writeObject(baseUI)
+            for (DefaultProperty DefaultProperty : children)
+                output.writeUIEntity(DefaultProperty)
         }
 
         this

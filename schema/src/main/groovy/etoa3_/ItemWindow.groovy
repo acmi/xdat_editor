@@ -2,9 +2,15 @@ package etoa3_
 
 import acmi.l2.clientmod.util.IOEntity
 import acmi.l2.clientmod.util.IOUtil
+import acmi.l2.clientmod.util.StringValue
+import acmi.l2.clientmod.util.Tex
 import acmi.l2.clientmod.util.Type
+import acmi.l2.clientmod.util.defaultio.DefaultIO
+import groovy.transform.CompileStatic
 
-class ItemWindow extends BaseUI {
+@DefaultIO
+@CompileStatic
+class ItemWindow extends DefaultProperty {
     ItemWindowType wndType = ItemWindowType.ScrollType
     int col
     int row
@@ -17,166 +23,66 @@ class ItemWindow extends BaseUI {
     int offsetY = -9999
     int backgroundItemWidth = -9999
     int backgroundItemHeight = -9999
+    @Tex
     String backgroundItemTex = 'undefined'
     int selectedItemWidth = -9999
     int selectedItemHeight = -9999
+    @Tex
     String selectedItemTex = 'undefined'
     int unselectedItemWidth = -9999
     int unselectedItemHeight = -9999
+    @Tex
     String unselectedItemTex = 'undefined'
     int blankItemWidth = -9999
     int blankItemHeight = -9999
+    @Tex
     String blankItemTex = 'undefined'
     int blankItemDependency = 0
-    int noSelectItem = -1
-    int noItemDrag = -1
-    int buttonClick = -1
-    int useCoolTime = -1
-    int noScroll = -1
-    int showIconFrame = -1
-    int simpleTooltip = -1
+    Boolean noSelectItem
+    Boolean noItemDrag
+    Boolean buttonClick
+    Boolean useCoolTime
+    Boolean noScroll
+    Boolean showIconFrame
+    Boolean simpleTooltip
+    @Tex
     String outLineUp = 'l2ui_ch3.InventoryWnd.inventory_outline'
+    @Tex
     String outLineDown = 'l2ui_ch3.InventoryWnd.inventory_outline_down'
     int buttonTypePrevButtonPosX = -9999
     int buttonTypePrevButtonPosY = -9999
     int buttonTypeNextButtonPosX = -9999
     int buttonTypeNextButtonPosY = -9999
     @Type(ItemWindowInner.class)
-    List<ItemWindowInner> unk134 = []
+    List<ItemWindowInner> expandItem = []
 
+    @DefaultIO
     static class ItemWindowInner implements IOEntity {
-        int unk135
-        int unk136
-        int unk137
-        String unk138
-
-        @Override
-        ItemWindowInner read(InputStream input) {
-            use(IOUtil) {
-                unk135 = input.readInt()
-                unk136 = input.readInt()
-                unk137 = input.readInt()
-                unk138 = input.readString()
-            }
-            this
-        }
-
-        @Override
-        ItemWindowInner write(OutputStream output) {
-            use(IOUtil) {
-                output.writeInt(unk135)
-                output.writeInt(unk136)
-                output.writeInt(unk137)
-                output.writeString(unk138)
-            }
-            this
-        }
+        int width
+        int height
+        int num
+        @Tex
+        String texture
 
         @Override
         String toString() {
             getClass().simpleName
         }
+
+        @Deprecated int getUnk135() { width }
+        @Deprecated void setUnk135(int unk135) { this.width = unk135 }
+
+        @Deprecated int getUnk136() { height }
+        @Deprecated void setUnk136(int unk136) { this.height = unk136 }
+
+        @Deprecated int getUnk137() { num }
+        @Deprecated void setUnk137(int unk137) { this.num = unk137 }
+
+        @Deprecated String getUnk138() { texture }
+        @Deprecated void setUnk138(String unk138) { this.texture = unk138 }
     }
 
-    @Override
-    ItemWindow read(InputStream input) {
-        super.read(input)
-
-        use(IOUtil) {
-            wndType = ItemWindowType.valueOf(input.readString())
-            col = input.readInt()
-            row = input.readInt()
-            maxItemNum = input.readInt()
-            iconWidth = input.readInt()
-            iconHeight = input.readInt()
-            gapX = input.readInt()
-            gapY = input.readInt()
-            offsetX = input.readInt()
-            offsetY = input.readInt()
-            backgroundItemWidth = input.readInt()
-            backgroundItemHeight = input.readInt()
-            backgroundItemTex = input.readString()
-            selectedItemWidth = input.readInt()
-            selectedItemHeight = input.readInt()
-            selectedItemTex = input.readString()
-            unselectedItemWidth = input.readInt()
-            unselectedItemHeight = input.readInt()
-            unselectedItemTex = input.readString()
-            blankItemWidth = input.readInt()
-            blankItemHeight = input.readInt()
-            blankItemTex = input.readString()
-            blankItemDependency = input.readInt()
-            noSelectItem = input.readInt()
-            noItemDrag = input.readInt()
-            buttonClick = input.readInt()
-            useCoolTime = input.readInt()
-            noScroll = input.readInt()
-            showIconFrame = input.readInt()
-            simpleTooltip = input.readInt()
-            outLineUp = input.readString()
-            outLineDown = input.readString()
-            buttonTypePrevButtonPosX = input.readInt()
-            buttonTypePrevButtonPosY = input.readInt()
-            buttonTypeNextButtonPosX = input.readInt()
-            buttonTypeNextButtonPosY = input.readInt()
-            int count = input.readInt()
-            for (int i = 0; i < count; i++)
-                unk134.add(new ItemWindowInner().read(input))
-        }
-
-        this
-    }
-
-    @Override
-    ItemWindow write(OutputStream output) {
-        super.write(output)
-
-        use(IOUtil) {
-            output.writeString(wndType.name())
-            output.writeInt(col)
-            output.writeInt(row)
-            output.writeInt(maxItemNum)
-            output.writeInt(iconWidth)
-            output.writeInt(iconHeight)
-            output.writeInt(gapX)
-            output.writeInt(gapY)
-            output.writeInt(offsetX)
-            output.writeInt(offsetY)
-            output.writeInt(backgroundItemWidth)
-            output.writeInt(backgroundItemHeight)
-            output.writeString(backgroundItemTex)
-            output.writeInt(selectedItemWidth)
-            output.writeInt(selectedItemHeight)
-            output.writeString(selectedItemTex)
-            output.writeInt(unselectedItemWidth)
-            output.writeInt(unselectedItemHeight)
-            output.writeString(unselectedItemTex)
-            output.writeInt(blankItemWidth)
-            output.writeInt(blankItemHeight)
-            output.writeString(blankItemTex)
-            output.writeInt(blankItemDependency)
-            output.writeInt(noSelectItem)
-            output.writeInt(noItemDrag)
-            output.writeInt(buttonClick)
-            output.writeInt(useCoolTime)
-            output.writeInt(noScroll)
-            output.writeInt(showIconFrame)
-            output.writeInt(simpleTooltip)
-            output.writeString(outLineUp)
-            output.writeString(outLineDown)
-            output.writeInt(buttonTypePrevButtonPosX)
-            output.writeInt(buttonTypePrevButtonPosY)
-            output.writeInt(buttonTypeNextButtonPosX)
-            output.writeInt(buttonTypeNextButtonPosY)
-            output.writeInt(unk134.size())
-            for (ItemWindowInner itemWindowInner : unk134)
-                itemWindowInner.write(output)
-        }
-
-        this
-    }
-
-    enum ItemWindowType {
+    enum ItemWindowType implements StringValue{
         ScrollType,
         SideButtonType,
         UpDownButtonType
@@ -251,26 +157,26 @@ class ItemWindow extends BaseUI {
     @Deprecated int getUnk1211() { blankItemDependency }
     @Deprecated void setUnk1211(int unk1211) { this.blankItemDependency = unk1211 }
 
-    @Deprecated int getUnk122() { noSelectItem }
-    @Deprecated void setUnk122(int unk122) { this.noSelectItem = unk122 }
+    @Deprecated int getUnk122() { IOUtil.boolToInt(noSelectItem) }
+    @Deprecated void setUnk122(int unk122) { this.noSelectItem = IOUtil.intToBool(unk122) }
 
-    @Deprecated int getUnk123() { noItemDrag }
-    @Deprecated void setUnk123(int unk123) { this.noItemDrag = unk123 }
+    @Deprecated int getUnk123() { IOUtil.boolToInt(noItemDrag) }
+    @Deprecated void setUnk123(int unk123) { this.noItemDrag = IOUtil.intToBool(unk123) }
 
-    @Deprecated int getUnk124() { buttonClick }
-    @Deprecated void setUnk124(int unk124) { this.buttonClick = unk124 }
+    @Deprecated int getUnk124() { IOUtil.boolToInt(buttonClick) }
+    @Deprecated void setUnk124(int unk124) { this.buttonClick = IOUtil.intToBool(unk124) }
 
-    @Deprecated int getUnk125() { useCoolTime }
-    @Deprecated void setUnk125(int unk125) { this.useCoolTime = unk125 }
+    @Deprecated int getUnk125() { IOUtil.boolToInt(useCoolTime) }
+    @Deprecated void setUnk125(int unk125) { this.useCoolTime = IOUtil.intToBool(unk125) }
 
-    @Deprecated int getUnk126() { noScroll }
-    @Deprecated void setUnk126(int unk126) { this.noScroll = unk126 }
+    @Deprecated int getUnk126() { IOUtil.boolToInt(noScroll) }
+    @Deprecated void setUnk126(int unk126) { this.noScroll = IOUtil.intToBool(unk126) }
 
-    @Deprecated int getUnk127() { showIconFrame }
-    @Deprecated void setUnk127(int unk127) { this.showIconFrame = unk127 }
+    @Deprecated int getUnk127() { IOUtil.boolToInt(showIconFrame) }
+    @Deprecated void setUnk127(int unk127) { this.showIconFrame = IOUtil.intToBool(unk127) }
 
-    @Deprecated int getUnk127_() { simpleTooltip }
-    @Deprecated void setUnk127_(int unk127_) { this.simpleTooltip = unk127_ }
+    @Deprecated int getUnk127_() { IOUtil.boolToInt(simpleTooltip) }
+    @Deprecated void setUnk127_(int unk127_) { this.simpleTooltip = IOUtil.intToBool(unk127_) }
 
     @Deprecated String getUnk128() { outLineUp }
     @Deprecated void setUnk128(String unk128) { this.outLineUp = unk128 }
@@ -289,4 +195,7 @@ class ItemWindow extends BaseUI {
 
     @Deprecated int getUnk133() { buttonTypeNextButtonPosY }
     @Deprecated void setUnk133(int unk133) { this.buttonTypeNextButtonPosY = unk133 }
+
+    @Deprecated List<ItemWindowInner> getUnk134() { expandItem }
+    @Deprecated void setUnk134(List<ItemWindowInner> unk134){ this.expandItem = unk134 }
 }

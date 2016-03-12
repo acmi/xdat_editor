@@ -1,4 +1,7 @@
 package etoa3_
 
-class MultiSellNeededItem extends BaseUI {
+import groovy.transform.CompileStatic
+
+@CompileStatic
+class MultiSellNeededItem extends DefaultProperty {
 }

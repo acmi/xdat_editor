@@ -1,4 +1,4 @@
 package ct1
 
-class MultiSellNeededItem extends BaseUI {
+class MultiSellNeededItem extends DefaultProperty {
 }

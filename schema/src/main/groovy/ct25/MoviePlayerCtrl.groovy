@@ -2,7 +2,7 @@ package ct25
 
 import acmi.l2.clientmod.util.IOUtil
 
-class MoviePlayerCtrl extends BaseUI {
+class MoviePlayerCtrl extends DefaultProperty {
     String unk100
     int unk101
 

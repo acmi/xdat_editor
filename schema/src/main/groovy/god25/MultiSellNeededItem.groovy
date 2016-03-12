@@ -1,4 +1,4 @@
 package god25
 
-class MultiSellNeededItem extends BaseUI {
+class MultiSellNeededItem extends DefaultProperty {
 }

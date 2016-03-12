@@ -2,7 +2,7 @@ package etoa2_4
 
 import acmi.l2.clientmod.util.IOUtil
 
-class TextListBox extends BaseUI {
+class TextListBox extends DefaultProperty {
     int maxRow
     int showRow
     int lineGap

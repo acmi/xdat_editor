@@ -1,4 +1,7 @@
 package etoa3_
 
-class WebBrowserCtrl extends BaseUI {
+import groovy.transform.CompileStatic
+
+@CompileStatic
+class WebBrowserCtrl extends DefaultProperty {
 }

@@ -1,4 +1,4 @@
 package god3
 
-class MultiSellItemInfo extends BaseUI {
+class MultiSellItemInfo extends DefaultProperty {
 }

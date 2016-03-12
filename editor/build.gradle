@@ -2,12 +2,18 @@ apply plugin: 'java'
 
 repositories {
     mavenCentral()
+    maven { url "https://raw.githubusercontent.com/acmi/L2crypt/mvn-repo" }
 }
 
 dependencies {
     compile project(':io')
     compile group: 'org.controlsfx',      name: 'controlsfx', version: '8.40.10'
-    compile group: 'org.codehaus.groovy', name: 'groovy',     version: '2.4.5'
+    compile group: 'org.codehaus.groovy', name: 'groovy',     version: '2.4.6'
+    compile group: 'commons-io',          name: 'commons-io', version: '2.4'
+    compile group: 'org.apache.commons',  name: 'commons-csv',version: '1.2'
+    compile group: 'acmi.l2.clientmod',   name: 'l2crypt',    version: '1.2'
+    compile files('libs/l2io.jar')
+    compile files('libs/jsquish.jar')
     runtime project(':schema')
 }
 

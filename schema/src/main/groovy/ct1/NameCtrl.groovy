@@ -1,4 +1,4 @@
 package ct1
 
-class NameCtrl extends BaseUI {
+class NameCtrl extends DefaultProperty {
 }

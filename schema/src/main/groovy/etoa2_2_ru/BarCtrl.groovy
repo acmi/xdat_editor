@@ -1,52 +1,26 @@
 package etoa2_2_ru
 
-import acmi.l2.clientmod.util.IOUtil
+import acmi.l2.clientmod.util.Tex
+import acmi.l2.clientmod.util.defaultio.DefaultIO
+import groovy.transform.CompileStatic
 
-class BarCtrl extends BaseUI {
+@DefaultIO
+@CompileStatic
+class BarCtrl extends DefaultProperty {
+    @Tex
     String foreTexture = 'undefined'
+    @Tex
     String foreLeftTexture = 'undefined'
+    @Tex
     String foreRightTexture = 'undefined'
+    @Tex
     String backTexture = 'undefined'
+    @Tex
     String backLeftTexture = 'undefined'
+    @Tex
     String backRightTexture = 'undefined'
     int uSize
     int vSize
-
-    @Override
-    BarCtrl read(InputStream input) {
-        super.read(input)
-
-        use(IOUtil) {
-            foreTexture = input.readString()
-            foreLeftTexture = input.readString()
-            foreRightTexture = input.readString()
-            backTexture = input.readString()
-            backLeftTexture = input.readString()
-            backRightTexture = input.readString()
-            uSize = input.readInt()
-            vSize = input.readInt()
-        }
-
-        this
-    }
-
-    @Override
-    BarCtrl write(OutputStream output) {
-        super.write(output)
-
-        use(IOUtil) {
-            output.writeString(foreTexture)
-            output.writeString(foreLeftTexture)
-            output.writeString(foreRightTexture)
-            output.writeString(backTexture)
-            output.writeString(backLeftTexture)
-            output.writeString(backRightTexture)
-            output.writeInt(uSize)
-            output.writeInt(vSize)
-        }
-
-        this
-    }
 
     @Deprecated String getTexCenter() { foreTexture }
     @Deprecated void setTexCenter(String texCenter) { this.foreTexture = texCenter }

@@ -4,7 +4,7 @@ import acmi.l2.clientmod.util.IOEntity
 import acmi.l2.clientmod.util.IOUtil
 import acmi.l2.clientmod.util.Type
 
-class RadarMapCtrl extends BaseUI {
+class RadarMapCtrl extends DefaultProperty {
     String unk100
     float unk101
     @Type(RadarMapElement.class)

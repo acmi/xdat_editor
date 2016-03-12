@@ -3,7 +3,7 @@ package god3
 import acmi.l2.clientmod.util.Description
 import acmi.l2.clientmod.util.IOUtil
 
-class Button extends BaseUI {
+class Button extends DefaultProperty {
     String normalTex = 'undefined'
     String pushedTex = 'undefined'
     String highlightTex = 'undefined'

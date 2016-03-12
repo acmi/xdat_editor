@@ -3,7 +3,7 @@ package ct0
 import acmi.l2.clientmod.util.Description
 import acmi.l2.clientmod.util.IOUtil
 
-class Texture extends BaseUI {
+class Texture extends DefaultProperty {
     String file
     TextureCtrlType type = TextureCtrlType.Stretch
     TextureLayer layer = TextureLayer.None

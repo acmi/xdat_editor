@@ -2,7 +2,7 @@ package etoa3
 
 import acmi.l2.clientmod.util.IOUtil
 
-class ShortcutItemWindow extends BaseUI {
+class ShortcutItemWindow extends DefaultProperty {
     boolean alwaysShowOutline
     boolean useReservedShortcut
 

@@ -4,7 +4,7 @@ import acmi.l2.clientmod.util.IOEntity
 import acmi.l2.clientmod.util.IOUtil
 import acmi.l2.clientmod.util.Type
 
-class StatusBar extends BaseUI {
+class StatusBar extends DefaultProperty {
     String title
     int titleIndex
     int barWidth

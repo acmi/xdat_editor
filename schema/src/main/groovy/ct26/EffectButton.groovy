@@ -1,49 +1,46 @@
 package ct26
 
-import acmi.l2.clientmod.util.IOUtil
+import acmi.l2.clientmod.util.IntValue
+import acmi.l2.clientmod.util.Tex
+import acmi.l2.clientmod.util.defaultio.DefaultIO
+import groovy.transform.CompileStatic
 
-class EffectButton extends BaseUI {
-    int type
+@DefaultIO
+@CompileStatic
+class EffectButton extends DefaultProperty {
+    Type type = Type.NORMAL
+    @Tex
     String normalTex = 'undefined'
+    @Tex
     String pushedTex = 'undefined'
+    @Tex
     String highlightTex = 'undefined'
+    @Tex
     String effectTex1 = 'undefined'
+    @Tex
     String effectTex2 = 'undefined'
 
-    @Override
-    EffectButton read(InputStream input) {
-        super.read(input)
+    enum Type implements IntValue{
+        TUTORIAL(-1),
+        NORMAL(0),
+        QUEST(1),
+        MAIL(2);
 
-        use(IOUtil) {
-            type = input.readInt()
-            normalTex = input.readString()
-            pushedTex = input.readString()
-            highlightTex = input.readString()
-            effectTex1 = input.readString()
-            effectTex2 = input.readString()
+        final int value
+
+        Type(int value) {this.value = value}
+
+        @Override
+        int intValue() { value }
+
+        static Type valueOf(int val){
+            Optional.ofNullable(values().find { it.value == val })
+                    .orElseThrow({ new IllegalArgumentException("No ${getClass().simpleName} constant with value=$val") })
         }
-
-        this
     }
 
-    @Override
-    EffectButton write(OutputStream output) {
-        super.write(output)
-
-        use(IOUtil) {
-            output.writeInt(type)
-            output.writeString(normalTex)
-            output.writeString(pushedTex)
-            output.writeString(highlightTex)
-            output.writeString(effectTex1)
-            output.writeString(effectTex2)
-        }
-
-        this
-    }
-
-    @Deprecated int getUnk100() { type }
-    @Deprecated void setUnk100(int unk100) { this.type = unk100 }
+    @Deprecated int getUnk100() { type.intValue() }
+    @Deprecated void setUnk100(int unk100) { this.type = Type.valueOf(unk100) }
 
     @Deprecated String getTex() { normalTex }
     @Deprecated void setTex(String tex) { this.normalTex = tex }

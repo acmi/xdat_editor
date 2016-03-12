@@ -26,9 +26,13 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 public interface IOEntity extends Named {
-    IOEntity read(InputStream input) throws IOException;
+    default IOEntity read(InputStream input) throws IOException {
+        return this;
+    }
 
-    IOEntity write(OutputStream output) throws IOException;
+    default IOEntity write(OutputStream output) throws IOException {
+        return this;
+    }
 
     default String getName() {
         return toString();

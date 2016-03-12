@@ -1,34 +1,13 @@
 package ct26
 
-import acmi.l2.clientmod.util.IOUtil
+import acmi.l2.clientmod.util.defaultio.DefaultIO
+import groovy.transform.CompileStatic
 
-class StatusIconCtrl extends BaseUI {
-    boolean noClip
-    boolean noTooltip
-
-    @Override
-    StatusIconCtrl read(InputStream input) {
-        super.read(input)
-
-        use(IOUtil) {
-            noClip = input.readBoolean()
-            noTooltip = input.readBoolean()
-        }
-
-        this
-    }
-
-    @Override
-    StatusIconCtrl write(OutputStream output) {
-        super.write(output)
-
-        use(IOUtil) {
-            output.writeBoolean(noClip)
-            output.writeBoolean(noTooltip)
-        }
-
-        this
-    }
+@DefaultIO
+@CompileStatic
+class StatusIconCtrl extends DefaultProperty {
+    Boolean noClip
+    Boolean noTooltip
 
     @Deprecated boolean getUnk100() { noClip }
     @Deprecated void setUnk100(boolean unk100) { this.noClip = unk100 }

@@ -1,4 +1,4 @@
 package god3
 
-class WebBrowserWnd extends BaseUI {
+class WebBrowserWnd extends DefaultProperty {
 }

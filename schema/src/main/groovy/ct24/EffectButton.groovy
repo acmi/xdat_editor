@@ -2,7 +2,7 @@ package ct24
 
 import acmi.l2.clientmod.util.IOUtil
 
-class EffectButton extends BaseUI {
+class EffectButton extends DefaultProperty {
     int type
     String normalTex = 'undefined'
     String pushedTex = 'undefined'

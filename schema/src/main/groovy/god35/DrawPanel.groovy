@@ -2,7 +2,7 @@ package god35
 
 import acmi.l2.clientmod.util.IOUtil
 
-class DrawPanel extends BaseUI {
+class DrawPanel extends DefaultProperty {
     int unk100
 
     @Override

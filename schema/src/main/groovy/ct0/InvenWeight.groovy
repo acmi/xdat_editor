@@ -1,4 +1,4 @@
 package ct0
 
-class InvenWeight extends BaseUI {
+class InvenWeight extends DefaultProperty {
 }

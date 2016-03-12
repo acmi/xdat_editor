@@ -2,7 +2,7 @@ package etoa2
 
 import acmi.l2.clientmod.util.IOUtil
 
-class InvenWeight extends BaseUI {
+class InvenWeight extends DefaultProperty {
     String target
     int textureWidth
     int textureHeight

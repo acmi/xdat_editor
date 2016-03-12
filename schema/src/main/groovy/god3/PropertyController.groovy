@@ -1,4 +1,4 @@
 package god3
 
-class PropertyController extends BaseUI {
+class PropertyController extends DefaultProperty {
 }

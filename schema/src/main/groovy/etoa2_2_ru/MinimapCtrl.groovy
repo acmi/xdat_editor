@@ -4,7 +4,7 @@ import acmi.l2.clientmod.util.IOEntity
 import acmi.l2.clientmod.util.IOUtil
 import acmi.l2.clientmod.util.Type
 
-class MinimapCtrl extends BaseUI {
+class MinimapCtrl extends DefaultProperty {
     boolean showTime
     boolean showTown
     boolean showGrid

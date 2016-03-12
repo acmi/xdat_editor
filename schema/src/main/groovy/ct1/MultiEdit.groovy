@@ -2,7 +2,7 @@ package ct1
 
 import acmi.l2.clientmod.util.IOUtil
 
-class MultiEdit extends BaseUI {
+class MultiEdit extends DefaultProperty {
     int unk100
     int unk101
 

@@ -1,35 +1,21 @@
 package etoa3_
 
-import acmi.l2.clientmod.util.IOUtil
+import acmi.l2.clientmod.util.defaultio.DefaultIO
+import groovy.transform.CompileStatic
 
-class MultiEdit extends BaseUI {
-    int unk100
-    int unk101
-    int unk102
+@DefaultIO
+@CompileStatic
+class MultiEdit extends DefaultProperty {
+    int maxRow
+    int showRow
+    int maxLength
 
-    @Override
-    MultiEdit read(InputStream input) {
-        super.read(input)
+    @Deprecated int getUnk100() { maxRow }
+    @Deprecated void setUnk100(int unk100) { this.maxRow = unk100 }
 
-        use(IOUtil) {
-            unk100 = input.readInt()
-            unk101 = input.readInt()
-            unk102 = input.readInt()
-        }
+    @Deprecated int getUnk101() { showRow }
+    @Deprecated void setUnk101(int unk101) { this.showRow = unk101 }
 
-        this
-    }
-
-    @Override
-    MultiEdit write(OutputStream output) {
-        super.write(output)
-
-        use(IOUtil) {
-            output.writeInt(unk100)
-            output.writeInt(unk101)
-            output.writeInt(unk102)
-        }
-
-        this
-    }
+    @Deprecated int getUnk102() { maxLength }
+    @Deprecated void setUnk102(int unk102) { this.maxLength = unk102 }
 }

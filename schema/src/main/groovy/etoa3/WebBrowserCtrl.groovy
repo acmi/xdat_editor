@@ -1,4 +1,4 @@
 package etoa3
 
-class WebBrowserCtrl extends BaseUI {
+class WebBrowserCtrl extends DefaultProperty {
 }

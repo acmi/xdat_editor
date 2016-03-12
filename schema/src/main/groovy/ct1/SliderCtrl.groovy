@@ -2,7 +2,7 @@ package ct1
 
 import acmi.l2.clientmod.util.IOUtil
 
-class SliderCtrl extends BaseUI {
+class SliderCtrl extends DefaultProperty {
     int numOfTick
     int currTick
     int thumbBtnWidth

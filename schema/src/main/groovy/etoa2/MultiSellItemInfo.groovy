@@ -1,4 +1,4 @@
 package etoa2
 
-class MultiSellItemInfo extends BaseUI {
+class MultiSellItemInfo extends DefaultProperty {
 }

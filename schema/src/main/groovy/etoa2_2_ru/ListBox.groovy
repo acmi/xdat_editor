@@ -2,7 +2,7 @@ package etoa2_2_ru
 
 import acmi.l2.clientmod.util.IOUtil
 
-class ListBox extends BaseUI {
+class ListBox extends DefaultProperty {
     int maxRow
     int showRow
     int showLastLine

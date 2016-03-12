@@ -21,14 +21,15 @@
  */
 package acmi.l2.clientmod.xdat;
 
-import acmi.l2.clientmod.util.Description;
-import acmi.l2.clientmod.util.IOEntity;
-import acmi.l2.clientmod.util.SubclassManager;
-import acmi.l2.clientmod.util.Type;
+import acmi.l2.clientmod.crypt.L2Crypt;
+import acmi.l2.clientmod.util.*;
+import acmi.l2.clientmod.xdat.propertyeditor.*;
 import javafx.application.Platform;
+import javafx.beans.InvalidationListener;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
-import javafx.beans.value.ChangeListener;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -40,11 +41,15 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.controlsfx.control.PropertySheet;
 import org.controlsfx.control.textfield.TextFields;
+import org.controlsfx.property.editor.PropertyEditor;
 
 import java.io.*;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.net.URL;
 import java.util.*;
 import java.util.logging.Level;
@@ -73,10 +78,10 @@ public class Controller implements Initializable {
     @FXML
     private ProgressBar progressBar;
 
-    private File initialDirectory = new File(System.getProperty("user.dir"), "");
-    private File xdatFile;
+    private ObjectProperty<File> initialDirectory = new SimpleObjectProperty<>(this, "initialDirectory", new File(XdatEditor.getPrefs().get("initialDirectory", System.getProperty("user.dir"))));
+    private ObjectProperty<File> xdatFile = new SimpleObjectProperty<>(this, "xdatFile");
 
-    private List<ChangeListener<IOEntity>> xdatListeners = new ArrayList<>();
+    private List<InvalidationListener> xdatListeners = new ArrayList<>();
 
     public Controller(XdatEditor editor) {
         this.editor = editor;
@@ -88,12 +93,16 @@ public class Controller implements Initializable {
 
         Node scriptingTab = loadScriptTabContent();
 
+        initialDirectory.addListener((observable, oldVal, newVal) -> {
+            if (newVal != null)
+                XdatEditor.getPrefs().put("initialDirectory", newVal.getPath());
+        });
         editor.xdatClassProperty().addListener((ob, ov, nv) -> {
             log.log(Level.INFO, String.format("XDAT class selected: %s", nv.getName()));
 
             tabs.getTabs().clear();
 
-            for (Iterator<ChangeListener<IOEntity>> it = xdatListeners.iterator(); it.hasNext(); ) {
+            for (Iterator<InvalidationListener> it = xdatListeners.iterator(); it.hasNext(); ) {
                 editor.xdatObjectProperty().removeListener(it.next());
                 it.remove();
             }
@@ -119,6 +128,32 @@ public class Controller implements Initializable {
         tabs.disableProperty().bind(nullXdatObject);
         save.disableProperty().bind(nullXdatObject);
         saveAs.disableProperty().bind(nullXdatObject);
+
+        xdatFile.addListener((observable, oldValue, newValue) -> {
+            if (newValue == null)
+                return;
+
+            Collection<File> files = FileUtils.listFiles(newValue.getParentFile(), new WildcardFileFilter("SysString-*.dat"), null);
+            if (!files.isEmpty()) {
+                File file = files.iterator().next();
+                log.info("sysstring file: " + file);
+                try (InputStream is = L2Crypt.decrypt(new FileInputStream(file), file.getName())) {
+                    SysstringPropertyEditor.strings.clear();
+                    int count = IOUtil.readInt(is);
+                    for (int i = 0; i < count; i++) {
+                        SysstringPropertyEditor.strings.put(IOUtil.readInt(is), IOUtil.readString(is));
+                    }
+                } catch (Exception ignore) {
+                }
+            }
+
+            File file = new File(newValue.getParentFile(), "L2.ini");
+            try {
+                TexturePropertyEditor.environment = new Environment(file);
+                TexturePropertyEditor.environment.getPaths().forEach(s -> log.info("environment path: " + s));
+            } catch (Exception ignore) {
+            }
+        });
     }
 
     public void registerVersion(String name, String xdatClass) {
@@ -188,16 +223,16 @@ public class Controller implements Initializable {
         elements.setShowRoot(false);
         elements.setContextMenu(createContextMenu(elements));
 
-        ChangeListener<IOEntity> xdatChangeListener = (observable, oldValue, newValue) -> buildTree(newValue, listField, elements, filter.getValue());
-        xdatListeners.add(xdatChangeListener);
-        editor.xdatObjectProperty().addListener(xdatChangeListener);
+        InvalidationListener treeInvalidation = (observable) -> buildTree(editor.xdatObjectProperty().get(), listField, elements, filter.getValue());
+        editor.xdatObjectProperty().addListener(treeInvalidation);
+        xdatListeners.add(treeInvalidation);
 
-        filter.addListener(observable -> buildTree(editor.xdatObjectProperty().get(), listField, elements, filter.getValue()));
+        filter.addListener(treeInvalidation);
 
         return elements;
     }
 
-    private void buildTree(IOEntity entity, Field listField, TreeView<Object> elements, String nameFilter) {
+    private static void buildTree(IOEntity entity, Field listField, TreeView<Object> elements, String nameFilter) {
         elements.setRoot(null);
 
         if (entity == null)
@@ -217,10 +252,11 @@ public class Controller implements Initializable {
 
                 elements.setRoot(rootItem);
 
-                list.stream()
-                        .map(this::createTreeItem)
-                        .filter(treeItem -> checkTreeNode(treeItem, nameFilter))
-                        .forEach(treeItem -> rootItem.getChildren().add(treeItem));
+                rootItem.getChildren().addAll(
+                        list.stream()
+                                .map(Controller::createTreeItem)
+                                .filter(treeItem -> checkTreeNode(treeItem, nameFilter))
+                                .collect(Collectors.toList()));
             }
         } catch (IllegalAccessException e) {
             log.log(Level.WARNING, String.format("%s.%s is not accessible", listField.getDeclaringClass().getSimpleName(), listField.getName()), e);
@@ -231,7 +267,7 @@ public class Controller implements Initializable {
         }
     }
 
-    private boolean checkTreeNode(TreeItem<Object> treeItem, String nameFilter) {
+    private static boolean checkTreeNode(TreeItem<Object> treeItem, String nameFilter) {
         if (checkName(Objects.toString(treeItem.getValue()), nameFilter))
             return true;
 
@@ -242,107 +278,117 @@ public class Controller implements Initializable {
         return false;
     }
 
-    private boolean checkName(String s, String nameFilter) {
+    private static boolean checkName(String s, String nameFilter) {
         return s.toLowerCase().contains(nameFilter.toLowerCase());
     }
 
     private ContextMenu createContextMenu(TreeView<Object> elements) {
         ContextMenu contextMenu = new ContextMenu();
-        elements.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            contextMenu.getItems().clear();
-
-            if (newValue == null)
-                return;
-
-            Object value = newValue.getValue();
-            if (value instanceof ListHolder) {
-                contextMenu.getItems().add(createAddMenu("Add ..", newValue));
-            } else {
-                MenuItem add = createAddMenu("Add to parent ..", newValue.getParent());
-
-                MenuItem delete = new MenuItem("Delete");
-                delete.setOnAction(event -> {
-                    ListHolder parent = (ListHolder) newValue.getParent().getValue();
-
-                    int index = parent.list.indexOf(value);
-                    editor.getHistory().valueRemoved(treeItemToScriptString(newValue.getParent()), index);
-
-                    parent.list.remove(index);
-                    newValue.getParent().getChildren().remove(newValue);
-                });
-                contextMenu.getItems().addAll(add, delete);
-            }
-        });
+        InvalidationListener il = observable1 -> updateContextMenu(contextMenu, elements);
+        elements.rootProperty().addListener(il);
+        elements.getSelectionModel().selectedItemProperty().addListener(il);
         return contextMenu;
     }
 
-    private MenuItem createAddMenu(String name, TreeItem<Object> newValue) {
-        ListHolder listHolder = (ListHolder) newValue.getValue();
+    private void updateContextMenu(ContextMenu contextMenu, TreeView<Object> elements) {
+        contextMenu.getItems().clear();
+
+        TreeItem<Object> root = elements.getRoot();
+        TreeItem<Object> selected = elements.getSelectionModel().getSelectedItem();
+
+        if (selected == null) {
+            if (root != null)
+                contextMenu.getItems().add(createAddMenu("Add ..", elements, root));
+        } else {
+            Object value = selected.getValue();
+            if (value instanceof ListHolder) {
+                contextMenu.getItems().add(createAddMenu("Add ..", elements, selected));
+            } else if (selected.getParent() != null && selected.getParent().getValue() instanceof ListHolder) {
+                MenuItem add = createAddMenu("Add to parent ..", elements, selected.getParent());
+
+                MenuItem delete = new MenuItem("Delete");
+                delete.setOnAction(event -> {
+                    ListHolder parent = (ListHolder) selected.getParent().getValue();
+
+                    int index = parent.list.indexOf(value);
+                    editor.getHistory().valueRemoved(treeItemToScriptString(selected.getParent()), index);
+
+                    parent.list.remove(index);
+                    selected.getParent().getChildren().remove(selected);
+
+                    elements.getSelectionModel().selectPrevious();
+                    elements.getSelectionModel().selectNext();
+                });
+                contextMenu.getItems().addAll(add, delete);
+            }
+        }
+    }
+
+    private MenuItem createAddMenu(String name, TreeView<Object> elements, TreeItem<Object> selected) {
+        ListHolder listHolder = (ListHolder) selected.getValue();
 
         MenuItem add = new MenuItem(name);
         add.setOnAction(event -> {
-            Collection<Class> classes = SubclassManager.getInstance().getClassWithAllSubclasses(listHolder.type);
-            Stream<ClassHolder> st = classes.stream()
+            Stream<ClassHolder> st = SubclassManager.getInstance()
+                    .getClassWithAllSubclasses(listHolder.type)
+                    .stream()
                     .map(ClassHolder::new);
             List<ClassHolder> list = st
                     .collect(Collectors.toList());
 
-            ChoiceDialog<ClassHolder> cd = new ChoiceDialog<>(list.get(0), list);
-            cd.setTitle("Select class");
-            cd.setHeaderText(null);
-            cd.showAndWait()
-                    .ifPresent(toCreate -> {
-                        IOEntity obj = null;
-                        try {
-                            obj = toCreate.clazz.newInstance();
+            Optional<ClassHolder> choice;
 
-                            listHolder.list.add(obj);
-                            newValue.getChildren().add(createTreeItem(obj));
+            if (list.size() == 1) {
+                choice = Optional.of(list.get(0));
+            } else {
+                ChoiceDialog<ClassHolder> cd = new ChoiceDialog<>(list.get(0), list);
+                cd.setTitle("Select class");
+                cd.setHeaderText(null);
+                choice = cd.showAndWait();
+            }
+            choice.ifPresent(toCreate -> {
+                try {
+                    IOEntity obj = toCreate.clazz.newInstance();
 
-                            editor.getHistory().valueCreated(treeItemToScriptString(newValue), toCreate.clazz);
-                        } catch (ReflectiveOperationException e) {
-                            log.log(Level.WARNING, String.format("Couldn't instantiate %s", toCreate.clazz.getName()), e);
-                            Dialogs.show(Alert.AlertType.ERROR,
-                                    "ReflectiveOperationException",
-                                    null,
-                                    "Couldn't instantiate " + toCreate.clazz);
-                        }
-                    });
+                    listHolder.list.add(obj);
+                    TreeItem<Object> treeItem = createTreeItem(obj);
+                    selected.getChildren().add(treeItem);
+                    elements.getSelectionModel().select(treeItem);
+                    elements.scrollTo(elements.getSelectionModel().getSelectedIndex());
+
+                    editor.getHistory().valueCreated(treeItemToScriptString(selected), toCreate.clazz);
+                } catch (ReflectiveOperationException e) {
+                    log.log(Level.WARNING, String.format("Couldn't instantiate %s", toCreate.clazz.getName()), e);
+                    Dialogs.show(Alert.AlertType.ERROR,
+                            "ReflectiveOperationException",
+                            null,
+                            "Couldn't instantiate " + toCreate.clazz);
+                }
+            });
         });
 
         return add;
     }
 
-    private TreeItem<Object> createTreeItem(IOEntity o) {
+    private static TreeItem<Object> createTreeItem(IOEntity o) {
         TreeItem<Object> item = new TreeItem<>(o);
 
-        List<Field> listFields = new ArrayList<>();
+        List<Field> fields = new ArrayList<>();
         Class<?> clazz = o.getClass();
         while (clazz != Object.class) {
             Arrays.stream(clazz.getDeclaredFields())
-                    .filter(field -> List.class.isAssignableFrom(field.getType()))
                     .filter(field -> !field.isSynthetic())
-                    .forEach(listFields::add);
+                    .filter(field -> List.class.isAssignableFrom(field.getType()) ||
+                            IOEntity.class.isAssignableFrom(field.getType()))
+                    .forEach(fields::add);
             clazz = clazz.getSuperclass();
         }
-        listFields.forEach(field -> {
+        fields.forEach(field -> {
             field.setAccessible(true);
+
+            Optional<Object> obj = Optional.empty();
             try {
-                List<IOEntity> list = (List<IOEntity>) field.get(o);
-                if (!field.isAnnotationPresent(Type.class)) {
-                    log.log(Level.WARNING, String.format("%s.%s: @Type not defined", o.getClass().getName(), field.getName()));
-                    Dialogs.show(Alert.AlertType.ERROR,
-                            "ReflectiveOperationException",
-                            null,
-                            String.format("%s.%s: @Type not defined", o.getClass().getName(), field.getName()));
-                } else {
-                    Class<? extends IOEntity> type = field.getAnnotation(Type.class).value().asSubclass(IOEntity.class);
-                    TreeItem<Object> listItem = new TreeItem<>(new ListHolder(o, list, field.getName(), type));
-
-                    item.getChildren().add(listItem);
-
-                    list.forEach(e -> listItem.getChildren().add(createTreeItem(e)));
-                }
+                obj = Optional.ofNullable(field.get(o));
             } catch (IllegalAccessException e) {
                 log.log(Level.WARNING, String.format("%s.%s is not accessible", o.getClass(), field.getName()), e);
                 Dialogs.show(Alert.AlertType.ERROR,
@@ -350,42 +396,89 @@ public class Controller implements Initializable {
                         null,
                         String.format("%s.%s is not accessible", o.getClass(), field.getName()));
             }
+
+            obj.ifPresent(val -> {
+                if (List.class.isAssignableFrom(field.getType())) {
+                    if (!field.isAnnotationPresent(Type.class)) {
+                        log.log(Level.WARNING, String.format("%s.%s: @Type not defined", o.getClass().getName(), field.getName()));
+                        Dialogs.show(Alert.AlertType.ERROR,
+                                "ReflectiveOperationException",
+                                null,
+                                String.format("%s.%s: @Type not defined", o.getClass().getName(), field.getName()));
+                    } else {
+                        List<IOEntity> list = (List<IOEntity>) val;
+                        Class<? extends IOEntity> type = field.getAnnotation(Type.class).value().asSubclass(IOEntity.class);
+                        TreeItem<Object> listItem = new TreeItem<>(new ListHolder(o, list, field.getName(), type));
+
+                        item.getChildren().add(listItem);
+
+                        listItem.getChildren().addAll(list.stream()
+                                .map(Controller::createTreeItem)
+                                .collect(Collectors.toList()));
+                    }
+                } else if (IOEntity.class.isAssignableFrom(field.getType())) {
+                    IOEntity ioEntity = (IOEntity) val;
+
+                    item.getChildren().add(createTreeItem(ioEntity));
+                }
+            });
         });
         return item;
     }
+
+    private static Map<Class, List<ReflectionProperty>> map = new HashMap<>();
 
     private PropertySheet createPropertySheet(TreeView<Object> elements) {
         PropertySheet properties = new PropertySheet();
         properties.setSkin(new PropertySheetSkin(properties));
 
-        elements.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+        elements.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newSelection) -> {
             properties.getItems().clear();
 
-            if (newValue == null)
+            if (newSelection == null)
                 return;
 
-            Object obj = newValue.getValue();
+            Object obj = newSelection.getValue();
 
             if (obj instanceof ListHolder)
                 return;
 
-            Class<?> objClass = obj.getClass();
-            while (objClass != Object.class) {
-                for (Field field : objClass.getDeclaredFields()) {
-                    if (field.isSynthetic())
-                        continue;
+            if (!map.containsKey(obj.getClass())) {
+                Class<?> objClass = obj.getClass();
+                List<ReflectionProperty> list = new ArrayList<>();
+                while (objClass != Object.class) {
+                    for (Field field : objClass.getDeclaredFields()) {
+                        if (field.isSynthetic() ||
+                                Modifier.isStatic(field.getModifiers()) ||
+                                Modifier.isTransient(field.getModifiers()))
+                            continue;
 
-                    String description = "";
-                    if (field.isAnnotationPresent(Description.class))
-                        description = field.getAnnotation(Description.class).value();
-                    field.setAccessible(true);
-                    ReflectionProperty property = new ReflectionProperty(obj, field, objClass.getSimpleName(), description);
-                    property.addListener((observable1, oldValue1, newValue1) -> editor.getHistory().valueChanged(treeItemToScriptString(newValue), field.getName(), newValue1));
-                    properties.getItems().add(property);
+                        String description = "";
+                        if (field.isAnnotationPresent(Description.class))
+                            description = field.getAnnotation(Description.class).value();
+                        Class<? extends PropertyEditor<?>> propertyEditorClass = null;
+                        if (field.getType() == Boolean.class) {
+                            propertyEditorClass = BooleanPropertyEditor.class;
+                        } else if (field.isAnnotationPresent(Tex.class)) {
+                            propertyEditorClass = TexturePropertyEditor.class;
+                        } else if (field.isAnnotationPresent(Sysstr.class)) {
+                            propertyEditorClass = SysstringPropertyEditor.class;
+                        }
+                        field.setAccessible(true);
+                        ReflectionProperty property = new ReflectionProperty(field, objClass.getSimpleName(), description, propertyEditorClass);
+                        property.setObject(obj);
+                        list.add(property);
+                    }
+
+                    objClass = objClass.getSuperclass();
                 }
-
-                objClass = objClass.getSuperclass();
+                map.put(obj.getClass(), list);
             }
+            map.get(obj.getClass()).forEach(p -> {
+                p.setObject(obj);
+                p.addListener((observable1, oldValue1, newValue1) -> editor.getHistory().valueChanged(treeItemToScriptString(newSelection), p.getName(), newValue1));
+            });
+            properties.getItems().setAll(map.get(obj.getClass()));
         });
 
         return properties;
@@ -422,20 +515,23 @@ public class Controller implements Initializable {
                 new FileChooser.ExtensionFilter("XDAT (*.xdat)", "*.xdat"),
                 new FileChooser.ExtensionFilter("All files", "*.*"));
 
-        if (initialDirectory != null)
-            fileChooser.setInitialDirectory(initialDirectory);
+        if (initialDirectory.getValue() != null &&
+                initialDirectory.getValue().exists() &&
+                initialDirectory.getValue().isDirectory())
+            fileChooser.setInitialDirectory(initialDirectory.getValue());
 
-        xdatFile = fileChooser.showOpenDialog(editor.getStage());
-        if (xdatFile == null)
+        File selected = fileChooser.showOpenDialog(editor.getStage());
+        if (selected == null)
             return;
 
-        initialDirectory = xdatFile.getParentFile();
+        xdatFile.setValue(selected);
+        initialDirectory.setValue(selected.getParentFile());
 
         try {
             IOEntity xdat = editor.getXdatClass().getConstructor().newInstance();
 
             editor.execute(() -> {
-                try (InputStream is = new BufferedInputStream(new FileInputStream(xdatFile))) {
+                try (InputStream is = new BufferedInputStream(new FileInputStream(selected))) {
                     xdat.read(is);
 
                     Platform.runLater(() -> editor.setXdatObject(xdat));
@@ -459,11 +555,11 @@ public class Controller implements Initializable {
 
     @FXML
     private void save() {
-        if (xdatFile == null)
+        if (xdatFile.getValue() == null)
             return;
 
         editor.execute(() -> {
-            try (OutputStream os = new BufferedOutputStream(new FileOutputStream(xdatFile))) {
+            try (OutputStream os = new BufferedOutputStream(new FileOutputStream(xdatFile.getValue()))) {
                 editor.getXdatObject().write(os);
             }
             return null;
@@ -483,17 +579,19 @@ public class Controller implements Initializable {
         fileChooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("XDAT (*.xdat)", "*.xdat"),
                 new FileChooser.ExtensionFilter("All files", "*.*"));
-        fileChooser.setInitialFileName(xdatFile.getName());
+        fileChooser.setInitialFileName(xdatFile.getValue().getName());
 
-        if (initialDirectory != null)
-            fileChooser.setInitialDirectory(initialDirectory);
+        if (initialDirectory.getValue() != null &&
+                initialDirectory.getValue().exists() &&
+                initialDirectory.getValue().isDirectory())
+            fileChooser.setInitialDirectory(initialDirectory.getValue());
 
         File file = fileChooser.showSaveDialog(editor.getStage());
         if (file == null)
             return;
 
-        this.xdatFile = file;
-        initialDirectory = file.getParentFile();
+        this.xdatFile.setValue(file);
+        initialDirectory.setValue(file.getParentFile());
 
         save();
     }

@@ -1,59 +1,28 @@
 package etoa3_
 
 import acmi.l2.clientmod.util.IOUtil
+import acmi.l2.clientmod.util.IntValue
+import acmi.l2.clientmod.util.Sysstr
+import acmi.l2.clientmod.util.Tex
+import acmi.l2.clientmod.util.defaultio.DefaultIO
+import groovy.transform.CompileStatic
 import javafx.scene.paint.Color
 
-class TextBox extends BaseUI {
-    String text
+@DefaultIO
+@CompileStatic
+class TextBox extends DefaultProperty {
+    String text = 'undefined'
     TextAlign textAlign = TextAlign.Undefined
     TextVAlign textVAlign = TextVAlign.Undefined
-    int fontType
-    String backTex
-    int sysstring
-    int systemMsg
+    FontType fontType = FontType.Normal
+    @Tex
+    String backTex = 'undefined'
+    @Sysstr
+    int sysstring = -9999
+    int systemMsg = -9999
     Color textColor = new Color(0.0, 0.0, 0.0, 0.0)
-    int emoticon
-    int autosize
-
-    @Override
-    TextBox read(InputStream input) {
-        super.read(input)
-
-        use(IOUtil) {
-            text = input.readString()
-            textAlign = TextAlign.values()[input.readInt()]
-            textVAlign = TextVAlign.values()[input.readInt()]
-            fontType = input.readInt()
-            backTex = input.readString()
-            sysstring = input.readInt()
-            systemMsg = input.readInt()
-            textColor = input.readColor()
-            emoticon = input.readInt()
-            autosize = input.readInt()
-        }
-
-        this
-    }
-
-    @Override
-    TextBox write(OutputStream output) {
-        super.write(output)
-
-        use(IOUtil) {
-            output.writeString(text)
-            output.writeInt(textAlign.ordinal())
-            output.writeInt(textVAlign.ordinal())
-            output.writeInt(fontType)
-            output.writeString(backTex)
-            output.writeInt(sysstring)
-            output.writeInt(systemMsg)
-            output.writeColor(textColor)
-            output.writeInt(emoticon)
-            output.writeInt(autosize)
-        }
-
-        this
-    }
+    Boolean emoticon
+    Boolean autosize
 
     enum TextAlign {
         Undefined,
@@ -70,6 +39,25 @@ class TextBox extends BaseUI {
         Bottom,
     }
 
+    enum FontType implements IntValue{
+        Normal(-1),
+        SpecialDigitSmall(0),
+        SpecialDigitLarge(1),
+        SpecialDigitXLarge(2);
+
+        final int value
+
+        FontType(int value) {this.value = value}
+
+        @Override
+        int intValue() { value }
+
+        static FontType valueOf(int val){
+            Optional.ofNullable(values().find { it.value == val })
+                    .orElseThrow({ new IllegalArgumentException("No ${getClass().simpleName} constant with value=$val") })
+        }
+    }
+
     @Deprecated String getUnk100() { text }
     @Deprecated void setUnk100(String unk100) { this.text = unk100 }
 
@@ -79,8 +67,8 @@ class TextBox extends BaseUI {
     @Deprecated int getUnk102() { textVAlign.ordinal() }
     @Deprecated void setUnk102(int unk102) { this.textVAlign = TextVAlign.values()[unk102] }
 
-    @Deprecated int getUnk103() { fontType }
-    @Deprecated void setUnk103(int unk103) { this.fontType = unk103 }
+    @Deprecated int getUnk103() { fontType.intValue() }
+    @Deprecated void setUnk103(int unk103) { this.fontType = FontType.valueOf(unk103) }
 
     @Deprecated String getUnk104() { backTex }
     @Deprecated void setUnk104(String unk104) { this.backTex = unk104 }
@@ -94,9 +82,9 @@ class TextBox extends BaseUI {
     @Deprecated Color getUnk107() { textColor }
     @Deprecated void setUnk107(Color unk107) { this.textColor = unk107 }
 
-    @Deprecated boolean getUnk108() { emoticon > 0 }
-    @Deprecated void setUnk108(boolean unk108) { this.emoticon = unk108 ? 1 : 0 }
+    @Deprecated boolean getUnk108() { emoticon }
+    @Deprecated void setUnk108(boolean unk108) { this.emoticon = unk108 }
 
-    @Deprecated int getUnk109() { autosize }
-    @Deprecated void setUnk109(int unk109) { this.autosize = unk109 }
+    @Deprecated int getUnk109() { IOUtil.boolToInt(autosize) }
+    @Deprecated void setUnk109(int unk109) { this.autosize = IOUtil.intToBool(unk109) }
 }

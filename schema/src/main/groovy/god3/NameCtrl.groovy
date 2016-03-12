@@ -1,4 +1,4 @@
 package god3
 
-class NameCtrl extends BaseUI {
+class NameCtrl extends DefaultProperty {
 }

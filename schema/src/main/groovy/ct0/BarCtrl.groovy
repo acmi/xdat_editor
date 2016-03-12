@@ -1,9 +1,12 @@
 package ct0
 
 import acmi.l2.clientmod.util.IOUtil
+import acmi.l2.clientmod.util.Tex
 
-class BarCtrl extends BaseUI {
+class BarCtrl extends DefaultProperty {
+    @Tex
     String foreTexture = 'undefined'
+    @Tex
     String backTexture = 'undefined'
     int uSize
     int vSize

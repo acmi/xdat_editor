@@ -1,58 +1,28 @@
 package ct26
 
-import acmi.l2.clientmod.util.IOUtil
+import acmi.l2.clientmod.util.Tex
+import acmi.l2.clientmod.util.defaultio.DefaultIO
+import groovy.transform.CompileStatic
 
-class Progress extends BaseUI {
+@DefaultIO
+@CompileStatic
+class Progress extends DefaultProperty {
     String unk100
+    @Tex
     String backLeftTexture
+    @Tex
     String backTexture
+    @Tex
     String backRightTexture
+    @Tex
     String barLeftTexture
+    @Tex
     String barTexture
+    @Tex
     String barRightTexture
     int gap
     int textureSize
     ProgressBarType type = ProgressBarType.None
-
-    @Override
-    Progress read(InputStream input) {
-        super.read(input)
-
-        use(IOUtil) {
-            unk100 = input.readString()
-            backLeftTexture = input.readString()
-            backTexture = input.readString()
-            backRightTexture = input.readString()
-            barLeftTexture = input.readString()
-            barTexture = input.readString()
-            barRightTexture = input.readString()
-            gap = input.readInt()
-            textureSize = input.readInt()
-            type = ProgressBarType.values()[input.readInt()]
-        }
-
-        this
-    }
-
-    @Override
-    Progress write(OutputStream output) {
-        super.write(output)
-
-        use(IOUtil) {
-            output.writeString(unk100)
-            output.writeString(backLeftTexture)
-            output.writeString(backTexture)
-            output.writeString(backRightTexture)
-            output.writeString(barLeftTexture)
-            output.writeString(barTexture)
-            output.writeString(barRightTexture)
-            output.writeInt(gap)
-            output.writeInt(textureSize)
-            output.writeInt(type.ordinal())
-        }
-
-        this
-    }
 
     enum ProgressBarType {
         None,

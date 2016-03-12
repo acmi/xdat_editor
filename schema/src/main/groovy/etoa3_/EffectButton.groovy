@@ -1,47 +1,44 @@
 package etoa3_
 
-import acmi.l2.clientmod.util.IOUtil
+import acmi.l2.clientmod.util.IntValue
+import acmi.l2.clientmod.util.Tex
+import acmi.l2.clientmod.util.defaultio.DefaultIO
+import groovy.transform.CompileStatic
 
-class EffectButton extends BaseUI {
-    int unk100
-    String tex = 'undefined'
-    String texDown = 'undefined'
-    String texOver = 'undefined'
-    String texEffect1 = 'undefined'
-    String texEffect2 = 'undefined'
-    String unk101 = 'undefined'
+@DefaultIO
+@CompileStatic
+class EffectButton extends DefaultProperty {
+    Type type = Type.TUTORIAL
+    @Tex
+    String normalTex = 'undefined'
+    @Tex
+    String pushedTex = 'undefined'
+    @Tex
+    String highlightTex = 'undefined'
+    @Tex
+    String effectTex1 = 'undefined'
+    @Tex
+    String effectTex2 = 'undefined'
+    @Tex
+    String disableTex = 'undefined'
 
-    @Override
-    EffectButton read(InputStream input) {
-        super.read(input)
+    enum Type implements IntValue{
+        TUTORIAL(-1),
+        NORMAL(0),
+        QUEST(1),
+        MAIL(2),
+        NOTYPE(3);
 
-        use(IOUtil) {
-            unk100 = input.readInt()
-            tex = input.readString()
-            texDown = input.readString()
-            texOver = input.readString()
-            texEffect1 = input.readString()
-            texEffect2 = input.readString()
-            unk101 = input.readString()
+        final int value
+
+        Type(int value) {this.value = value}
+
+        @Override
+        int intValue() { value }
+
+        static Type valueOf(int val){
+            Optional.ofNullable(values().find { it.value == val })
+                    .orElseThrow({ new IllegalArgumentException("No ${getClass().simpleName} constant with value=$val") })
         }
-
-        this
-    }
-
-    @Override
-    EffectButton write(OutputStream output) {
-        super.write(output)
-
-        use(IOUtil) {
-            output.writeInt(unk100)
-            output.writeString(tex)
-            output.writeString(texDown)
-            output.writeString(texOver)
-            output.writeString(texEffect1)
-            output.writeString(texEffect2)
-            output.writeString(unk101)
-        }
-
-        this
     }
 }

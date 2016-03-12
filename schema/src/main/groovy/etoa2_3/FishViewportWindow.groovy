@@ -1,4 +1,4 @@
 package etoa2_3
 
-class FishViewportWindow extends BaseUI {
+class FishViewportWindow extends DefaultProperty {
 }

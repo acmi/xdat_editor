@@ -2,7 +2,7 @@ package god25
 
 import acmi.l2.clientmod.util.IOUtil
 
-class SliderCtrl extends BaseUI {
+class SliderCtrl extends DefaultProperty {
     int isVerticalType
     int numOfTick
     int currTick

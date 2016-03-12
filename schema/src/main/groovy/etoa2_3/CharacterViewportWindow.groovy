@@ -2,7 +2,7 @@ package etoa2_3
 
 import acmi.l2.clientmod.util.IOUtil
 
-class CharacterViewportWindow extends BaseUI {
+class CharacterViewportWindow extends DefaultProperty {
     float unk100
     int unk101
     int unk102

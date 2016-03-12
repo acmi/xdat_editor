@@ -28,7 +28,7 @@ import javafx.scene.control.ButtonType;
 import java.util.Optional;
 
 public class Dialogs {
-    public static void show(Alert.AlertType alertType, String title, String headerText, String contentText){
+    public static void show(Alert.AlertType alertType, String title, String headerText, String contentText) {
         Alert alert = new Alert(alertType);
         alert.setTitle(title);
         alert.setHeaderText(headerText);
@@ -36,7 +36,7 @@ public class Dialogs {
         alert.show();
     }
 
-    public static void show(Alert.AlertType alertType, String title, String headerText, Node graphic){
+    public static void show(Alert.AlertType alertType, String title, String headerText, Node graphic) {
         Alert alert = new Alert(alertType);
         alert.setTitle(title);
         alert.setHeaderText(headerText);
@@ -44,7 +44,7 @@ public class Dialogs {
         alert.show();
     }
 
-    public static Optional<ButtonType> showAndWait(Alert.AlertType alertType, String title, String headerText, String contentText){
+    public static Optional<ButtonType> showAndWait(Alert.AlertType alertType, String title, String headerText, String contentText) {
         Alert alert = new Alert(alertType);
         alert.setTitle(title);
         alert.setHeaderText(headerText);

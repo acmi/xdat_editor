@@ -2,7 +2,7 @@ package ct0
 
 import acmi.l2.clientmod.util.IOUtil
 
-class Progress extends BaseUI {
+class Progress extends DefaultProperty {
     String backTexture
     String barTexture
     int gap

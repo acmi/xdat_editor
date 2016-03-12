@@ -2,7 +2,7 @@ package etoa2_2_ru
 
 import acmi.l2.clientmod.util.IOUtil
 
-class Progress extends BaseUI {
+class Progress extends DefaultProperty {
     String unk100
     String backLeftTexture
     String backTexture

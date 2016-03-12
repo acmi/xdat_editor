@@ -7,42 +7,31 @@ import acmi.l2.clientmod.util.Type
 
 class XDAT implements IOEntity {
     @Type(Shortcut.class)
-    final List<Shortcut> shortcuts = []
+    List<Shortcut> shortcuts = []
     @Type(Window.class)
-    final List<Window> windows = []
+    List<Window> windows = []
     @Type(WndDefPos.class)
-    final List<WndDefPos> wndDefPos = []
-    @Type(Unk2.class)
-    final List<Unk2> unk2 = []
-    @Type(Font.class)
-    final List<Font> fonts = []
+    List<WndDefPos> wndDefPos = []
+    @Type(Font)
+    List<Font> fonts = []
+    @Type(Style)
+    List<Style> styles = []
     @Type(Unk3.class)
-    final List<Unk3> chatColors = []
+    List<Unk3> chatColors = []
     private ByteArrayOutputStream unk = new ByteArrayOutputStream()
 
     @Override
     XDAT read(InputStream input) throws IOException {
         use(IOUtil) {
+            shortcuts = input.readList(Shortcut)
             int count = input.readInt()
-            for (int i = 0; i < count; i++)
-                shortcuts.add(new Shortcut().read(input))
-            count = input.readInt()
             for (int i = 0; i < count; i++)
                 windows.add(new Window().read(input))
             input.readInt()
-            count = input.readInt()
-            for (int i = 0; i < count; i++)
-                wndDefPos.add(new WndDefPos().read(input))
-            count = input.readInt()
-            for (int i = 0; i < count; i++)
-                unk2.add(new Unk2().read(input))
-            count = input.readInt()
-            for (int i = 0; i < count; i++)
-                fonts.add(new Font().read(input))
-            input.readInt()
-            count = input.readInt()
-            for (int i = 0; i < count; i++)
-                chatColors.add(new Unk3().read(input))
+            wndDefPos = input.readList(WndDefPos)
+            fonts = input.readList(Font)
+            styles = input.readList(Style)
+            chatColors = input.readList(Unk3)
             int b
             while ((b = input.read()) >= 0)
                 unk.write(b)
@@ -53,26 +42,15 @@ class XDAT implements IOEntity {
     @Override
     XDAT write(OutputStream output) throws IOException {
         use(IOUtil) {
-            output.writeInt(shortcuts.size())
-            for (Shortcut shortcut : shortcuts)
-                shortcut.write(output)
+            output.writeList(shortcuts)
             output.writeInt(windows.size())
             for (Window window : windows)
-                window.write(output)
+                output.writeIOEntity(window)
             output.writeInt(1)
-            output.writeInt(wndDefPos.size())
-            for (WndDefPos unk11 : wndDefPos)
-                unk11.write(output)
-            output.writeInt(unk2.size())
-            for (Unk2 unk21 : unk2)
-                unk21.write(output)
-            output.writeInt(fonts.size())
-            for (Font font : fonts)
-                font.write(output)
-            output.writeInt(0)
-            output.writeInt(chatColors.size())
-            for (Unk3 unk31 : chatColors)
-                unk31.write(output)
+            output.writeList(wndDefPos)
+            output.writeList(fonts)
+            output.writeList(styles)
+            output.writeList(chatColors)
             unk.writeTo(output)
         }
         this

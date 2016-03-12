@@ -1,4 +1,4 @@
 package ct22
 
-class MultiSellItemInfo extends BaseUI {
+class MultiSellItemInfo extends DefaultProperty {
 }

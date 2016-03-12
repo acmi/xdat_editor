@@ -1,4 +1,7 @@
 package ct26
 
-class PropertyController extends BaseUI {
+import groovy.transform.CompileStatic
+
+@CompileStatic
+class PropertyController extends DefaultProperty {
 }

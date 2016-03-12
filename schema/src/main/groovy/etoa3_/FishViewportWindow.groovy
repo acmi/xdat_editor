@@ -1,4 +1,7 @@
 package etoa3_
 
-class FishViewportWindow extends BaseUI {
+import groovy.transform.CompileStatic
+
+@CompileStatic
+class FishViewportWindow extends DefaultProperty {
 }

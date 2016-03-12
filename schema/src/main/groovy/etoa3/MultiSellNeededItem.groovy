@@ -1,4 +1,4 @@
 package etoa3
 
-class MultiSellNeededItem extends BaseUI {
+class MultiSellNeededItem extends DefaultProperty {
 }

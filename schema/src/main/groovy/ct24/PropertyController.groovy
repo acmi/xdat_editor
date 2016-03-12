@@ -1,4 +1,4 @@
 package ct24
 
-class PropertyController extends BaseUI {
+class PropertyController extends DefaultProperty {
 }

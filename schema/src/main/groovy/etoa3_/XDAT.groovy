@@ -6,46 +6,34 @@ import acmi.l2.clientmod.util.SubclassManager
 import acmi.l2.clientmod.util.Type
 
 class XDAT implements IOEntity {
-    @Type(Shortcut.class)
-    final List<Shortcut> shortcuts = []
-    @Type(Window.class)
-    final List<Window> windows = []
-    @Type(WndDefPos.class)
-    final List<WndDefPos> wndDefPos = []
-    @Type(Unk2.class)
-    final List<Unk2> unk2 = []
-    @Type(Font.class)
-    final List<Font> fonts = []
-    @Type(Unk3.class)
-    final List<Unk3> chatColors = []
-    private ByteArrayOutputStream unk = new ByteArrayOutputStream()
+    @Type(Shortcut)
+    List<Shortcut> shortcuts = []
+    @Type(Window)
+    List<Window> windows = []
+    @Type(WndDefPos)
+    List<WndDefPos> wndDefPos = []
+    @Type(Font)
+    List<Font> fonts = []
+    @Type(Style)
+    List<Style> styles = []
+    @Type(ChatChannelDefinition)
+    List<ChatChannelDefinition> chatChannel = []
+    @Type(HeadDisplayDefinition)
+    final List<HeadDisplayDefinition> headDisplay = [null]
 
     @Override
     XDAT read(InputStream input) {
         use(IOUtil) {
+            shortcuts = input.readList(Shortcut)
             int count = input.readInt()
-            for (int i = 0; i < count; i++)
-                shortcuts.add(new Shortcut().read(input))
-            count = input.readInt()
             for (int i = 0; i < count; i++)
                 windows.add(new Window().read(input))
             input.readInt()
-            count = input.readInt()
-            for (int i = 0; i < count; i++)
-                wndDefPos.add(new WndDefPos().read(input))
-            count = input.readInt()
-            for (int i = 0; i < count; i++)
-                unk2.add(new Unk2().read(input))
-            count = input.readInt()
-            for (int i = 0; i < count; i++)
-                fonts.add(new Font().read(input))
-            input.readInt()
-            count = input.readInt()
-            for (int i = 0; i < count; i++)
-                chatColors.add(new Unk3().read(input))
-            int b
-            while ((b = input.read()) >= 0)
-                unk.write(b)
+            wndDefPos = input.readList(WndDefPos)
+            fonts = input.readList(Font)
+            styles = input.readList(Style)
+            chatChannel = input.readList(ChatChannelDefinition)
+            headDisplay[0] = input.readIOEntity(HeadDisplayDefinition.class)
         }
 
         this
@@ -54,27 +42,16 @@ class XDAT implements IOEntity {
     @Override
     XDAT write(OutputStream output) {
         use(IOUtil) {
-            output.writeInt(shortcuts.size())
-            for (Shortcut shortcut : shortcuts)
-                shortcut.write(output)
+            output.writeList(shortcuts)
             output.writeInt(windows.size())
             for (Window window : windows)
-                window.write(output)
+                output.writeIOEntity(window)
             output.writeInt(1)
-            output.writeInt(wndDefPos.size())
-            for (WndDefPos unk11 : wndDefPos)
-                unk11.write(output)
-            output.writeInt(unk2.size())
-            for (Unk2 unk21 : unk2)
-                unk21.write(output)
-            output.writeInt(fonts.size())
-            for (Font font : fonts)
-                font.write(output)
-            output.writeInt(0)
-            output.writeInt(chatColors.size())
-            for (Unk3 unk31 : chatColors)
-                unk31.write(output)
-            unk.writeTo(output)
+            output.writeList(wndDefPos)
+            output.writeList(fonts)
+            output.writeList(styles)
+            output.writeList(chatChannel)
+            output.writeIOEntity(headDisplay[0])
         }
 
         this
@@ -91,6 +68,7 @@ class XDAT implements IOEntity {
         SubclassManager.instance.registerClass(EditBox.class)
         SubclassManager.instance.registerClass(EffectButton.class)
         SubclassManager.instance.registerClass(FishViewportWindow.class)
+        SubclassManager.instance.registerClass(FlashCtrl.class)
         SubclassManager.instance.registerClass(HtmlCtrl.class)
         SubclassManager.instance.registerClass(InvenWeight.class)
         SubclassManager.instance.registerClass(ItemWindow.class)
@@ -103,6 +81,8 @@ class XDAT implements IOEntity {
         SubclassManager.instance.registerClass(NameCtrl.class)
         SubclassManager.instance.registerClass(Progress.class)
         SubclassManager.instance.registerClass(PropertyController.class)
+        SubclassManager.instance.registerClass(Radar.class)
+        SubclassManager.instance.registerClass(RadarMapCtrl.class)
         SubclassManager.instance.registerClass(RadioButton.class)
         SubclassManager.instance.registerClass(ScrollArea.class)
         SubclassManager.instance.registerClass(ShortcutItemWindow.class)

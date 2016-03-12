@@ -2,7 +2,7 @@ package ct22
 
 import acmi.l2.clientmod.util.IOUtil
 
-class TreeCtrl extends BaseUI {
+class TreeCtrl extends DefaultProperty {
     boolean saveExpandedNode
     int multiExpand
 

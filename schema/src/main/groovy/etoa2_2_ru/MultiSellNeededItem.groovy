@@ -1,4 +1,4 @@
 package etoa2_2_ru
 
-class MultiSellNeededItem extends BaseUI {
+class MultiSellNeededItem extends DefaultProperty {
 }

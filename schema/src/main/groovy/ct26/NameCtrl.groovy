@@ -1,4 +1,7 @@
 package ct26
 
-class NameCtrl extends BaseUI {
+import groovy.transform.CompileStatic
+
+@CompileStatic
+class NameCtrl extends DefaultProperty {
 }

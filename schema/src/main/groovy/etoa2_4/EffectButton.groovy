@@ -2,7 +2,7 @@ package etoa2_4
 
 import acmi.l2.clientmod.util.IOUtil
 
-class EffectButton extends BaseUI {
+class EffectButton extends DefaultProperty {
     int unk100
     String tex = 'undefined'
     String texDown = 'undefined'

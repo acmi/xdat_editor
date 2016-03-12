@@ -2,7 +2,7 @@ package ct24
 
 import acmi.l2.clientmod.util.IOUtil
 
-class StatusIconCtrl extends BaseUI {
+class StatusIconCtrl extends DefaultProperty {
     boolean noClip
     boolean noTooltip
 

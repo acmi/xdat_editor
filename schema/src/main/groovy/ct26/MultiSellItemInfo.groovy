@@ -1,4 +1,7 @@
 package ct26
 
-class MultiSellItemInfo extends BaseUI {
+import groovy.transform.CompileStatic
+
+@CompileStatic
+class MultiSellItemInfo extends DefaultProperty {
 }

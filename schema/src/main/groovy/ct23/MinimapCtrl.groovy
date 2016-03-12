@@ -2,7 +2,7 @@ package ct23
 
 import acmi.l2.clientmod.util.IOUtil
 
-class MinimapCtrl extends BaseUI {
+class MinimapCtrl extends DefaultProperty {
     boolean showTime
     boolean showTown
     boolean showGrid

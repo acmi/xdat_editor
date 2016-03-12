@@ -2,87 +2,58 @@ package ct26
 
 import acmi.l2.clientmod.util.IOEntity
 import acmi.l2.clientmod.util.IOUtil
+import acmi.l2.clientmod.util.Sysstr
 import acmi.l2.clientmod.util.Type
+import acmi.l2.clientmod.util.defaultio.DefaultIO
+import groovy.transform.CompileStatic
 
-class ListCtrl extends BaseUI {
-    int unk100
-    int unk101
-    int unk102
-    int unk103
-    int unk104
+@DefaultIO
+@CompileStatic
+class ListCtrl extends DefaultProperty {
+    int maxRow
+    int showRow
+    Boolean useVScroll
+    int contentsHeight
+    int headerHeight
     @Type(ListElement.class)
     List<ListElement> values = []
 
+    @DefaultIO
     static class ListElement implements IOEntity {
+        @Sysstr
         int textStringId
         int width
-        boolean unk108
-        boolean unk109
-        boolean unk110
-
-        @Override
-        ListElement read(InputStream input) {
-            use(IOUtil) {
-                textStringId = input.readInt()
-                width = input.readInt()
-                unk108 = input.readBoolean()
-                unk109 = input.readBoolean()
-                unk110 = input.readBoolean()
-            }
-            this
-        }
-
-        @Override
-        ListElement write(OutputStream output) {
-            use(IOUtil) {
-                output.writeInt(textStringId)
-                output.writeInt(width)
-                output.writeBoolean(unk108)
-                output.writeBoolean(unk109)
-                output.writeBoolean(unk110)
-            }
-            this
-        }
+        boolean bAscend
+        boolean bClickEnable
+        boolean bNumber
 
         @Override
         String toString() {
             return getClass().simpleName
         }
+
+        @Deprecated boolean getUnk108() { bAscend }
+        @Deprecated void setUnk108(boolean unk108) { this.bAscend = unk108 }
+
+        @Deprecated boolean getUnk109() { bClickEnable }
+        @Deprecated void setUnk109(boolean unk109) { this.bClickEnable = unk109  }
+
+        @Deprecated boolean getUnk110() { bNumber }
+        @Deprecated void setUnk110(boolean unk110) { this.bNumber = unk110 }
     }
 
-    @Override
-    ListCtrl read(InputStream input) {
-        super.read(input)
+    @Deprecated int getUnk100() { maxRow }
+    @Deprecated void setUnk100(int unk100) { this.maxRow = unk100 }
 
-        use(IOUtil) {
-            unk100 = input.readInt()
-            unk101 = input.readInt()
-            unk102 = input.readInt()
-            unk103 = input.readInt()
-            unk104 = input.readInt()
-            int count = input.readInt()
-            for (int i = 0; i < count; i++)
-                values.add(new ListElement().read(input))
-        }
+    @Deprecated int getUnk101() { showRow }
+    @Deprecated void setUnk101(int unk101) { this.showRow = unk101 }
 
-        this
-    }
+    @Deprecated int getUnk102() { IOUtil.boolToInt(useVScroll) }
+    @Deprecated void setUnk102(int unk102) { this.useVScroll = IOUtil.intToBool(unk102) }
 
-    @Override
-    ListCtrl write(OutputStream output) {
-        super.write(output)
+    @Deprecated int getUnk103() { contentsHeight }
+    @Deprecated void setUnk103(int unk103) { this.contentsHeight = unk103 }
 
-        use(IOUtil) {
-            output.writeInt(unk100)
-            output.writeInt(unk101)
-            output.writeInt(unk102)
-            output.writeInt(unk103)
-            output.writeInt(unk104)
-            output.writeInt(values.size())
-            for (ListElement listElement : values)
-                listElement.write(output)
-        }
-
-        this
-    }
+    @Deprecated int getUnk104() { headerHeight }
+    @Deprecated void setUnk104(int unk104) { this.headerHeight = unk104 }
 }

@@ -3,13 +3,13 @@ package etoa3
 import acmi.l2.clientmod.util.IOUtil
 import acmi.l2.clientmod.util.Type
 
-class ScrollArea extends BaseUI implements Iterable<BaseUI> {
+class ScrollArea extends DefaultProperty implements Iterable<DefaultProperty> {
     int areaHeight
-    @Type(BaseUI.class)
-    List<BaseUI> children = []
+    @Type(DefaultProperty.class)
+    List<DefaultProperty> children = []
 
     @Override
-    Iterator<BaseUI> iterator() {
+    Iterator<DefaultProperty> iterator() {
         children.iterator()
     }
 
@@ -21,7 +21,7 @@ class ScrollArea extends BaseUI implements Iterable<BaseUI> {
             areaHeight = input.readInt()
             int count = input.readInt()
             for (int i = 0; i < count; i++)
-                children.add(input.readObject(ScrollArea.class.package.name, getClass().classLoader) as BaseUI)
+                children.add(input.readUIEntity(ScrollArea.class.package.name, getClass().classLoader) as DefaultProperty)
         }
 
         this
@@ -34,8 +34,8 @@ class ScrollArea extends BaseUI implements Iterable<BaseUI> {
         use(IOUtil) {
             output.writeInt(areaHeight)
             output.writeInt(children.size())
-            for (BaseUI baseUI : children)
-                output.writeObject(baseUI)
+            for (DefaultProperty DefaultProperty : children)
+                output.writeUIEntity(DefaultProperty)
         }
 
         this

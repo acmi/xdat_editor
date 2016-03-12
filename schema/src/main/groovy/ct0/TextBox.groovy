@@ -3,7 +3,7 @@ package ct0
 import acmi.l2.clientmod.util.IOUtil
 import javafx.scene.paint.Color
 
-class TextBox extends BaseUI {
+class TextBox extends DefaultProperty {
     String text
     TextAlign textAlign = TextAlign.Undefined
     int offsetY

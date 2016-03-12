@@ -2,7 +2,7 @@ package ct23
 
 import acmi.l2.clientmod.util.IOUtil
 
-class StatusBar extends BaseUI {
+class StatusBar extends DefaultProperty {
     String title
     int barWidth
     int barHeight

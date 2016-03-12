@@ -1,4 +1,4 @@
 package etoa2_2_ru
 
-class MultiSellItemInfo extends BaseUI {
+class MultiSellItemInfo extends DefaultProperty {
 }

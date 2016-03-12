@@ -4,7 +4,7 @@ import acmi.l2.clientmod.util.IOEntity
 import acmi.l2.clientmod.util.IOUtil
 import acmi.l2.clientmod.util.Type
 
-class ListCtrl extends BaseUI {
+class ListCtrl extends DefaultProperty {
     int unk100
     int unk101
     int unk102

@@ -1,4 +1,4 @@
 package etoa2_3_ru
 
-class WebBrowserWnd extends BaseUI {
+class WebBrowserWnd extends DefaultProperty {
 }

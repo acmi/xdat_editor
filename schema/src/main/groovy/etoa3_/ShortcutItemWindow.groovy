@@ -1,34 +1,13 @@
 package etoa3_
 
-import acmi.l2.clientmod.util.IOUtil
+import acmi.l2.clientmod.util.defaultio.DefaultIO
+import groovy.transform.CompileStatic
 
-class ShortcutItemWindow extends BaseUI {
-    boolean alwaysShowOutline
-    boolean useReservedShortcut
-
-    @Override
-    ShortcutItemWindow read(InputStream input) {
-        super.read(input)
-
-        use(IOUtil) {
-            alwaysShowOutline = input.readBoolean()
-            useReservedShortcut = input.readBoolean()
-        }
-
-        this
-    }
-
-    @Override
-    ShortcutItemWindow write(OutputStream output) {
-        super.write(output)
-
-        use(IOUtil) {
-            output.writeBoolean(alwaysShowOutline)
-            output.writeBoolean(useReservedShortcut)
-        }
-
-        this
-    }
+@DefaultIO
+@CompileStatic
+class ShortcutItemWindow extends DefaultProperty {
+    Boolean alwaysShowOutline = false
+    Boolean useReservedShortcut = false
 
     @Deprecated boolean getUnk100() { alwaysShowOutline }
     @Deprecated void setUnk100(boolean unk100) { this.alwaysShowOutline = unk100 }

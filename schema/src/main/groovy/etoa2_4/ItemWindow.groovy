@@ -4,7 +4,7 @@ import acmi.l2.clientmod.util.IOEntity
 import acmi.l2.clientmod.util.IOUtil
 import acmi.l2.clientmod.util.Type
 
-class ItemWindow extends BaseUI {
+class ItemWindow extends DefaultProperty {
     String unk100
     int cols
     int rows
