@@ -2,7 +2,6 @@ package etoa2_4
 
 import acmi.l2.clientmod.util.IOEntity
 import acmi.l2.clientmod.util.IOUtil
-import acmi.l2.clientmod.util.StringValue
 import acmi.l2.clientmod.util.Type
 import acmi.l2.clientmod.util.defaultio.DefaultIO
 import javafx.scene.paint.Color
@@ -17,7 +16,7 @@ class Font implements IOEntity {
     static class FontData implements IOEntity {
         String name
         String file
-        LocationType location = LocationType.undefined
+        String location = 'windows'
         int size
         int index
         boolean indexOn = false
@@ -37,7 +36,7 @@ class Font implements IOEntity {
             use(IOUtil) {
                 name = input.readString()
                 file = input.readString()
-                location = input.readEnum(LocationType)
+                location = input.readString()
                 size = input.readInt()
                 index = input.readInt()
                 indexOn = input.readInt()
@@ -66,7 +65,7 @@ class Font implements IOEntity {
             use(IOUtil) {
                 output.writeString(name)
                 output.writeString(file)
-                output.writeEnum(location)
+                output.writeString(location)
                 output.writeInt(size)
                 output.writeInt(index)
                 output.writeBoolean(indexOn)
@@ -93,17 +92,6 @@ class Font implements IOEntity {
         @Override
         String toString() {
             return name
-        }
-
-        enum LocationType implements StringValue {
-            undefined("system"),
-            windows("windows")
-
-            final String value
-
-            LocationType(String value) { this.value = value }
-
-            public String value() { return value }
         }
     }
 

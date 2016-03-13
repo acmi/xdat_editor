@@ -65,14 +65,14 @@ public class IOUtil {
 
     public static Boolean intToBool(int val) {
         switch (val) {
-            case -1:
-                return null;
             case 0:
                 return false;
             case 1:
                 return true;
+            case -1:
             default:
-                throw new IllegalStateException(val + " is not valid boolean value");
+                return null;
+//                throw new IllegalStateException(val + " is not valid boolean value");
         }
     }
 

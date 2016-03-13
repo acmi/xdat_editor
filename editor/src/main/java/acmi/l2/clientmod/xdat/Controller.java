@@ -43,6 +43,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
+import org.apache.commons.io.input.CountingInputStream;
 import org.controlsfx.control.PropertySheet;
 import org.controlsfx.control.textfield.TextFields;
 import org.controlsfx.property.editor.PropertyEditor;
@@ -531,19 +532,20 @@ public class Controller implements Initializable {
             IOEntity xdat = editor.getXdatClass().getConstructor().newInstance();
 
             editor.execute(() -> {
-                try (InputStream is = new BufferedInputStream(new FileInputStream(selected))) {
+                CountingInputStream cis = new CountingInputStream(new BufferedInputStream(new FileInputStream(selected)));
+                try (InputStream is = cis) {
                     xdat.read(is);
 
                     Platform.runLater(() -> editor.setXdatObject(xdat));
+                } catch (Exception e) {
+                    log.log(Level.WARNING, String.format("Read error before offset 0x%x", cis.getCount()), e);
+                    throw e;
                 }
                 return null;
-            }, e -> {
-                log.log(Level.WARNING, "Read error", e);
-                Platform.runLater(() -> Dialogs.show(Alert.AlertType.ERROR,
-                        "Read error",
-                        null,
-                        "Try to choose another version"));
-            });
+            }, e -> Platform.runLater(() -> Dialogs.show(Alert.AlertType.ERROR,
+                    "Read error",
+                    null,
+                    "Try to choose another version")));
         } catch (ReflectiveOperationException e) {
             log.log(Level.WARNING, "XDAT class should have empty public constructor", e);
             Dialogs.show(Alert.AlertType.ERROR,
