@@ -41,7 +41,7 @@ public class SysstringPropertyEditor extends AbstractPropertyEditor<Integer, Tex
         super(property, createTextField());
 
         Tooltip tooltip = new Tooltip();
-        tooltip.textProperty().bind(Bindings.createStringBinding(() -> strings.containsKey(getValue()) ? strings.get(getValue()) : "", value));
+        tooltip.textProperty().bind(Bindings.createStringBinding(() -> strings.containsKey(getValue()) ? strings.get(getValue()) : "", getObservableValue()));
         getEditor().setTooltip(tooltip);
     }
 

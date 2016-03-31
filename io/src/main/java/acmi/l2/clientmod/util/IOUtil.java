@@ -21,6 +21,7 @@
  */
 package acmi.l2.clientmod.util;
 
+import javafx.collections.FXCollections;
 import javafx.scene.paint.Color;
 
 import java.io.*;
@@ -69,7 +70,6 @@ public class IOUtil {
                 return false;
             case 1:
                 return true;
-            case -1:
             default:
                 return null;
 //                throw new IllegalStateException(val + " is not valid boolean value");
@@ -144,7 +144,7 @@ public class IOUtil {
             }
             list.add(obj);
         }
-        return list;
+        return FXCollections.observableList(list);
     }
 
     public static <T extends IOEntity> List<T> readList(InputStream buffer, Class<T> type) throws IOException {

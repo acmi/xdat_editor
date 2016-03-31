@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package acmi.l2.clientmod.xdat.propertyeditor.texture;
+package acmi.l2.clientmod.l2resources.texture;
 
 import acmi.l2.clientmod.io.UnrealPackage;
 
@@ -44,9 +44,7 @@ public class MipMapInfo {
     public String name;
     public int exportIndex;
 
-    public Img.Format format = Img.Format.P8;
-    public int width;
-    public int height;
+    public TextureProperties properties;
     public Palette palette;
     public int[] offsets;
     public int[] sizes;
@@ -80,12 +78,10 @@ public class MipMapInfo {
             return null;
 
         final MipMapInfo info = new MipMapInfo();
+        info.properties = properties;
         info.name = ee.toString();
         info.exportIndex = ee.getIndex();
         readUnk(buffer, up.getVersion(), up.getLicensee());
-        info.format = properties.getFormat();
-        info.width = properties.getWidth();
-        info.height = properties.getHeight();
         info.offsets = new int[getCompactInt(buffer)];
         info.sizes = new int[info.offsets.length];
 

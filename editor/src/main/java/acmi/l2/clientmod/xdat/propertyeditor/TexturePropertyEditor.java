@@ -21,8 +21,9 @@
  */
 package acmi.l2.clientmod.xdat.propertyeditor;
 
-import acmi.l2.clientmod.xdat.propertyeditor.texture.Img;
-import acmi.l2.clientmod.xdat.propertyeditor.texture.MipMapInfo;
+import acmi.l2.clientmod.l2resources.Environment;
+import acmi.l2.clientmod.l2resources.texture.Img;
+import acmi.l2.clientmod.l2resources.texture.MipMapInfo;
 import javafx.beans.binding.Bindings;
 import javafx.beans.value.ObservableValue;
 import javafx.embed.swing.SwingFXUtils;
@@ -54,7 +55,7 @@ public class TexturePropertyEditor extends AbstractPropertyEditor<String, TextFi
                             .ifPresent(info -> {
                                 try {
                                     byte[] raw = texture.getObjectRawDataExternally();
-                                    switch (info.format) {
+                                    switch (info.properties.getFormat()) {
                                         case DXT1:
                                         case DXT3:
                                         case DXT5:

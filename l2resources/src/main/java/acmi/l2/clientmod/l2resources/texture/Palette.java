@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package acmi.l2.clientmod.xdat.propertyeditor.texture;
+package acmi.l2.clientmod.l2resources.texture;
 
 import acmi.l2.clientmod.io.DataInput;
 import acmi.l2.clientmod.io.DataInputStream;

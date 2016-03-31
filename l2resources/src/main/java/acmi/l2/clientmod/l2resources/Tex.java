@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package acmi.l2.clientmod.util;
+package acmi.l2.clientmod.l2resources;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -27,6 +27,6 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.FIELD)
-public @interface Sysstr {
+@Target({ElementType.FIELD, ElementType.METHOD})
+public @interface Tex {
 }

@@ -22,25 +22,30 @@
 package acmi.l2.clientmod.xdat;
 
 import acmi.l2.clientmod.crypt.L2Crypt;
+import acmi.l2.clientmod.l2resources.*;
 import acmi.l2.clientmod.util.*;
 import acmi.l2.clientmod.xdat.propertyeditor.*;
 import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.apache.commons.io.input.CountingInputStream;
@@ -48,9 +53,13 @@ import org.controlsfx.control.PropertySheet;
 import org.controlsfx.control.textfield.TextFields;
 import org.controlsfx.property.editor.PropertyEditor;
 
+import java.beans.BeanInfo;
+import java.beans.IntrospectionException;
+import java.beans.Introspector;
+import java.beans.PropertyDescriptor;
 import java.io.*;
+import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import java.net.URL;
 import java.util.*;
 import java.util.logging.Level;
@@ -81,11 +90,26 @@ public class Controller implements Initializable {
 
     private ObjectProperty<File> initialDirectory = new SimpleObjectProperty<>(this, "initialDirectory", new File(XdatEditor.getPrefs().get("initialDirectory", System.getProperty("user.dir"))));
     private ObjectProperty<File> xdatFile = new SimpleObjectProperty<>(this, "xdatFile");
+    private ObjectProperty<Environment> environment = new SimpleObjectProperty<>(this, "environment");
+    private ObjectProperty<L2Resources> l2resources = new SimpleObjectProperty<>(this, "l2resources");
 
     private List<InvalidationListener> xdatListeners = new ArrayList<>();
 
     public Controller(XdatEditor editor) {
         this.editor = editor;
+
+        environment.bind(Bindings.createObjectBinding(() -> {
+            if (xdatFile.getValue() == null)
+                return null;
+
+            return new Environment(new File(xdatFile.getValue().getParentFile(), "L2.ini"));
+        }, xdatFile));
+        l2resources.bind(Bindings.createObjectBinding(() -> {
+            if (environment.getValue() == null)
+                return null;
+
+            return new L2Resources(environment.get());
+        }, environment));
     }
 
     @Override
@@ -322,6 +346,20 @@ public class Controller implements Initializable {
                 });
                 contextMenu.getItems().addAll(add, delete);
             }
+            if (value instanceof ComponentFactory) {
+                MenuItem view = new MenuItem("View");
+                view.setOnAction(event -> {
+                    if (value instanceof L2Context)
+                        ((L2Context) value).setResources(l2resources.getValue());
+                    Stage stage = new Stage();
+                    stage.setTitle(value.toString());
+                    Scene scene = new Scene(((ComponentFactory) value).getComponent());
+                    scene.getStylesheets().add(getClass().getResource("l2.css").toExternalForm());
+                    stage.setScene(scene);
+                    stage.show();
+                });
+                contextMenu.getItems().add(view);
+            }
         }
     }
 
@@ -427,13 +465,13 @@ public class Controller implements Initializable {
         return item;
     }
 
-    private static Map<Class, List<ReflectionProperty>> map = new HashMap<>();
+    private static Map<Class, List<PropertySheetItem>> map = new HashMap<>();
 
     private PropertySheet createPropertySheet(TreeView<Object> elements) {
         PropertySheet properties = new PropertySheet();
         properties.setSkin(new PropertySheetSkin(properties));
 
-        elements.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newSelection) -> {
+        elements.getSelectionModel().selectedItemProperty().addListener((selected, oldValue, newSelection) -> {
             properties.getItems().clear();
 
             if (newSelection == null)
@@ -445,44 +483,72 @@ public class Controller implements Initializable {
                 return;
 
             if (!map.containsKey(obj.getClass())) {
-                Class<?> objClass = obj.getClass();
-                List<ReflectionProperty> list = new ArrayList<>();
-                while (objClass != Object.class) {
-                    for (Field field : objClass.getDeclaredFields()) {
-                        if (field.isSynthetic() ||
-                                Modifier.isStatic(field.getModifiers()) ||
-                                Modifier.isTransient(field.getModifiers()))
-                            continue;
-
-                        String description = "";
-                        if (field.isAnnotationPresent(Description.class))
-                            description = field.getAnnotation(Description.class).value();
-                        Class<? extends PropertyEditor<?>> propertyEditorClass = null;
-                        if (field.getType() == Boolean.class) {
-                            propertyEditorClass = BooleanPropertyEditor.class;
-                        } else if (field.isAnnotationPresent(Tex.class)) {
-                            propertyEditorClass = TexturePropertyEditor.class;
-                        } else if (field.isAnnotationPresent(Sysstr.class)) {
-                            propertyEditorClass = SysstringPropertyEditor.class;
-                        }
-                        field.setAccessible(true);
-                        ReflectionProperty property = new ReflectionProperty(field, objClass.getSimpleName(), description, propertyEditorClass);
-                        property.setObject(obj);
-                        list.add(property);
-                    }
-
-                    objClass = objClass.getSuperclass();
-                }
-                map.put(obj.getClass(), list);
+                map.put(obj.getClass(), loadProperties(obj));
             }
-            map.get(obj.getClass()).forEach(p -> {
-                p.setObject(obj);
-                p.addListener((observable1, oldValue1, newValue1) -> editor.getHistory().valueChanged(treeItemToScriptString(newSelection), p.getName(), newValue1));
+            List<PropertySheetItem> props = map.get(obj.getClass());
+            props.forEach(property -> {
+                property.setObject(obj);
+                ChangeListener<Object> addToHistory = (observable1, oldValue1, newValue) -> editor.getHistory().valueChanged(treeItemToScriptString(newSelection), property.getName(), newValue);
+                property.addListener(addToHistory);
+
+                selected.addListener(new InvalidationListener() {
+                    @Override
+                    public void invalidated(Observable observable) {
+                        property.removeListener(addToHistory);
+                        observable.removeListener(this);
+                    }
+                });
             });
-            properties.getItems().setAll(map.get(obj.getClass()));
+            properties.getItems().setAll(props);
         });
 
         return properties;
+    }
+
+    private static List<PropertySheetItem> loadProperties(Object obj) {
+        Class<?> objClass = obj.getClass();
+        List<PropertySheetItem> list = new ArrayList<>();
+        while (objClass != Object.class) {
+            try {
+                List<String> names = Arrays.stream(objClass.getDeclaredFields())
+                        .map(field -> field.getName().replace("Prop", ""))
+                        .collect(Collectors.toList());
+                BeanInfo beanInfo = Introspector.getBeanInfo(objClass, objClass.getSuperclass());
+                PropertyDescriptor[] propertyDescriptors = beanInfo.getPropertyDescriptors();
+                Arrays.sort(propertyDescriptors, (pd1, pd2) -> Integer.compare(names.indexOf(pd1.getName()), names.indexOf(pd2.getName())));
+                for (PropertyDescriptor descriptor : propertyDescriptors) {
+                    if ("metaClass".equals(descriptor.getName()))
+                        continue;
+
+                    if (Collection.class.isAssignableFrom(descriptor.getPropertyType()))
+                        continue;
+
+                    AnnotatedElement getter = descriptor.getReadMethod();
+                    if (getter.isAnnotationPresent(Deprecated.class) ||
+                            getter.isAnnotationPresent(Hide.class))
+                        continue;
+
+                    String description = "";
+                    if (getter.isAnnotationPresent(Description.class))
+                        description = getter.getAnnotation(Description.class).value();
+                    Class<? extends PropertyEditor<?>> propertyEditorClass = null;
+                    if (descriptor.getPropertyType() == Boolean.class ||
+                            descriptor.getPropertyType() == Boolean.TYPE) {
+                        propertyEditorClass = BooleanPropertyEditor.class;
+                    } else if (getter.isAnnotationPresent(Tex.class)) {
+                        propertyEditorClass = TexturePropertyEditor.class;
+                    } else if (getter.isAnnotationPresent(Sysstr.class)) {
+                        propertyEditorClass = SysstringPropertyEditor.class;
+                    }
+                    BeanProperty property = new BeanProperty(descriptor, objClass.getSimpleName(), description, propertyEditorClass);
+                    list.add(property);
+                }
+            } catch (IntrospectionException e) {
+                e.printStackTrace();
+            }
+            objClass = objClass.getSuperclass();
+        }
+        return list;
     }
 
     private String treeItemToScriptString(TreeItem item) {

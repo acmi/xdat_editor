@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package acmi.l2.clientmod.xdat.propertyeditor;
+package acmi.l2.clientmod.l2resources;
 
 import acmi.l2.clientmod.crypt.CryptoException;
 import acmi.l2.clientmod.crypt.L2Crypt;
@@ -38,8 +38,8 @@ import java.util.stream.Stream;
 public class Environment {
     private static final Pattern PATHS_PATTERN = Pattern.compile("\\s*Paths=(.*)");
 
-    private File startDir;
-    private List<String> paths;
+    private final File startDir;
+    private final List<String> paths;
 
     private Map<File, UnrealPackage> pckgCache = new HashMap<>();
 

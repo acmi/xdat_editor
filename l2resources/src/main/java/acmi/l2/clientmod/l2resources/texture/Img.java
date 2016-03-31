@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package acmi.l2.clientmod.xdat.propertyeditor.texture;
+package acmi.l2.clientmod.l2resources.texture;
 
 import gr.zdimensions.jsquish.Squish;
 
@@ -97,12 +97,12 @@ public abstract class Img {
 
         public static DDS createFromData(byte[] data, MipMapInfo info) throws IOException {
             DDS dds = new DDS();
-            dds.setFormat(info.format);
+            dds.setFormat(info.properties.getFormat());
             dds.setMipMaps(new BufferedImage[info.offsets.length]);
             dds.setData(new byte[info.offsets.length][]);
             for (int i = 0; i < info.offsets.length; i++) {
-                int width = Math.max(info.width / (1 << i), 1);
-                int height = Math.max(info.height / (1 << i), 1);
+                int width = Math.max(info.properties.getWidth() / (1 << i), 1);
+                int height = Math.max(info.properties.getHeight() / (1 << i), 1);
 
                 byte[] compressed = Arrays.copyOfRange(data, info.offsets[i], info.offsets[i] + info.sizes[i]);
                 dds.getData()[i] = compressed;
@@ -135,14 +135,14 @@ public abstract class Img {
 
             byte[] imageData = new byte[info.sizes[0]];
 
-            for (int i = 0; i < data.length - info.width * 2; i += info.width * 2)
-                System.arraycopy(data, info.offsets[0] + i, imageData, imageData.length - i - info.width * 2, info.width * 2);
+            for (int i = 0; i < data.length - info.properties.getWidth() * 2; i += info.properties.getWidth() * 2)
+                System.arraycopy(data, info.offsets[0] + i, imageData, imageData.length - i - info.properties.getWidth() * 2, info.properties.getWidth() * 2);
 
             ByteBuffer buffer = ByteBuffer.wrap(imageData).order(ByteOrder.LITTLE_ENDIAN);
 
-            BufferedImage image = new BufferedImage(info.width, info.height, BufferedImage.TYPE_USHORT_GRAY);
-            for (int y = info.height - 1; y >= 0; y--)
-                for (int x = 0; x < info.width; x++) {
+            BufferedImage image = new BufferedImage(info.properties.getWidth(), info.properties.getHeight(), BufferedImage.TYPE_USHORT_GRAY);
+            for (int y = info.properties.getHeight() - 1; y >= 0; y--)
+                for (int x = 0; x < info.properties.getWidth(); x++) {
                     int b = (buffer.getShort() & 0xffff) >> 8;
                     image.setRGB(x, y, b | (b << 8) | (b << 16));
                 }
@@ -167,10 +167,10 @@ public abstract class Img {
 
             byte[] imageData = new byte[info.sizes[0]];
 
-            for (int i = 0; i < info.sizes[0]; i += info.width)
-                System.arraycopy(data, info.offsets[0] + i, imageData, imageData.length - i - info.width, info.width);
+            for (int i = 0; i < info.sizes[0]; i += info.properties.getWidth())
+                System.arraycopy(data, info.offsets[0] + i, imageData, imageData.length - i - info.properties.getWidth(), info.properties.getWidth());
 
-            BufferedImage image = p8.fromData(imageData, info.width, info.height, true);
+            BufferedImage image = p8.fromData(imageData, info.properties.getWidth(), info.properties.getHeight(), true);
 
             p8.setMipMaps(new BufferedImage[]{image});
             p8.setData(new byte[][]{imageData});
@@ -212,8 +212,8 @@ public abstract class Img {
             BufferedImage[] mipMaps = new BufferedImage[info.offsets.length];
             byte[][] ds = new byte[info.offsets.length][];
             for (int i = 0; i < info.offsets.length; i++) {
-                int width = Math.max(info.width / (1 << i), 1);
-                int height = Math.max(info.height / (1 << i), 1);
+                int width = Math.max(info.properties.getWidth() / (1 << i), 1);
+                int height = Math.max(info.properties.getHeight() / (1 << i), 1);
 
                 ds[i] = Arrays.copyOfRange(data, info.offsets[i], info.offsets[i] + info.sizes[i]);
                 ByteBuffer imageBuffer = ByteBuffer.wrap(ds[i]);

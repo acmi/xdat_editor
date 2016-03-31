@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package acmi.l2.clientmod.xdat.propertyeditor.texture;
+package acmi.l2.clientmod.l2resources.texture;
 
 import acmi.l2.clientmod.io.UnrealPackage;
 
@@ -32,6 +32,8 @@ public class TextureProperties {
     private Img.Format format = Img.Format.values()[0];
     private int width, height;
     private int palette;
+
+    private Split9 split9 = new Split9();
 
     public Img.Format getFormat() {
         return format;
@@ -47,6 +49,10 @@ public class TextureProperties {
 
     public int getPalette() {
         return palette;
+    }
+
+    public Split9 getSplit9() {
+        return split9;
     }
 
     public TextureProperties read(UnrealPackage l2UnrealPackage, ByteBuffer buffer) {
@@ -81,6 +87,28 @@ public class TextureProperties {
                     break;
                 case "Palette":
                     palette = getCompactInt(objBuffer);
+                    break;
+                case "bSplit9Texture":
+                    split9.setSplit9Texture(array);
+                    break;
+                case "Split9X1":
+                    split9.setSplit9X1(objBuffer.getInt());
+                    break;
+                case "Split9X2":
+                    split9.setSplit9X2(objBuffer.getInt());
+                    ;
+                    break;
+                case "Split9X3":
+                    split9.setSplit9X3(objBuffer.getInt());
+                    break;
+                case "Split9Y1":
+                    split9.setSplit9Y1(objBuffer.getInt());
+                    break;
+                case "Split9Y2":
+                    split9.setSplit9Y2(objBuffer.getInt());
+                    break;
+                case "Split9Y3":
+                    split9.setSplit9Y3(objBuffer.getInt());
                     break;
             }
         }
