@@ -1,6 +1,6 @@
 package ct26
 
-import acmi.l2.clientmod.util.Sysstr
+import acmi.l2.clientmod.l2resources.Sysstr
 import acmi.l2.clientmod.util.UIEntity
 import acmi.l2.clientmod.util.IOUtil
 import javafx.scene.paint.Color

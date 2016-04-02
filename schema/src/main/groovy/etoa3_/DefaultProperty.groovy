@@ -1,7 +1,7 @@
 package etoa3_
 
 import acmi.l2.clientmod.util.IOUtil
-import acmi.l2.clientmod.util.Sysstr
+import acmi.l2.clientmod.l2resources.Sysstr
 import acmi.l2.clientmod.util.UIEntity
 import javafx.scene.paint.Color
 

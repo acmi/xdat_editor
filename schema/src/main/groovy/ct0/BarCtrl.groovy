@@ -1,7 +1,7 @@
 package ct0
 
 import acmi.l2.clientmod.util.IOUtil
-import acmi.l2.clientmod.util.Tex
+import acmi.l2.clientmod.l2resources.Tex
 
 class BarCtrl extends DefaultProperty {
     @Tex

@@ -2,7 +2,7 @@ package ct26
 
 import acmi.l2.clientmod.util.IOEntity
 import acmi.l2.clientmod.util.IOUtil
-import acmi.l2.clientmod.util.Sysstr
+import acmi.l2.clientmod.l2resources.Sysstr
 import acmi.l2.clientmod.util.Type
 import acmi.l2.clientmod.util.defaultio.DefaultIO
 import groovy.transform.CompileStatic

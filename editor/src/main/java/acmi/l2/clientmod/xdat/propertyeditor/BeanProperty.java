@@ -84,7 +84,6 @@ public class BeanProperty extends PropertySheetItem {
                 observable = (ObservableValue) val;
             }
         } catch (ReflectiveOperationException | SecurityException | IllegalArgumentException ignore) {
-            ignore.printStackTrace();
         }
         return Optional.ofNullable(observable);
     }

@@ -1,7 +1,7 @@
 package etoa3_
 
 import acmi.l2.clientmod.util.IntValue
-import acmi.l2.clientmod.util.Tex
+import acmi.l2.clientmod.l2resources.Tex
 import acmi.l2.clientmod.util.defaultio.DefaultIO
 import groovy.transform.CompileStatic
 

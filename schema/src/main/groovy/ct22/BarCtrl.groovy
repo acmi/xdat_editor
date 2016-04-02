@@ -1,6 +1,6 @@
 package ct22
 
-import acmi.l2.clientmod.util.Tex
+import acmi.l2.clientmod.l2resources.Tex
 import acmi.l2.clientmod.util.defaultio.DefaultIO
 import groovy.transform.CompileStatic
 

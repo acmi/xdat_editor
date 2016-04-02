@@ -41,6 +41,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URISyntaxException;
 import java.nio.file.Paths;
+import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Executor;
@@ -55,7 +56,7 @@ import java.util.prefs.Preferences;
 public class XdatEditor extends Application {
     private static final Logger log = Logger.getLogger(XdatEditor.class.getName());
 
-    private ResourceBundle interfaceResources = ResourceBundle.getBundle("acmi.l2.clientmod.xdat.interface");
+    private ResourceBundle interfaceResources = ResourceBundle.getBundle("acmi.l2.clientmod.xdat.interface", Locale.getDefault(), getClass().getClassLoader());
 
     private Stage stage;
 
@@ -120,7 +121,8 @@ public class XdatEditor extends Application {
     public void start(Stage primaryStage) throws Exception {
         this.stage = primaryStage;
 
-        FXMLLoader loader = new FXMLLoader(XdatEditor.class.getResource("main.fxml"), interfaceResources);
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("main.fxml"), interfaceResources);
+        loader.setClassLoader(getClass().getClassLoader());
         loader.setControllerFactory(param -> new Controller(XdatEditor.this));
         Parent root = loader.load();
         controller = loader.getController();
@@ -153,7 +155,7 @@ public class XdatEditor extends Application {
 
     private void loadSchema() {
         String versionsFilePath = "/versions.csv";
-        try (CSVParser parser = new CSVParser(new InputStreamReader(XdatEditor.class.getResourceAsStream(versionsFilePath)), CSVFormat.DEFAULT)) {
+        try (CSVParser parser = new CSVParser(new InputStreamReader(getClass().getResourceAsStream(versionsFilePath)), CSVFormat.DEFAULT)) {
             for (CSVRecord record : parser.getRecords()) {
                 String name = record.get(0);
                 String className = record.get(1);
@@ -193,9 +195,5 @@ public class XdatEditor extends Application {
 
     public static Preferences getPrefs() {
         return Preferences.userRoot().node("xdat_editor");
-    }
-
-    public static void main(String[] args) {
-        launch(args);
     }
 }

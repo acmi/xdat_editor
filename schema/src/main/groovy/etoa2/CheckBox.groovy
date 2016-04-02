@@ -1,8 +1,8 @@
 package etoa2
 
 import acmi.l2.clientmod.util.IOUtil
-import acmi.l2.clientmod.util.Sysstr
-import acmi.l2.clientmod.util.Tex
+import acmi.l2.clientmod.l2resources.Sysstr
+import acmi.l2.clientmod.l2resources.Tex
 import acmi.l2.clientmod.util.defaultio.DefaultIO
 import groovy.transform.CompileStatic
 

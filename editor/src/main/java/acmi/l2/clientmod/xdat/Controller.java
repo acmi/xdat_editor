@@ -25,6 +25,7 @@ import acmi.l2.clientmod.crypt.L2Crypt;
 import acmi.l2.clientmod.l2resources.*;
 import acmi.l2.clientmod.util.*;
 import acmi.l2.clientmod.xdat.propertyeditor.*;
+import groovy.lang.GroovyClassLoader;
 import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
@@ -186,17 +187,20 @@ public class Controller implements Initializable {
         menuItem.selectedProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue) {
                 editor.execute(() -> {
-                    Class<? extends IOEntity> clazz = Class.forName(xdatClass).asSubclass(IOEntity.class);
+                    Class<? extends IOEntity> clazz = Class.forName(xdatClass, true, new GroovyClassLoader(getClass().getClassLoader())).asSubclass(IOEntity.class);
                     Platform.runLater(() -> editor.setXdatClass(clazz));
                     return null;
                 }, e -> {
                     log.log(Level.WARNING, String.format("%s: XDAT class load error", name), e);
-                    version.getToggles().remove(menuItem);
-                    versionMenu.getItems().remove(menuItem);
-                    Platform.runLater(() -> Dialogs.show(Alert.AlertType.ERROR,
-                            name + ": XDAT class load error",
-                            null,
-                            e.getClass().getSimpleName() + ": " + e.getMessage()));
+                    Platform.runLater(() -> {
+                        version.getToggles().remove(menuItem);
+                        versionMenu.getItems().remove(menuItem);
+
+                        Dialogs.show(Alert.AlertType.ERROR,
+                                name + ": XDAT class load error",
+                                null,
+                                e.getClass().getSimpleName() + ": " + e.getMessage());
+                    });
                 });
             }
         });
@@ -207,6 +211,7 @@ public class Controller implements Initializable {
     private Node loadScriptTabContent() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("scripting/main.fxml"));
+            loader.setClassLoader(getClass().getClassLoader());
             loader.setControllerFactory(param -> new acmi.l2.clientmod.xdat.scripting.Controller(editor));
             return wrap(loader.load());
         } catch (IOException e) {
