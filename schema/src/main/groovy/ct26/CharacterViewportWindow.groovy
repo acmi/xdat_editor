@@ -20,6 +20,7 @@ class CharacterViewportWindow extends DefaultProperty {
     String backgroundTex
     int npcID
 
+    // @formatter:off
     @Deprecated float getUnk100() { return characterScale }
     @Deprecated void setUnk100(float unk100) { this.characterScale = unk100 }
 
@@ -52,4 +53,5 @@ class CharacterViewportWindow extends DefaultProperty {
 
     @Deprecated int getUnk110() { return npcID }
     @Deprecated void setUnk110(int unk110) { this.npcID = unk110 }
+    // @formatter:on
 }

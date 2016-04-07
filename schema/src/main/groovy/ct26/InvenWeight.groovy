@@ -39,6 +39,7 @@ class InvenWeight extends DefaultProperty {
     int fontWidth
     int fontHeight
 
+    // @formatter:off
     @Deprecated String getUnk100() { target }
     @Deprecated void setUnk100(String unk100) { this.target = unk100 }
 
@@ -92,4 +93,5 @@ class InvenWeight extends DefaultProperty {
 
     @Deprecated int getUnk117() { fontHeight }
     @Deprecated void setUnk117(int unk117) { this.fontHeight = unk117 }
+    // @formatter:on
 }

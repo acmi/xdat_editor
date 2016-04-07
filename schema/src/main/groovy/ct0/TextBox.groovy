@@ -1,59 +1,26 @@
 package ct0
 
-import acmi.l2.clientmod.util.IOUtil
+import acmi.l2.clientmod.l2resources.Sysstr
+import acmi.l2.clientmod.l2resources.Tex
+import acmi.l2.clientmod.util.defaultio.DefaultIO
+import groovy.transform.CompileStatic
 import javafx.scene.paint.Color
 
+@DefaultIO
+@CompileStatic
 class TextBox extends DefaultProperty {
     String text
     TextAlign textAlign = TextAlign.Undefined
     int offsetY
+    @Tex
     String backTex
     int fontType
+    @Sysstr
     int sysstring
     int systemMsg
     Color textColor = new Color(0.0, 0.0, 0.0, 0.0)
     int emoticon
     int autosize
-
-    @Override
-    TextBox read(InputStream input) {
-        super.read(input)
-
-        use(IOUtil) {
-            text = input.readString()
-            textAlign = TextAlign.values()[input.readInt()]
-            offsetY = input.readInt()
-            backTex = input.readString()
-            fontType = input.readInt()
-            sysstring = input.readInt()
-            systemMsg = input.readInt()
-            textColor = input.readColor()
-            emoticon = input.readInt()
-            autosize = input.readInt()
-        }
-
-        this
-    }
-
-    @Override
-    TextBox write(OutputStream output) {
-        super.write(output)
-
-        use(IOUtil) {
-            output.writeString(text)
-            output.writeInt(textAlign.ordinal())
-            output.writeInt(offsetY)
-            output.writeString(backTex)
-            output.writeInt(fontType)
-            output.writeInt(sysstring)
-            output.writeInt(systemMsg)
-            output.writeColor(textColor)
-            output.writeInt(emoticon)
-            output.writeInt(autosize)
-        }
-
-        this
-    }
 
     enum TextAlign {
         Undefined,
@@ -63,6 +30,7 @@ class TextBox extends DefaultProperty {
         MacroIcon,
     }
 
+    // @formatter:off
     @Deprecated String getUnk100() { text }
     @Deprecated void setUnk100(String unk100) { this.text = unk100 }
 
@@ -92,4 +60,5 @@ class TextBox extends DefaultProperty {
 
     @Deprecated int getUnk109() { autosize }
     @Deprecated void setUnk109(int unk109) { this.autosize = unk109 }
+    // @formatter:on
 }

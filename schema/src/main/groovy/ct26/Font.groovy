@@ -1,5 +1,6 @@
 package ct26
 
+import acmi.l2.clientmod.util.Hide
 import acmi.l2.clientmod.util.IOEntity
 import acmi.l2.clientmod.util.IOUtil
 import acmi.l2.clientmod.util.Type
@@ -23,11 +24,14 @@ class Font implements IOEntity {
         boolean shadow = false
         int shadow_x
         int shadow_y
-        transient int unused01 //shadow_x
-        transient int unused02 //shadow_y
+        @Hide
+        int unused01 //shadow_x
+        @Hide
+        int unused02 //shadow_y
         boolean stroke = false
         boolean stroke_large = false
-        transient int unused11 //stroke_large
+        @Hide
+        int unused11 //stroke_large
         int lineGap
         int underlineOffset
 
@@ -44,14 +48,14 @@ class Font implements IOEntity {
                 if (shadow) {
                     shadow_x = input.readInt()
                     shadow_y = input.readInt()
-                }else{
+                } else {
                     unused01 = input.readInt()
                     unused02 = input.readInt()
                 }
                 stroke = input.readBoolean()
                 if (stroke) {
                     stroke_large = input.readBoolean()
-                }else{
+                } else {
                     unused11 = input.readInt()
                 }
                 lineGap = input.readInt()
@@ -73,14 +77,14 @@ class Font implements IOEntity {
                 if (shadow) {
                     output.writeInt(shadow_x)
                     output.writeInt(shadow_y)
-                }else{
+                } else {
                     output.writeInt(unused01)
                     output.writeInt(unused02)
                 }
                 output.writeBoolean(stroke)
                 if (stroke) {
                     output.writeBoolean(stroke_large)
-                }else{
+                } else {
                     output.writeInt(unused11)
                 }
                 output.writeInt(lineGap)

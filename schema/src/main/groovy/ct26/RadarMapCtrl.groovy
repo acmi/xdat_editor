@@ -1,7 +1,7 @@
 package ct26
 
-import acmi.l2.clientmod.util.IOEntity
 import acmi.l2.clientmod.l2resources.Tex
+import acmi.l2.clientmod.util.IOEntity
 import acmi.l2.clientmod.util.Type
 import acmi.l2.clientmod.util.defaultio.DefaultIO
 import groovy.transform.CompileStatic

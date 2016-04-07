@@ -12,9 +12,11 @@ class ChatWindow extends DefaultProperty {
     @Description('-9999')
     int nextLineOffsetX = -9999
 
+    // @formatter:off
     @Deprecated int getSpacing() { lineGap }
     @Deprecated void setSpacing(int spacing) { this.lineGap = spacing }
 
     @Deprecated int getUnk101() { nextLineOffsetX }
     @Deprecated void setUnk101(int unk101) { this.nextLineOffsetX = unk101 }
+    // @formatter:on
 }

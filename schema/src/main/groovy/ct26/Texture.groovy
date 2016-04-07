@@ -1,9 +1,9 @@
 package ct26
 
+import acmi.l2.clientmod.l2resources.Tex
 import acmi.l2.clientmod.util.Description
 import acmi.l2.clientmod.util.IOUtil
 import acmi.l2.clientmod.util.StringValue
-import acmi.l2.clientmod.l2resources.Tex
 import acmi.l2.clientmod.util.defaultio.DefaultIO
 import acmi.l2.clientmod.util.defaultio.RGBA
 import groovy.transform.CompileStatic
@@ -51,6 +51,7 @@ class Texture extends DefaultProperty {
         Pawn
     }
 
+    // @formatter:off
     @Deprecated String getUnk100() { file }
     @Deprecated void setUnk100(String unk100) { this.file = unk100 }
 
@@ -89,4 +90,5 @@ class Texture extends DefaultProperty {
 
     @Deprecated int getUnk112() { IOUtil.colorToRGBA(colorModify) }
     @Deprecated void setUnk112(int unk112) { this.colorModify = IOUtil.intToRGBA(unk112) }
+    // @formatter:on
 }

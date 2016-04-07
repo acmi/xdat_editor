@@ -1,32 +1,16 @@
 package ct0
 
-import acmi.l2.clientmod.util.IOUtil
+import acmi.l2.clientmod.util.defaultio.DefaultIO
+import groovy.transform.CompileStatic
 
+@DefaultIO
+
+@CompileStatic
 class ShortcutItemWindow extends DefaultProperty {
     boolean alwaysShowOutline
 
-    @Override
-    ShortcutItemWindow read(InputStream input) {
-        super.read(input)
-
-        use(IOUtil) {
-            alwaysShowOutline = input.readBoolean()
-        }
-
-        this
-    }
-
-    @Override
-    ShortcutItemWindow write(OutputStream output) {
-        super.write(output)
-
-        use(IOUtil) {
-            output.writeBoolean(alwaysShowOutline)
-        }
-
-        this
-    }
-
+    // @formatter:off
     @Deprecated boolean getUnk100() { alwaysShowOutline }
     @Deprecated void setUnk100(boolean unk100) { this.alwaysShowOutline = unk100 }
+    // @formatter:on
 }

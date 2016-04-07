@@ -1,9 +1,9 @@
 package ct26
 
+import acmi.l2.clientmod.l2resources.Tex
 import acmi.l2.clientmod.util.IOEntity
 import acmi.l2.clientmod.util.IOUtil
 import acmi.l2.clientmod.util.StringValue
-import acmi.l2.clientmod.l2resources.Tex
 import acmi.l2.clientmod.util.Type
 import acmi.l2.clientmod.util.defaultio.DefaultIO
 import groovy.transform.CompileStatic
@@ -67,6 +67,7 @@ class ItemWindow extends DefaultProperty {
             getClass().simpleName
         }
 
+        // @formatter:off
         @Deprecated int getUnk135() { width }
         @Deprecated void setUnk135(int unk135) { this.width = unk135 }
 
@@ -78,14 +79,16 @@ class ItemWindow extends DefaultProperty {
 
         @Deprecated String getUnk138() { texture }
         @Deprecated void setUnk138(String unk138) { this.texture = unk138 }
+        // @formatter:on
     }
 
-    enum ItemWindowType implements StringValue{
+    enum ItemWindowType implements StringValue {
         ScrollType,
         SideButtonType,
         UpDownButtonType
     }
 
+    // @formatter:off
     @Deprecated String getUnk100() { wndType.name() }
     @Deprecated void setUnk100(String unk100) { this.wndType = ItemWindowType.valueOf(unk100) }
 
@@ -190,4 +193,5 @@ class ItemWindow extends DefaultProperty {
 
     @Deprecated List<ItemWindowInner> getUnk134() { expandItem }
     @Deprecated void setUnk134(List<ItemWindowInner> unk134){ this.expandItem = unk134 }
+    // @formatter:on
 }

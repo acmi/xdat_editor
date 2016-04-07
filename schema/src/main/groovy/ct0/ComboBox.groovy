@@ -1,13 +1,11 @@
 package ct0
 
-import acmi.l2.clientmod.util.IOEntity
 import acmi.l2.clientmod.l2resources.Sysstr
+import acmi.l2.clientmod.util.IOEntity
 import acmi.l2.clientmod.util.Type
 import acmi.l2.clientmod.util.defaultio.DefaultIO
-import groovy.transform.CompileStatic
 
 @DefaultIO
-@CompileStatic
 class ComboBox extends DefaultProperty {
     @Type(ComboBoxElement.class)
     List<ComboBoxElement> values = []
@@ -25,6 +23,7 @@ class ComboBox extends DefaultProperty {
             return getClass().simpleName
         }
 
+        // @formatter:off
         @Deprecated int getTextStringId() { sysString }
         @Deprecated void setTextStringId(int textStringId) { this.sysString = textStringId }
 
@@ -36,5 +35,6 @@ class ComboBox extends DefaultProperty {
 
         @Deprecated int getUnk104() { reserved }
         @Deprecated void setUnk104(int unk104) { this.reserved = unk104 }
+        // @formatter:on
     }
 }

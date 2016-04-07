@@ -1,9 +1,9 @@
 package ct26
 
-import acmi.l2.clientmod.util.Description
-import acmi.l2.clientmod.util.IOUtil
 import acmi.l2.clientmod.l2resources.Sysstr
 import acmi.l2.clientmod.l2resources.Tex
+import acmi.l2.clientmod.util.Description
+import acmi.l2.clientmod.util.IOUtil
 import acmi.l2.clientmod.util.defaultio.DefaultIO
 import groovy.transform.CompileStatic
 
@@ -26,6 +26,7 @@ class Button extends DefaultProperty {
     @Description('-9999/5000')
     int disableTime = -9999
 
+    // @formatter:off
     @Deprecated String getTexture() { normalTex }
     @Deprecated void setTexture(String texture) { this.normalTex = texture }
 
@@ -52,4 +53,5 @@ class Button extends DefaultProperty {
 
     @Deprecated int getUnk108() { disableTime }
     @Deprecated void setUnk108(int unk108) { this.disableTime = unk108 }
+    // @formatter:on
 }

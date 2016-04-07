@@ -13,6 +13,7 @@ class MinimapCtrl extends DefaultProperty {
     boolean showMyLocText = true
     boolean showSSQText = true
 
+    // @formatter:off
     @Deprecated boolean getUnk100() { showTime }
     @Deprecated void setUnk100(boolean unk100) { this.showTime = unk100 }
 
@@ -30,4 +31,5 @@ class MinimapCtrl extends DefaultProperty {
 
     @Deprecated boolean getUnk105() { showSSQText }
     @Deprecated void setUnk105(boolean unk105) { this.showSSQText = unk105 }
+    // @formatter:on
 }

@@ -1,7 +1,7 @@
 package ct0
 
-import acmi.l2.clientmod.util.UIEntity
 import acmi.l2.clientmod.util.IOUtil
+import acmi.l2.clientmod.util.UIEntity
 
 abstract class DefaultProperty implements UIEntity {
     String name

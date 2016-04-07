@@ -30,12 +30,15 @@ class EditBox extends DefaultProperty {
         Normal,
         PostBox;
 
-        static AutoCompletionType valueOf(int val){
+        static AutoCompletionType valueOf(int val) {
             Optional.ofNullable(values().find { it.ordinal() == val })
-                    .orElseThrow({ new IllegalArgumentException("No ${getClass().simpleName} constant with value=$val") })
+                    .orElseThrow({
+                new IllegalArgumentException("No ${getClass().simpleName} constant with value=$val")
+            })
         }
     }
 
+    // @formatter:off
     @Deprecated int getUnk102() { IOUtil.boolToInt(showCursor) }
     @Deprecated void setUnk102(int unk102) { this.showCursor = IOUtil.intToBool(unk102) }
 
@@ -50,4 +53,5 @@ class EditBox extends DefaultProperty {
 
     @Deprecated int getUnk106() { autoCompletionType.ordinal() }
     @Deprecated void setUnk106(int unk106) { this.autoCompletionType = AutoCompletionType.valueOf(unk106) }
+    // @formatter:on
 }

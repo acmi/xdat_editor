@@ -1,7 +1,6 @@
 package ct26
 
 import acmi.l2.clientmod.util.IOEntity
-import acmi.l2.clientmod.util.IOUtil
 import acmi.l2.clientmod.util.Type
 import acmi.l2.clientmod.util.defaultio.DefaultIO
 import groovy.transform.CompileStatic
@@ -304,7 +303,7 @@ class Shortcut implements IOEntity {
 
         private String text
 
-        InputKey(String text){
+        InputKey(String text) {
             this.text = text
         }
 

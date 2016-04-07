@@ -1,9 +1,14 @@
 package ct0
 
+import acmi.l2.clientmod.l2resources.Tex
 import acmi.l2.clientmod.util.Description
-import acmi.l2.clientmod.util.IOUtil
+import acmi.l2.clientmod.util.defaultio.DefaultIO
+import groovy.transform.CompileStatic
 
+@DefaultIO
+@CompileStatic
 class Texture extends DefaultProperty {
+    @Tex
     String file
     TextureCtrlType type = TextureCtrlType.Stretch
     TextureLayer layer = TextureLayer.None
@@ -14,44 +19,6 @@ class Texture extends DefaultProperty {
     @Description("0..255")
     int alpha
     int isAnimTex
-
-    @Override
-    Texture read(InputStream input) {
-        super.read(input)
-
-        use(IOUtil) {
-            file = input.readString()
-            type = TextureCtrlType.values()[input.readInt()]
-            layer = TextureLayer.values()[input.readInt()]
-            u = input.readFloat()
-            v = input.readFloat()
-            uSize = input.readFloat()
-            vSize = input.readFloat()
-            alpha = input.readInt()
-            isAnimTex = input.readInt()
-        }
-
-        this
-    }
-
-    @Override
-    Texture write(OutputStream output) {
-        super.write(output)
-
-        use(IOUtil) {
-            output.writeString(file)
-            output.writeInt(type.ordinal())
-            output.writeInt(layer.ordinal())
-            output.writeFloat(u)
-            output.writeFloat(v)
-            output.writeFloat(uSize)
-            output.writeFloat(vSize)
-            output.writeInt(alpha)
-            output.writeInt(isAnimTex)
-        }
-
-        this
-    }
 
     enum TextureCtrlType {
         Stretch,
@@ -68,6 +35,7 @@ class Texture extends DefaultProperty {
         Background
     }
 
+    // @formatter:off
     @Deprecated String getUnk100() { file }
     @Deprecated void setUnk100(String unk100) { this.file = unk100 }
 
@@ -94,4 +62,5 @@ class Texture extends DefaultProperty {
 
     @Deprecated int getUnk108() { isAnimTex }
     @Deprecated void setUnk108(int unk108) { this.isAnimTex = unk108 }
+    // @formatter:on
 }

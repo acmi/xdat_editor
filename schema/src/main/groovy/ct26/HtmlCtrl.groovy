@@ -10,6 +10,8 @@ class HtmlCtrl extends DefaultProperty {
     @Description("''/'Normal'/'Help'/'BBS'")
     String viewType
 
-    @Deprecated String getType() { return viewType }
+    // @formatter:off
+    @Deprecated String getType() { viewType }
     @Deprecated void setType(String type) { this.viewType = type }
+    // @formatter:on
 }

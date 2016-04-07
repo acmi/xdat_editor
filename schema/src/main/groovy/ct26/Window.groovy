@@ -1,12 +1,8 @@
 package ct26
 
-import acmi.l2.clientmod.util.ArrayLength
-import acmi.l2.clientmod.util.IOEntity
-import acmi.l2.clientmod.util.IOUtil
-import acmi.l2.clientmod.util.IntValue
 import acmi.l2.clientmod.l2resources.Sysstr
 import acmi.l2.clientmod.l2resources.Tex
-import acmi.l2.clientmod.util.Type
+import acmi.l2.clientmod.util.*
 
 class Window extends DefaultProperty implements Iterable<DefaultProperty> {
     String parent
@@ -38,9 +34,12 @@ class Window extends DefaultProperty implements Iterable<DefaultProperty> {
     int offsetX
     int offsetY
     Boolean directionFixed
-    transient int notUsed01 // offsetX
-    transient int notUsed02 // offsetY
-    transient int notUsed03 // directionFixed
+    @Hide
+    int notUsed01 // offsetX
+    @Hide
+    int notUsed02 // offsetY
+    @Hide
+    int notUsed03 // directionFixed
     String ownerWindow
     AnimType showAnimType = AnimType.None
     AnimType hideAnimType = AnimType.None
@@ -48,10 +47,14 @@ class Window extends DefaultProperty implements Iterable<DefaultProperty> {
     float showAnimSeconds
     DirectionType hideAnimDirection = DirectionType.None
     float hideAnimSeconds
-    transient int notUsed11 // showAnimDirection
-    transient int notUsed12 // showAnimSeconds
-    transient int notUsed13 // hideAnimDirection
-    transient int notUsed14 // hideAnimSeconds
+    @Hide
+    int notUsed11 // showAnimDirection
+    @Hide
+    int notUsed12 // showAnimSeconds
+    @Hide
+    int notUsed13 // hideAnimDirection
+    @Hide
+    int notUsed14 // hideAnimSeconds
     @Tex
     String iconName = 'undefined'
     int tooltipIdx = -9999
@@ -109,21 +112,23 @@ class Window extends DefaultProperty implements Iterable<DefaultProperty> {
         }
     }
 
-    enum FrameSizeType implements IntValue{
+    enum FrameSizeType implements IntValue {
         None(-1),
         Big(0),
         Small(1);
 
         final int value
 
-        FrameSizeType(int value) {this.value = value}
+        FrameSizeType(int value) { this.value = value }
 
         @Override
         int intValue() { value }
 
-        static FrameSizeType valueOf(int val){
+        static FrameSizeType valueOf(int val) {
             Optional.ofNullable(values().find { it.value == val })
-                    .orElseThrow({ new IllegalArgumentException("No ${getClass().simpleName} constant with value=$val") })
+                    .orElseThrow({
+                new IllegalArgumentException("No ${getClass().simpleName} constant with value=$val")
+            })
         }
     }
 
@@ -135,27 +140,31 @@ class Window extends DefaultProperty implements Iterable<DefaultProperty> {
         Bottom,
         Free;
 
-        static DirectionType valueOf(int val){
+        static DirectionType valueOf(int val) {
             Optional.ofNullable(values().find { it.ordinal() == val })
-                    .orElseThrow({ new IllegalArgumentException("No ${getClass().simpleName} constant with value=$val") })
+                    .orElseThrow({
+                new IllegalArgumentException("No ${getClass().simpleName} constant with value=$val")
+            })
         }
     }
 
-    enum AnimType implements IntValue{
+    enum AnimType implements IntValue {
         None(0),
         AlphaTransition(3),
         PositionTransition(4);
 
         final int value
 
-        AnimType(int value) {this.value = value}
+        AnimType(int value) { this.value = value }
 
         @Override
         int intValue() { value }
 
-        static AnimType valueOf(int val){
+        static AnimType valueOf(int val) {
             Optional.ofNullable(values().find { it.value == val })
-                    .orElseThrow({ new IllegalArgumentException("No ${getClass().simpleName} constant with value=$val") })
+                    .orElseThrow({
+                new IllegalArgumentException("No ${getClass().simpleName} constant with value=$val")
+            })
         }
     }
 
@@ -311,6 +320,7 @@ class Window extends DefaultProperty implements Iterable<DefaultProperty> {
         this
     }
 
+    // @formatter:off
     @Deprecated String getUnk100() { parent }
     @Deprecated void setUnk100(String unk100) { this.parent = unk100 }
 
@@ -457,4 +467,5 @@ class Window extends DefaultProperty implements Iterable<DefaultProperty> {
 
     @Deprecated int getUnk149() { IOUtil.boolToInt(useParentClipRect) }
     @Deprecated void setUnk149(int unk149) { this.useParentClipRect = IOUtil.intToBool(unk149) }
+    // @formatter:on
 }

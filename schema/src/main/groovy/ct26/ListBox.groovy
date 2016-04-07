@@ -11,6 +11,7 @@ class ListBox extends DefaultProperty {
     int showRow
     Boolean showLastLine
 
+    // @formatter:off
     @Deprecated int getUnk100() { maxRow }
     @Deprecated void setUnk100(int unk100) { this.maxRow = unk100 }
 
@@ -19,4 +20,5 @@ class ListBox extends DefaultProperty {
 
     @Deprecated int getUnk102() { IOUtil.boolToInt(showLastLine) }
     @Deprecated void setUnk102(int unk102) { this.showLastLine = IOUtil.intToBool(unk102) }
+    // @formatter:on
 }

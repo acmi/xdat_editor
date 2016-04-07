@@ -32,6 +32,7 @@ class Progress extends DefaultProperty {
         BottomTop,
     }
 
+    // @formatter:off
     @Deprecated String getUnk101() { backLeftTexture }
     @Deprecated void setUnk101(String unk101) { this.backLeftTexture = unk101 }
 
@@ -58,4 +59,5 @@ class Progress extends DefaultProperty {
 
     @Deprecated int getUnk109() { type.ordinal() }
     @Deprecated void setUnk109(int unk109) { this.type = ProgressBarType.values()[unk109] }
+    // @formatter:on
 }

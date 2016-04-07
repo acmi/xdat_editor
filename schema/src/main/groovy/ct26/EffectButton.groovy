@@ -1,7 +1,7 @@
 package ct26
 
-import acmi.l2.clientmod.util.IntValue
 import acmi.l2.clientmod.l2resources.Tex
+import acmi.l2.clientmod.util.IntValue
 import acmi.l2.clientmod.util.defaultio.DefaultIO
 import groovy.transform.CompileStatic
 
@@ -20,7 +20,7 @@ class EffectButton extends DefaultProperty {
     @Tex
     String effectTex2 = 'undefined'
 
-    enum Type implements IntValue{
+    enum Type implements IntValue {
         TUTORIAL(-1),
         NORMAL(0),
         QUEST(1),
@@ -28,17 +28,20 @@ class EffectButton extends DefaultProperty {
 
         final int value
 
-        Type(int value) {this.value = value}
+        Type(int value) { this.value = value }
 
         @Override
         int intValue() { value }
 
-        static Type valueOf(int val){
+        static Type valueOf(int val) {
             Optional.ofNullable(values().find { it.value == val })
-                    .orElseThrow({ new IllegalArgumentException("No ${getClass().simpleName} constant with value=$val") })
+                    .orElseThrow({
+                new IllegalArgumentException("No ${getClass().simpleName} constant with value=$val")
+            })
         }
     }
 
+    // @formatter:off
     @Deprecated int getUnk100() { type.intValue() }
     @Deprecated void setUnk100(int unk100) { this.type = Type.valueOf(unk100) }
 
@@ -56,4 +59,5 @@ class EffectButton extends DefaultProperty {
 
     @Deprecated String getTexEffect2() { effectTex2 }
     @Deprecated void setTexEffect2(String texEffect2) { this.effectTex2 = texEffect2 }
+    // @formatter:on
 }

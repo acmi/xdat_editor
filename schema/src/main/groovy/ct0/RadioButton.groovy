@@ -1,38 +1,18 @@
 package ct0
 
-import acmi.l2.clientmod.util.IOUtil
+import acmi.l2.clientmod.l2resources.Sysstr
+import acmi.l2.clientmod.util.defaultio.DefaultIO
+import groovy.transform.CompileStatic
 
+@DefaultIO
+@CompileStatic
 class RadioButton extends DefaultProperty {
+    @Sysstr
     int sysstring
     int radioGroupID
     int isChecked
 
-    @Override
-    RadioButton read(InputStream input) {
-        super.read(input)
-
-        use(IOUtil) {
-            sysstring = input.readInt()
-            radioGroupID = input.readInt()
-            isChecked = input.readInt()
-        }
-
-        this
-    }
-
-    @Override
-    RadioButton write(OutputStream output) {
-        super.write(output)
-
-        use(IOUtil) {
-            output.writeInt(sysstring)
-            output.writeInt(radioGroupID)
-            output.writeInt(isChecked)
-        }
-
-        this
-    }
-
+    // @formatter:off
     @Deprecated int getUnk100() { sysstring }
     @Deprecated void setUnk100(int unk100) { this.sysstring = unk100 }
 
@@ -41,4 +21,5 @@ class RadioButton extends DefaultProperty {
 
     @Deprecated int getUnk102() { isChecked }
     @Deprecated void setUnk102(int unk102) { this.isChecked = unk102 }
+    // @formatter:on
 }

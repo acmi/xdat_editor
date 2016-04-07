@@ -1,8 +1,8 @@
 package ct26
 
-import acmi.l2.clientmod.util.IOUtil
 import acmi.l2.clientmod.l2resources.Sysstr
 import acmi.l2.clientmod.l2resources.Tex
+import acmi.l2.clientmod.util.IOUtil
 import acmi.l2.clientmod.util.defaultio.DefaultIO
 import groovy.transform.CompileStatic
 
@@ -14,7 +14,7 @@ class CheckBox extends DefaultProperty {
     String titleText = 'undefined'
     Boolean checked
     Boolean leftAligned
-    int maxWidth = -9999
+    int max_width = -9999
     @Tex
     String checkTexture = 'undefined'
     @Tex
@@ -24,6 +24,7 @@ class CheckBox extends DefaultProperty {
     @Tex
     String disableCheckTexture = 'undefined'
 
+    // @formatter:off
     @Deprecated int getLabelStringId() { titleIndex }
     @Deprecated void setLabelStringId(int labelStringId) { this.titleIndex = labelStringId }
 
@@ -36,8 +37,8 @@ class CheckBox extends DefaultProperty {
     @Deprecated int getUnk103() { IOUtil.boolToInt(leftAligned) }
     @Deprecated void setUnk103(int unk103) { this.leftAligned = IOUtil.intToBool(unk103) }
 
-    @Deprecated int getUnk104() { maxWidth }
-    @Deprecated void setUnk104(int unk104) { this.maxWidth = unk104 }
+    @Deprecated int getUnk104() { max_width }
+    @Deprecated void setUnk104(int unk104) { this.max_width = unk104 }
 
     @Deprecated String getTexChecked() { checkTexture }
     @Deprecated void setTexChecked(String texChecked) { this.checkTexture = texChecked }
@@ -50,4 +51,5 @@ class CheckBox extends DefaultProperty {
 
     @Deprecated String getTexCheckedUnable() { disableCheckTexture }
     @Deprecated void setTexCheckedUnable(String texCheckedUnable) { this.disableCheckTexture = texCheckedUnable }
+    // @formatter:on
 }

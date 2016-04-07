@@ -1,68 +1,32 @@
 package ct0
 
-import acmi.l2.clientmod.util.IOUtil
+import acmi.l2.clientmod.l2resources.Tex
+import acmi.l2.clientmod.util.defaultio.DefaultIO
+import groovy.transform.CompileStatic
 
+@DefaultIO
+@CompileStatic
 class SliderCtrl extends DefaultProperty {
     int numOfTick
     int currTick
     int thumbBtnWidth
     int thumbBtnHeight
+    @Tex
     String backTexture = 'L2UI_ch3.Button.slider_back'
+    @Tex
     String disableBackTexture = 'L2UI_ch3.Button.slider_back'
+    @Tex
     String thumbBtnNormalTexture = 'L2UI_ch3.Button.slider_cursor'
+    @Tex
     String thumbBtnDownTexture = 'L2UI_ch3.Button.slider_cursor_down'
     int pushBtnWidth = -1
     int pushBtnHeight = -1
     int pushBtnAutoHitTime = 300
     int unk111 = 0
+    @Tex
     String tickTexture = 'L2UI_ch3.Button.slider_mark'
 
-    @Override
-    SliderCtrl read(InputStream input) {
-        super.read(input)
-
-        use(IOUtil) {
-            numOfTick = input.readInt()
-            currTick = input.readInt()
-            thumbBtnWidth = input.readInt()
-            thumbBtnHeight = input.readInt()
-            backTexture = input.readString()
-            disableBackTexture = input.readString()
-            thumbBtnNormalTexture = input.readString()
-            thumbBtnDownTexture = input.readString()
-            pushBtnWidth = input.readInt()
-            pushBtnHeight = input.readInt()
-            pushBtnAutoHitTime = input.readInt()
-            unk111 = input.readInt()
-            tickTexture = input.readString()
-        }
-
-        this
-    }
-
-    @Override
-    SliderCtrl write(OutputStream output) {
-        super.write(output)
-
-        use(IOUtil) {
-            output.writeInt(numOfTick)
-            output.writeInt(currTick)
-            output.writeInt(thumbBtnWidth)
-            output.writeInt(thumbBtnHeight)
-            output.writeString(backTexture)
-            output.writeString(disableBackTexture)
-            output.writeString(thumbBtnNormalTexture)
-            output.writeString(thumbBtnDownTexture)
-            output.writeInt(pushBtnWidth)
-            output.writeInt(pushBtnHeight)
-            output.writeInt(pushBtnAutoHitTime)
-            output.writeInt(unk111)
-            output.writeString(tickTexture)
-        }
-
-        this
-    }
-
+    // @formatter:off
     @Deprecated int getUnk100() { numOfTick }
     @Deprecated void setUnk100(int unk100) { this.numOfTick = unk100 }
 
@@ -98,4 +62,5 @@ class SliderCtrl extends DefaultProperty {
 
     @Deprecated String getUnk112() { tickTexture }
     @Deprecated void setUnk112(String unk112) { this.tickTexture = unk112 }
+    // @formatter:on
 }

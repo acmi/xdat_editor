@@ -39,6 +39,7 @@ class StatusBar extends DefaultProperty {
     int gaugeFontSizeX
     int gaugeFontSizeY
 
+    // @formatter:off
     @Deprecated String getUnk100() { title }
     @Deprecated void setUnk100(String unk100) { this.title = unk100 }
 
@@ -92,4 +93,5 @@ class StatusBar extends DefaultProperty {
 
     @Deprecated int getUnk119() { gaugeFontSizeY }
     @Deprecated void setUnk119(int unk119) { this.gaugeFontSizeY = unk119 }
+    // @formatter:on
 }

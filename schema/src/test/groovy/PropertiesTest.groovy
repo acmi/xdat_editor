@@ -89,9 +89,21 @@ class PropertiesTest {
     }
 
     @Test
+    void TheBeginningOfJourneyRu() {
+        new etoa2_2_ru.XDAT()
+        test(SubclassManager.instance.getClassWithAllSubclasses(etoa2_2_ru.DefaultProperty))
+    }
+
+    @Test
     void NewGuardianOfAstatine() {
         new etoa2_3.XDAT()
         test(SubclassManager.instance.getClassWithAllSubclasses(etoa2_3.DefaultProperty))
+    }
+
+    @Test
+    void HymnOfTheSoulRu() {
+        new etoa2_3_ru.XDAT()
+        test(SubclassManager.instance.getClassWithAllSubclasses(etoa2_3_ru.DefaultProperty))
     }
 
     @Test

@@ -1,8 +1,8 @@
 package ct26
 
 import acmi.l2.clientmod.l2resources.Sysstr
-import acmi.l2.clientmod.util.UIEntity
 import acmi.l2.clientmod.util.IOUtil
+import acmi.l2.clientmod.util.UIEntity
 import javafx.scene.paint.Color
 
 abstract class DefaultProperty implements UIEntity {
@@ -49,9 +49,11 @@ abstract class DefaultProperty implements UIEntity {
         UNDERLINE,
         LINE_THROUGH
 
-        static FontLineType valueOf(int val){
+        static FontLineType valueOf(int val) {
             Optional.ofNullable(values().find { it.ordinal() == val })
-                    .orElseThrow({ new IllegalArgumentException("No ${getClass().simpleName} constant with value=$val") })
+                    .orElseThrow({
+                new IllegalArgumentException("No ${getClass().simpleName} constant with value=$val")
+            })
         }
     }
 
@@ -162,6 +164,7 @@ abstract class DefaultProperty implements UIEntity {
         name + "[" + getClass().simpleName + "]"
     }
 
+    // @formatter:off
     @Deprecated String getSuperName() { extendsName }
     @Deprecated void setSuperName(String superName) { this.extendsName = superName }
 
@@ -230,4 +233,5 @@ abstract class DefaultProperty implements UIEntity {
 
     @Deprecated int getUnk30() { scrollBarOffsetHeight }
     @Deprecated void setUnk30(int unk30) { this.scrollBarOffsetHeight = unk30 }
+    // @formatter:on
 }

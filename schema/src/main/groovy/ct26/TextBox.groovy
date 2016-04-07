@@ -1,9 +1,9 @@
 package ct26
 
-import acmi.l2.clientmod.util.IOUtil
-import acmi.l2.clientmod.util.IntValue
 import acmi.l2.clientmod.l2resources.Sysstr
 import acmi.l2.clientmod.l2resources.Tex
+import acmi.l2.clientmod.util.IOUtil
+import acmi.l2.clientmod.util.IntValue
 import acmi.l2.clientmod.util.defaultio.DefaultIO
 import groovy.transform.CompileStatic
 import javafx.scene.paint.Color
@@ -22,7 +22,7 @@ class TextBox extends DefaultProperty {
     int systemMsg = -9999
     Color textColor = Color.rgb(220, 220, 220)
     Boolean emoticon
-    Boolean autosize
+    Boolean autoSize
 
     enum TextAlign {
         Undefined,
@@ -39,7 +39,7 @@ class TextBox extends DefaultProperty {
         Bottom,
     }
 
-    enum FontType implements IntValue{
+    enum FontType implements IntValue {
         Normal(-1),
         SpecialDigitSmall(0),
         SpecialDigitLarge(1),
@@ -47,17 +47,20 @@ class TextBox extends DefaultProperty {
 
         final int value
 
-        FontType(int value) {this.value = value}
+        FontType(int value) { this.value = value }
 
         @Override
         int intValue() { value }
 
-        static FontType valueOf(int val){
+        static FontType valueOf(int val) {
             Optional.ofNullable(values().find { it.value == val })
-                    .orElseThrow({ new IllegalArgumentException("No ${getClass().simpleName} constant with value=$val") })
+                    .orElseThrow({
+                new IllegalArgumentException("No ${getClass().simpleName} constant with value=$val")
+            })
         }
     }
 
+    // @formatter:off
     @Deprecated String getUnk100() { text }
     @Deprecated void setUnk100(String unk100) { this.text = unk100 }
 
@@ -85,6 +88,7 @@ class TextBox extends DefaultProperty {
     @Deprecated boolean getUnk108() { emoticon }
     @Deprecated void setUnk108(boolean unk108) { this.emoticon = unk108 }
 
-    @Deprecated int getUnk109() { IOUtil.boolToInt(autosize) }
-    @Deprecated void setUnk109(int unk109) { this.autosize = IOUtil.intToBool(unk109) }
+    @Deprecated int getUnk109() { IOUtil.boolToInt(autoSize) }
+    @Deprecated void setUnk109(int unk109) { this.autoSize = IOUtil.intToBool(unk109) }
+    // @formatter:on
 }

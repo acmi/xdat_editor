@@ -1,50 +1,25 @@
 package ct0
 
-import acmi.l2.clientmod.util.IOUtil
+import acmi.l2.clientmod.l2resources.Tex
+import acmi.l2.clientmod.util.defaultio.DefaultIO
+import groovy.transform.CompileStatic
 
+@DefaultIO
+@CompileStatic
 class StatusBar extends DefaultProperty {
     String title
     int textureWidth
     int textureHeight
+    @Tex
     String foreTexture
+    @Tex
     String backTexture
+    @Tex
     String warnTexture
+    @Tex
     String regenTexture
 
-    @Override
-    StatusBar read(InputStream input) {
-        super.read(input)
-
-        use(IOUtil) {
-            title = input.readString()
-            textureWidth = input.readInt()
-            textureHeight = input.readInt()
-            foreTexture = input.readString()
-            backTexture = input.readString()
-            warnTexture = input.readString()
-            regenTexture = input.readString()
-        }
-
-        this
-    }
-
-    @Override
-    StatusBar write(OutputStream output) {
-        super.write(output)
-
-        use(IOUtil) {
-            output.writeString(title)
-            output.writeInt(textureWidth)
-            output.writeInt(textureHeight)
-            output.writeString(foreTexture)
-            output.writeString(backTexture)
-            output.writeString(warnTexture)
-            output.writeString(regenTexture)
-        }
-
-        this
-    }
-
+    // @formatter:off
     @Deprecated String getUnk100() { title }
     @Deprecated void setUnk100(String unk100) { this.title = unk100 }
 
@@ -65,4 +40,5 @@ class StatusBar extends DefaultProperty {
 
     @Deprecated String getUnk106() { regenTexture }
     @Deprecated void setUnk106(String unk106) { this.regenTexture = unk106 }
+    // @formatter:on
 }

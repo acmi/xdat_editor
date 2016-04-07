@@ -15,7 +15,7 @@ enum Alignment {
     BOTTOM_CENTER,
     BOTTOM_RIGHT
 
-    static Alignment valueOf(int val){
+    static Alignment valueOf(int val) {
         Optional.ofNullable(values().find { it.ordinal() == val })
                 .orElseThrow({ new IllegalArgumentException("No ${getClass().simpleName} constant with value=$val") })
     }

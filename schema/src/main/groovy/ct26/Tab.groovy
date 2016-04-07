@@ -1,8 +1,8 @@
 package ct26
 
-import acmi.l2.clientmod.util.IOEntity
 import acmi.l2.clientmod.l2resources.Sysstr
 import acmi.l2.clientmod.l2resources.Tex
+import acmi.l2.clientmod.util.IOEntity
 import acmi.l2.clientmod.util.Type
 import acmi.l2.clientmod.util.defaultio.DefaultIO
 import groovy.transform.CompileStatic
@@ -36,6 +36,7 @@ class Tab extends DefaultProperty {
             getClass().simpleName
         }
 
+        // @formatter:off
         @Deprecated int getTitleStringId() { buttonName }
         @Deprecated void setTitleStringId(int titleStringId) { this.buttonName = titleStringId }
 
@@ -68,5 +69,6 @@ class Tab extends DefaultProperty {
 
         @Deprecated int getUnk111() { noHighlight }
         @Deprecated void setUnk111(int unk111) { this.noHighlight = unk111 }
+        // @formatter:on
     }
 }

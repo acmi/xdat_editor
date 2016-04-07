@@ -1,7 +1,11 @@
 package ct0
 
-import acmi.l2.clientmod.util.IOUtil
+import acmi.l2.clientmod.l2resources.Tex
+import acmi.l2.clientmod.util.defaultio.DefaultIO
+import groovy.transform.CompileStatic
 
+@DefaultIO
+@CompileStatic
 class ItemWindow extends DefaultProperty {
     int col
     int row
@@ -14,91 +18,27 @@ class ItemWindow extends DefaultProperty {
     int offsetY = -9999
     int backgroundItemWidth = -9999
     int backgroundItemHeight = -9999
+    @Tex
     String backgroundItemTex = 'undefined'
     int selectedItemWidth = -9999
     int selectedItemHeight = -9999
+    @Tex
     String selectedItemTex = 'undefined'
     int unselectedItemWidth = -9999
     int unselectedItemHeight = -9999
+    @Tex
     String unselectedItemTex = 'undefined'
     int noSelectItem = -1
     int noItemDrag = -1
     int buttonClick = -1
     int useCoolTime = -1
     int noScroll = -1
+    @Tex
     String outLineUp = 'l2ui_ch3.InventoryWnd.inventory_outline'
+    @Tex
     String outLineDown = 'l2ui_ch3.InventoryWnd.inventory_outline_down'
 
-    @Override
-    ItemWindow read(InputStream input) {
-        super.read(input)
-
-        use(IOUtil) {
-            col = input.readInt()
-            row = input.readInt()
-            maxItemNum = input.readInt()
-            iconWidth = input.readInt()
-            iconHeight = input.readInt()
-            gapX = input.readInt()
-            gapY = input.readInt()
-            offsetX = input.readInt()
-            offsetY = input.readInt()
-            backgroundItemWidth = input.readInt()
-            backgroundItemHeight = input.readInt()
-            backgroundItemTex = input.readString()
-            selectedItemWidth = input.readInt()
-            selectedItemHeight = input.readInt()
-            selectedItemTex = input.readString()
-            unselectedItemWidth = input.readInt()
-            unselectedItemHeight = input.readInt()
-            unselectedItemTex = input.readString()
-            noSelectItem = input.readInt()
-            noItemDrag = input.readInt()
-            buttonClick = input.readInt()
-            useCoolTime = input.readInt()
-            noScroll = input.readInt()
-            outLineUp = input.readString()
-            outLineDown = input.readString()
-        }
-
-        this
-    }
-
-    @Override
-    ItemWindow write(OutputStream output) {
-        super.write(output)
-
-        use(IOUtil) {
-            output.writeInt(col)
-            output.writeInt(row)
-            output.writeInt(maxItemNum)
-            output.writeInt(iconWidth)
-            output.writeInt(iconHeight)
-            output.writeInt(gapX)
-            output.writeInt(gapY)
-            output.writeInt(offsetX)
-            output.writeInt(offsetY)
-            output.writeInt(backgroundItemWidth)
-            output.writeInt(backgroundItemHeight)
-            output.writeString(backgroundItemTex)
-            output.writeInt(selectedItemWidth)
-            output.writeInt(selectedItemHeight)
-            output.writeString(selectedItemTex)
-            output.writeInt(unselectedItemWidth)
-            output.writeInt(unselectedItemHeight)
-            output.writeString(unselectedItemTex)
-            output.writeInt(noSelectItem)
-            output.writeInt(noItemDrag)
-            output.writeInt(buttonClick)
-            output.writeInt(useCoolTime)
-            output.writeInt(noScroll)
-            output.writeString(outLineUp)
-            output.writeString(outLineDown)
-        }
-
-        this
-    }
-
+    // @formatter:off
     @Deprecated int getCols() { col }
     @Deprecated void setCols(int cols) { this.col = cols }
 
@@ -173,4 +113,5 @@ class ItemWindow extends DefaultProperty {
 
     @Deprecated String getUnk129() { outLineDown }
     @Deprecated void setUnk129(String unk129) { this.outLineDown = unk129 }
+    // @formatter:on
 }
