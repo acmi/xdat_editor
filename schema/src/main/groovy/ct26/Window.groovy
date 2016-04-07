@@ -28,7 +28,7 @@ class Window extends DefaultProperty implements Iterable<DefaultProperty> {
     DirectionType frameDirection = DirectionType.None
     Boolean exitbutton
     Boolean draggable
-    DirectionType resizeFrameDirection
+    DirectionType resizeFrameDirection = DirectionType.None
     float resizeFrameX = -9999.0
     float resizeFrameY = -9999.0
     float resizeFrameWidth = -9999.0

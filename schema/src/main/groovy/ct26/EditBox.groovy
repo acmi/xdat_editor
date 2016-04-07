@@ -13,7 +13,7 @@ class EditBox extends DefaultProperty {
     Boolean chatMarkOn
     int offsetX = -9999
     Boolean candidateBoxShowUpPos
-    AutoCompletionType autoCompletionType
+    AutoCompletionType autoCompletionType = AutoCompletionType.NotUsed
 
     enum Type {
         NORMAL,

@@ -18,7 +18,7 @@ class Texture extends DefaultProperty {
     int isAnimTex
     AutoRotateType autoRotate = AutoRotateType.None
     float maskLayer
-    Color colorModify
+    Color colorModify = Color.WHITE
 
     @Override
     Texture read(InputStream input) {

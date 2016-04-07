@@ -15,7 +15,7 @@ class EditBox extends DefaultProperty {
     int offsetX = -9999
     Boolean candidateBoxShowUpPos
     Boolean useAutoCompletion
-    BooleanEvent enableCopyNPaste
+    BooleanEvent enableCopyNPaste = BooleanEvent.Default
 
     enum Type {
         NORMAL,
