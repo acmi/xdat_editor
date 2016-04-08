@@ -1,8 +1,8 @@
 package ct1
 
-import acmi.l2.clientmod.util.IOUtil
 import acmi.l2.clientmod.l2resources.Sysstr
 import acmi.l2.clientmod.l2resources.Tex
+import acmi.l2.clientmod.util.IOUtil
 import acmi.l2.clientmod.util.defaultio.DefaultIO
 import groovy.transform.CompileStatic
 
@@ -24,6 +24,7 @@ class CheckBox extends DefaultProperty {
     @Tex
     String disableCheckTexture = 'undefined'
 
+    // @formatter:off
     @Deprecated int getLabelStringId() { titleIndex }
     @Deprecated void setLabelStringId(int labelStringId) { this.titleIndex = labelStringId }
 
@@ -50,4 +51,5 @@ class CheckBox extends DefaultProperty {
 
     @Deprecated String getTexCheckedUnable() { disableCheckTexture }
     @Deprecated void setTexCheckedUnable(String texCheckedUnable) { this.disableCheckTexture = texCheckedUnable }
+    // @formatter:on
 }

@@ -6,7 +6,7 @@ import acmi.l2.clientmod.util.SubclassManager
 import acmi.l2.clientmod.util.Type
 
 class XDAT implements IOEntity {
-    @Type(Window.class)
+    @Type(Window)
     List<Window> windows = []
     @Type(Shortcut.class)
     List<Shortcut> shortcuts = []

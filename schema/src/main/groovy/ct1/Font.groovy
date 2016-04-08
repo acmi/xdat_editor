@@ -44,14 +44,14 @@ class Font implements IOEntity {
                 if (shadow) {
                     shadow_x = input.readInt()
                     shadow_y = input.readInt()
-                }else{
+                } else {
                     unused01 = input.readInt()
                     unused02 = input.readInt()
                 }
                 stroke = input.readBoolean()
                 if (stroke) {
                     stroke_large = input.readBoolean()
-                }else{
+                } else {
                     unused11 = input.readInt()
                 }
                 lineGap = input.readInt()
@@ -73,14 +73,14 @@ class Font implements IOEntity {
                 if (shadow) {
                     output.writeInt(shadow_x)
                     output.writeInt(shadow_y)
-                }else{
+                } else {
                     output.writeInt(unused01)
                     output.writeInt(unused02)
                 }
                 output.writeBoolean(stroke)
                 if (stroke) {
                     output.writeBoolean(stroke_large)
-                }else{
+                } else {
                     output.writeInt(unused11)
                 }
                 output.writeInt(lineGap)

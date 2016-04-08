@@ -41,6 +41,8 @@ class ScrollArea extends DefaultProperty implements Iterable<DefaultProperty> {
         this
     }
 
+    // @formatter:off
     @Deprecated int getUnk100() { areaHeight }
     @Deprecated void setUnk100(int unk100) { this.areaHeight = unk100 }
+    // @formatter:on
 }

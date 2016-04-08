@@ -1,9 +1,12 @@
 package ct1
 
 import acmi.l2.clientmod.util.IOEntity
-import acmi.l2.clientmod.util.IOUtil
 import acmi.l2.clientmod.util.Type
+import acmi.l2.clientmod.util.defaultio.DefaultIO
+import groovy.transform.CompileStatic
 
+@DefaultIO
+@CompileStatic
 class Shortcut implements IOEntity {
     String unk0
     String unk1
@@ -11,33 +14,12 @@ class Shortcut implements IOEntity {
     List<Action> actions = []
     int unk9
 
+    @DefaultIO
     static class Action implements IOEntity {
         InputKey key_1 = InputKey.IK_None
         InputKey key_2 = InputKey.IK_None
         InputKey key_3 = InputKey.IK_None
         String action
-
-        @Override
-        Action read(InputStream input) {
-            use(IOUtil) {
-                key_1 = InputKey.values()[input.readInt()]
-                key_2 = InputKey.values()[input.readInt()]
-                key_3 = InputKey.values()[input.readInt()]
-                action = input.readString()
-            }
-            this
-        }
-
-        @Override
-        Action write(OutputStream output) {
-            use(IOUtil) {
-                output.writeInt(key_1.ordinal())
-                output.writeInt(key_2.ordinal())
-                output.writeInt(key_3.ordinal())
-                output.writeString(action)
-            }
-            this
-        }
 
         @Override
         String toString() {
@@ -303,7 +285,7 @@ class Shortcut implements IOEntity {
 
             private String text
 
-            InputKey(String text){
+            InputKey(String text) {
                 this.text = text
             }
 
@@ -312,33 +294,6 @@ class Shortcut implements IOEntity {
                 text
             }
         }
-    }
-
-    @Override
-    Shortcut read(InputStream input) {
-        use(IOUtil) {
-            unk0 = input.readString()
-            unk1 = input.readString()
-            int count = input.readInt()
-            for (int i = 0; i < count; i++) {
-                actions.add(new Action().read(input))
-            }
-            unk9 = input.readInt()
-        }
-        this
-    }
-
-    @Override
-    Shortcut write(OutputStream output) {
-        use(IOUtil) {
-            output.writeString(unk0)
-            output.writeString(unk1)
-            output.writeInt(actions.size())
-            for (Action shortcutUnk : actions)
-                shortcutUnk.write(output)
-            output.writeInt(unk9)
-        }
-        this
     }
 
     @Override

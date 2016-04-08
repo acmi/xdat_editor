@@ -2,13 +2,17 @@ package ct1
 
 import acmi.l2.clientmod.util.Description
 import acmi.l2.clientmod.util.IOEntity
-import acmi.l2.clientmod.util.IOUtil
 import acmi.l2.clientmod.util.Type
+import acmi.l2.clientmod.util.defaultio.DefaultIO
+import groovy.transform.CompileStatic
 
+@DefaultIO
+@CompileStatic
 class Tab extends DefaultProperty {
     @Type(TabElement.class)
     List<TabElement> tabs = []
 
+    @DefaultIO
     static class TabElement implements IOEntity {
         @Description("sysstring")
         int buttonName = -9999
@@ -25,46 +29,11 @@ class Tab extends DefaultProperty {
         int noHighlight = -1
 
         @Override
-        TabElement read(InputStream input) {
-            use(IOUtil) {
-                buttonName = input.readInt()
-                buttonNameText = input.readString()
-                target = input.readString()
-                width = input.readInt()
-                height = input.readInt()
-                normalTex = input.readString()
-                pushedTex = input.readString()
-                movable = input.readBoolean()
-                gap = input.readInt()
-                tooltip = input.readInt()
-                noHighlight = input.readInt()
-            }
-            this
-        }
-
-        @Override
-        TabElement write(OutputStream output) {
-            use(IOUtil) {
-                output.writeInt(buttonName)
-                output.writeString(buttonNameText)
-                output.writeString(target)
-                output.writeInt(width)
-                output.writeInt(height)
-                output.writeString(normalTex)
-                output.writeString(pushedTex)
-                output.writeBoolean(movable)
-                output.writeInt(gap)
-                output.writeInt(tooltip)
-                output.writeInt(noHighlight)
-            }
-            this
-        }
-
-        @Override
         String toString() {
             getClass().simpleName
         }
 
+        // @formatter:off
         @Deprecated int getTitleStringId() { buttonName }
         @Deprecated void setTitleStringId(int titleStringId) { this.buttonName = titleStringId }
 
@@ -97,31 +66,6 @@ class Tab extends DefaultProperty {
 
         @Deprecated int getUnk111() { noHighlight }
         @Deprecated void setUnk111(int unk111) { this.noHighlight = unk111 }
-    }
-
-    @Override
-    Tab read(InputStream input) {
-        super.read(input)
-
-        use(IOUtil) {
-            int count = input.readInt()
-            for (int i = 0; i < count; i++)
-                tabs.add(new TabElement().read(input))
-        }
-
-        this
-    }
-
-    @Override
-    Tab write(OutputStream output) {
-        super.write(output)
-
-        use(IOUtil) {
-            output.writeInt(tabs.size())
-            for (TabElement tabElement : tabs)
-                tabElement.write(output)
-        }
-
-        this
+        // @formatter:on
     }
 }

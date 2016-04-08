@@ -1,7 +1,10 @@
 package ct1
 
-import acmi.l2.clientmod.util.IOUtil
+import acmi.l2.clientmod.util.defaultio.DefaultIO
+import groovy.transform.CompileStatic
 
+@DefaultIO
+@CompileStatic
 class EffectButton extends DefaultProperty {
     int type
     String normalTex = 'undefined'
@@ -10,38 +13,7 @@ class EffectButton extends DefaultProperty {
     String effectTex1 = 'undefined'
     String effectTex2 = 'undefined'
 
-    @Override
-    EffectButton read(InputStream input) {
-        super.read(input)
-
-        use(IOUtil) {
-            type = input.readInt()
-            normalTex = input.readString()
-            pushedTex = input.readString()
-            highlightTex = input.readString()
-            effectTex1 = input.readString()
-            effectTex2 = input.readString()
-        }
-
-        this
-    }
-
-    @Override
-    EffectButton write(OutputStream output) {
-        super.write(output)
-
-        use(IOUtil) {
-            output.writeInt(type)
-            output.writeString(normalTex)
-            output.writeString(pushedTex)
-            output.writeString(highlightTex)
-            output.writeString(effectTex1)
-            output.writeString(effectTex2)
-        }
-
-        this
-    }
-
+    // @formatter:off
     @Deprecated int getUnk100() { type }
     @Deprecated void setUnk100(int unk100) { this.type = unk100 }
 
@@ -59,4 +31,5 @@ class EffectButton extends DefaultProperty {
 
     @Deprecated String getTexEffect2() { effectTex2 }
     @Deprecated void setTexEffect2(String texEffect2) { this.effectTex2 = texEffect2 }
+    // @formatter:on
 }

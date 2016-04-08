@@ -1,8 +1,11 @@
 package ct1
 
 import acmi.l2.clientmod.util.Description
-import acmi.l2.clientmod.util.IOUtil
+import acmi.l2.clientmod.util.defaultio.DefaultIO
+import groovy.transform.CompileStatic
 
+@DefaultIO
+@CompileStatic
 class Button extends DefaultProperty {
     String normalTex = 'undefined'
     String pushedTex = 'undefined'
@@ -18,44 +21,7 @@ class Button extends DefaultProperty {
     @Description('-9999/5000')
     int disableTime = -9999
 
-    @Override
-    Button read(InputStream input) {
-        super.read(input)
-
-        use(IOUtil) {
-            normalTex = input.readString()
-            pushedTex = input.readString()
-            highlightTex = input.readString()
-            dropTex = input.readString()
-            buttonName = input.readInt()
-            buttonNameText = input.readString()
-            noHighlight = input.readInt()
-            defaultSoundOn = input.readInt()
-            disableTime = input.readInt()
-        }
-
-        this
-    }
-
-    @Override
-    Button write(OutputStream output) {
-        super.write(output)
-
-        use(IOUtil) {
-            output.writeString(normalTex)
-            output.writeString(pushedTex)
-            output.writeString(highlightTex)
-            output.writeString(dropTex)
-            output.writeInt(buttonName)
-            output.writeString(buttonNameText)
-            output.writeInt(noHighlight)
-            output.writeInt(defaultSoundOn)
-            output.writeInt(disableTime)
-        }
-
-        this
-    }
-
+    // @formatter:off
     @Deprecated String getTexture() { normalTex }
     @Deprecated void setTexture(String texture) { this.normalTex = texture }
 
@@ -82,4 +48,5 @@ class Button extends DefaultProperty {
 
     @Deprecated int getUnk108() { disableTime }
     @Deprecated void setUnk108(int unk108) { this.disableTime = unk108 }
+    // @formatter:on
 }

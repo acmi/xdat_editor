@@ -1,38 +1,16 @@
 package ct1
 
-import acmi.l2.clientmod.util.IOUtil
+import acmi.l2.clientmod.util.defaultio.DefaultIO
+import groovy.transform.CompileStatic
 
+@DefaultIO
+@CompileStatic
 class ListBox extends DefaultProperty {
     int maxRow
     int showRow
     int showLastLine
 
-    @Override
-    ListBox read(InputStream input) {
-        super.read(input)
-
-        use(IOUtil) {
-            maxRow = input.readInt()
-            showRow = input.readInt()
-            showLastLine = input.readInt()
-        }
-
-        this
-    }
-
-    @Override
-    ListBox write(OutputStream output) {
-        super.write(output)
-
-        use(IOUtil) {
-            output.writeInt(maxRow)
-            output.writeInt(showRow)
-            output.writeInt(showLastLine)
-        }
-
-        this
-    }
-
+    // @formatter:off
     @Deprecated int getUnk100() { maxRow }
     @Deprecated void setUnk100(int unk100) { this.maxRow = unk100 }
 
@@ -41,4 +19,5 @@ class ListBox extends DefaultProperty {
 
     @Deprecated int getUnk102() { showLastLine }
     @Deprecated void setUnk102(int unk102) { this.showLastLine = unk102 }
+    // @formatter:on
 }

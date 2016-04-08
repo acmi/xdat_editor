@@ -1,9 +1,11 @@
 package ct1
 
 import acmi.l2.clientmod.util.Description
-import acmi.l2.clientmod.util.IOUtil
-import javafx.scene.paint.Color
+import acmi.l2.clientmod.util.defaultio.DefaultIO
+import groovy.transform.CompileStatic
 
+@DefaultIO
+@CompileStatic
 class Texture extends DefaultProperty {
     String file
     TextureCtrlType type = TextureCtrlType.Stretch
@@ -17,48 +19,6 @@ class Texture extends DefaultProperty {
     int isAnimTex
     AutoRotateType autoRotate = AutoRotateType.None
     float maskLayer
-
-    @Override
-    Texture read(InputStream input) {
-        super.read(input)
-
-        use(IOUtil, Texture) {
-            file = input.readString()
-            type = TextureCtrlType.values()[input.readInt()]
-            layer = TextureLayer.values()[input.readInt()]
-            u = input.readFloat()
-            v = input.readFloat()
-            uSize = input.readFloat()
-            vSize = input.readFloat()
-            alpha = input.readInt()
-            isAnimTex = input.readInt()
-            autoRotate = AutoRotateType.values()[input.readInt()]
-            maskLayer = input.readFloat()
-        }
-
-        this
-    }
-
-    @Override
-    Texture write(OutputStream output) {
-        super.write(output)
-
-        use(IOUtil, Texture) {
-            output.writeString(file)
-            output.writeInt(type.ordinal())
-            output.writeInt(layer.ordinal())
-            output.writeFloat(u)
-            output.writeFloat(v)
-            output.writeFloat(uSize)
-            output.writeFloat(vSize)
-            output.writeInt(alpha)
-            output.writeInt(isAnimTex)
-            output.writeInt(autoRotate.ordinal())
-            output.writeFloat(maskLayer)
-        }
-
-        this
-    }
 
     enum TextureCtrlType {
         Stretch,
@@ -75,12 +35,13 @@ class Texture extends DefaultProperty {
         Background
     }
 
-    enum AutoRotateType{
+    enum AutoRotateType {
         None,
         Camera,
         Pawn
     }
 
+    // @formatter:off
     @Deprecated String getUnk100() { file }
     @Deprecated void setUnk100(String unk100) { this.file = unk100 }
 
@@ -113,4 +74,5 @@ class Texture extends DefaultProperty {
 
     @Deprecated float getUnk111() { maskLayer }
     @Deprecated void setUnk111(float unk111) { this.maskLayer = unk111 }
+    // @formatter:on
 }

@@ -1,7 +1,10 @@
 package ct1
 
-import acmi.l2.clientmod.util.IOUtil
+import acmi.l2.clientmod.util.defaultio.DefaultIO
+import groovy.transform.CompileStatic
 
+@DefaultIO
+@CompileStatic
 class StatusBar extends DefaultProperty {
     String title
     int barWidth
@@ -22,62 +25,7 @@ class StatusBar extends DefaultProperty {
     int gaugeFontSizeX
     int gaugeFontSizeY
 
-    @Override
-    StatusBar read(InputStream input) {
-        super.read(input)
-
-        use(IOUtil) {
-            title = input.readString()
-            barWidth = input.readInt()
-            barHeight = input.readInt()
-            foreTex = input.readString()
-            foreLeftTex = input.readString()
-            foreRightTex = input.readString()
-            backTex = input.readString()
-            backLeftTex = input.readString()
-            backRightTex = input.readString()
-            regenLeftTex = input.readString()
-            regenTex = input.readString()
-            regenRightTex = input.readString()
-            warnTex = input.readString()
-            warnLeftTex = input.readString()
-            warnRightTex = input.readString()
-            gaugeFontTextureName = input.readString()
-            gaugeFontSizeX = input.readInt()
-            gaugeFontSizeY = input.readInt()
-        }
-
-        this
-    }
-
-    @Override
-    StatusBar write(OutputStream output) {
-        super.write(output)
-
-        use(IOUtil) {
-            output.writeString(title)
-            output.writeInt(barWidth)
-            output.writeInt(barHeight)
-            output.writeString(foreTex)
-            output.writeString(foreLeftTex)
-            output.writeString(foreRightTex)
-            output.writeString(backTex)
-            output.writeString(backLeftTex)
-            output.writeString(backRightTex)
-            output.writeString(regenLeftTex)
-            output.writeString(regenTex)
-            output.writeString(regenRightTex)
-            output.writeString(warnTex)
-            output.writeString(warnLeftTex)
-            output.writeString(warnRightTex)
-            output.writeString(gaugeFontTextureName)
-            output.writeInt(gaugeFontSizeX)
-            output.writeInt(gaugeFontSizeY)
-        }
-
-        this
-    }
-
+    // @formatter:off
     @Deprecated String getUnk100() { title }
     @Deprecated void setUnk100(String unk100) { this.title = unk100 }
 
@@ -131,4 +79,5 @@ class StatusBar extends DefaultProperty {
 
     @Deprecated int getUnk119() { gaugeFontSizeY }
     @Deprecated void setUnk119(int unk119) { this.gaugeFontSizeY = unk119 }
+    // @formatter:on
 }

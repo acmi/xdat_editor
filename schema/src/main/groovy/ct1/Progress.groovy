@@ -1,7 +1,10 @@
 package ct1
 
-import acmi.l2.clientmod.util.IOUtil
+import acmi.l2.clientmod.util.defaultio.DefaultIO
+import groovy.transform.CompileStatic
 
+@DefaultIO
+@CompileStatic
 class Progress extends DefaultProperty {
     String unk100
     String backLeftTexture
@@ -14,46 +17,6 @@ class Progress extends DefaultProperty {
     int textureSize
     ProgressBarType type = ProgressBarType.None
 
-    @Override
-    Progress read(InputStream input) {
-        super.read(input)
-
-        use(IOUtil) {
-            unk100 = input.readString()
-            backLeftTexture = input.readString()
-            backTexture = input.readString()
-            backRightTexture = input.readString()
-            barLeftTexture = input.readString()
-            barTexture = input.readString()
-            barRightTexture = input.readString()
-            gap = input.readInt()
-            textureSize = input.readInt()
-            type = ProgressBarType.values()[input.readInt()]
-        }
-
-        this
-    }
-
-    @Override
-    Progress write(OutputStream output) {
-        super.write(output)
-
-        use(IOUtil) {
-            output.writeString(unk100)
-            output.writeString(backLeftTexture)
-            output.writeString(backTexture)
-            output.writeString(backRightTexture)
-            output.writeString(barLeftTexture)
-            output.writeString(barTexture)
-            output.writeString(barRightTexture)
-            output.writeInt(gap)
-            output.writeInt(textureSize)
-            output.writeInt(type.ordinal())
-        }
-
-        this
-    }
-
     enum ProgressBarType {
         None,
         RightLeft,
@@ -62,6 +25,7 @@ class Progress extends DefaultProperty {
         BottomTop,
     }
 
+    // @formatter:off
     @Deprecated String getUnk101() { backLeftTexture }
     @Deprecated void setUnk101(String unk101) { this.backLeftTexture = unk101 }
 
@@ -88,4 +52,5 @@ class Progress extends DefaultProperty {
 
     @Deprecated int getUnk109() { type.ordinal() }
     @Deprecated void setUnk109(int unk109) { this.type = ProgressBarType.values()[unk109] }
+    // @formatter:on
 }

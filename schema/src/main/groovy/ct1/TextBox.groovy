@@ -1,8 +1,11 @@
 package ct1
 
-import acmi.l2.clientmod.util.IOUtil
+import acmi.l2.clientmod.util.defaultio.DefaultIO
+import groovy.transform.CompileStatic
 import javafx.scene.paint.Color
 
+@DefaultIO
+@CompileStatic
 class TextBox extends DefaultProperty {
     String text
     TextAlign textAlign = TextAlign.Undefined
@@ -14,46 +17,6 @@ class TextBox extends DefaultProperty {
     Color textColor = new Color(0.0, 0.0, 0.0, 0.0)
     int emoticon
     int autosize
-
-    @Override
-    TextBox read(InputStream input) {
-        super.read(input)
-
-        use(IOUtil) {
-            text = input.readString()
-            textAlign = TextAlign.values()[input.readInt()]
-            textVAlign = TextVAlign.values()[input.readInt()]
-            fontType = input.readInt()
-            backTex = input.readString()
-            sysstring = input.readInt()
-            systemMsg = input.readInt()
-            textColor = input.readColor()
-            emoticon = input.readInt()
-            autosize = input.readInt()
-        }
-
-        this
-    }
-
-    @Override
-    TextBox write(OutputStream output) {
-        super.write(output)
-
-        use(IOUtil) {
-            output.writeString(text)
-            output.writeInt(textAlign.ordinal())
-            output.writeInt(textVAlign.ordinal())
-            output.writeInt(fontType)
-            output.writeString(backTex)
-            output.writeInt(sysstring)
-            output.writeInt(systemMsg)
-            output.writeColor(textColor)
-            output.writeInt(emoticon)
-            output.writeInt(autosize)
-        }
-
-        this
-    }
 
     enum TextAlign {
         Undefined,
@@ -70,6 +33,7 @@ class TextBox extends DefaultProperty {
         Bottom,
     }
 
+    // @formatter:off
     @Deprecated String getUnk100() { text }
     @Deprecated void setUnk100(String unk100) { this.text = unk100 }
 
@@ -99,4 +63,5 @@ class TextBox extends DefaultProperty {
 
     @Deprecated int getUnk109() { autosize }
     @Deprecated void setUnk109(int unk109) { this.autosize = unk109 }
+    // @formatter:on
 }
