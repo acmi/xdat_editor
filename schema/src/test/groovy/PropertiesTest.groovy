@@ -123,4 +123,10 @@ class PropertiesTest {
         new etoa3_.XDAT()
         test(SubclassManager.instance.getClassWithAllSubclasses(etoa3_.DefaultProperty))
     }
+
+    @Test
+    void Helios3() {
+        new etoa3__.XDAT()
+        test(SubclassManager.instance.getClassWithAllSubclasses(etoa3__.DefaultProperty))
+    }
 }
