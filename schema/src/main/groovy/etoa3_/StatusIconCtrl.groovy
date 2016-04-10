@@ -2,7 +2,9 @@ package etoa3_
 
 import acmi.l2.clientmod.util.defaultio.DefaultIO
 import groovy.transform.CompileStatic
+import groovyx.javafx.beans.FXBindable
 
+@FXBindable
 @DefaultIO
 @CompileStatic
 class StatusIconCtrl extends DefaultProperty {
@@ -11,6 +13,7 @@ class StatusIconCtrl extends DefaultProperty {
     int align
     Boolean alarmBelow24Hour = false
 
+    // @formatter:off
     @Deprecated boolean getUnk100() { noClip }
     @Deprecated void setUnk100(boolean unk100) { this.noClip = unk100 }
 
@@ -22,4 +25,5 @@ class StatusIconCtrl extends DefaultProperty {
 
     @Deprecated boolean getUnk103() { alarmBelow24Hour }
     @Deprecated void setUnk103(boolean unk103) { this.alarmBelow24Hour = unk103 }
+    // @formatter:on
 }

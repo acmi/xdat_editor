@@ -4,7 +4,9 @@ import acmi.l2.clientmod.util.IOUtil
 import acmi.l2.clientmod.util.IntValue
 import acmi.l2.clientmod.util.defaultio.DefaultIO
 import groovy.transform.CompileStatic
+import groovyx.javafx.beans.FXBindable
 
+@FXBindable
 @DefaultIO
 @CompileStatic
 class EditBox extends DefaultProperty {
@@ -46,6 +48,7 @@ class EditBox extends DefaultProperty {
         }
     }
 
+    // @formatter:off
     @Deprecated int getUnk102() { IOUtil.boolToInt(showCursor) }
     @Deprecated void setUnk102(int unk102) { this.showCursor = IOUtil.intToBool(unk102) }
 
@@ -63,4 +66,5 @@ class EditBox extends DefaultProperty {
 
     @Deprecated int getUnk107() { return enableCopyNPaste.intValue() }
     @Deprecated void setUnk107(int unk107) { this.enableCopyNPaste = BooleanEvent.valueOf(unk107) }
+    // @formatter:on
 }

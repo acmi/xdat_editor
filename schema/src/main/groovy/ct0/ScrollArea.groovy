@@ -3,7 +3,9 @@ package ct0
 import acmi.l2.clientmod.util.Type
 import acmi.l2.clientmod.util.defaultio.DefaultIO
 import groovy.transform.CompileStatic
+import groovyx.javafx.beans.FXBindable
 
+@FXBindable
 @DefaultIO
 @CompileStatic
 class ScrollArea extends DefaultProperty implements Iterable<DefaultProperty> {

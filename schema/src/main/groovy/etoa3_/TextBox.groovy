@@ -6,8 +6,10 @@ import acmi.l2.clientmod.l2resources.Sysstr
 import acmi.l2.clientmod.l2resources.Tex
 import acmi.l2.clientmod.util.defaultio.DefaultIO
 import groovy.transform.CompileStatic
+import groovyx.javafx.beans.FXBindable
 import javafx.scene.paint.Color
 
+@FXBindable
 @DefaultIO
 @CompileStatic
 class TextBox extends DefaultProperty {
@@ -58,6 +60,7 @@ class TextBox extends DefaultProperty {
         }
     }
 
+    // @formatter:off
     @Deprecated String getUnk100() { text }
     @Deprecated void setUnk100(String unk100) { this.text = unk100 }
 
@@ -87,4 +90,5 @@ class TextBox extends DefaultProperty {
 
     @Deprecated int getUnk109() { IOUtil.boolToInt(autosize) }
     @Deprecated void setUnk109(int unk109) { this.autosize = IOUtil.intToBool(unk109) }
+    // @formatter:on
 }

@@ -5,9 +5,10 @@ import acmi.l2.clientmod.l2resources.Tex
 import acmi.l2.clientmod.util.Type
 import acmi.l2.clientmod.util.defaultio.DefaultIO
 import groovy.transform.CompileStatic
+import groovyx.javafx.beans.FXBindable
 
+@FXBindable
 @DefaultIO
-@CompileStatic
 class MinimapCtrl extends DefaultProperty {
     boolean showTime = true
     boolean showTown = true
@@ -18,6 +19,7 @@ class MinimapCtrl extends DefaultProperty {
     @Type(MiniMapCtrlIconType.class)
     List<MiniMapCtrlIconType> miniMapCtrlIconType = []
 
+    @FXBindable
     @DefaultIO
     static class MiniMapCtrlIconType implements IOEntity {
         int typeName
@@ -33,6 +35,7 @@ class MinimapCtrl extends DefaultProperty {
         int offsetY
         int priority
 
+        // @formatter:off
         @Deprecated int getUnk1() { typeName }
         @Deprecated void setUnk1(int unk1) { this.typeName = unk1 }
 
@@ -59,8 +62,10 @@ class MinimapCtrl extends DefaultProperty {
 
         @Deprecated int getUnk9() { priority }
         @Deprecated void setUnk9(int unk9) { this.priority = unk9 }
+        // @formatter:on
     }
 
+    // @formatter:off
     @Deprecated boolean getUnk100() { showTime }
     @Deprecated void setUnk100(boolean unk100) { this.showTime = unk100 }
 
@@ -81,4 +86,5 @@ class MinimapCtrl extends DefaultProperty {
 
     @Deprecated List<MiniMapCtrlIconType> getUnk106() { miniMapCtrlIconType }
     @Deprecated void setUnk106(List<MiniMapCtrlIconType> unk106) { this.miniMapCtrlIconType = unk106 }
+    // @formatter:on
 }

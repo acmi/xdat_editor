@@ -6,7 +6,9 @@ import acmi.l2.clientmod.l2resources.Sysstr
 import acmi.l2.clientmod.l2resources.Tex
 import acmi.l2.clientmod.util.defaultio.DefaultIO
 import groovy.transform.CompileStatic
+import groovyx.javafx.beans.FXBindable
 
+@FXBindable
 @DefaultIO
 @CompileStatic
 class Button extends DefaultProperty {
@@ -28,6 +30,7 @@ class Button extends DefaultProperty {
     @Tex
     String disableTex = 'undefined'
 
+    // @formatter:off
     @Deprecated String getTexture() { normalTex }
     @Deprecated void setTexture(String texture) { this.normalTex = texture }
 
@@ -57,4 +60,5 @@ class Button extends DefaultProperty {
 
     @Deprecated String getUnk109() { disableTex }
     @Deprecated void setUnk109(String unk109) { this.disableTex = unk109 }
+    // @formatter:on
 }

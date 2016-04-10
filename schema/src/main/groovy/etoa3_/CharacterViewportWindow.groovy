@@ -3,7 +3,9 @@ package etoa3_
 import acmi.l2.clientmod.l2resources.Tex
 import acmi.l2.clientmod.util.defaultio.DefaultIO
 import groovy.transform.CompileStatic
+import groovyx.javafx.beans.FXBindable
 
+@FXBindable
 @DefaultIO
 @CompileStatic
 class CharacterViewportWindow extends DefaultProperty {
@@ -22,6 +24,7 @@ class CharacterViewportWindow extends DefaultProperty {
     String maskTex
     int npcID
 
+    // @formatter:off
     @Deprecated float getUnk100() { return characterScale }
     @Deprecated void setUnk100(float unk100) { this.characterScale = unk100 }
 
@@ -57,4 +60,5 @@ class CharacterViewportWindow extends DefaultProperty {
 
     @Deprecated int getUnk110() { return npcID }
     @Deprecated void setUnk110(int unk110) { this.npcID = unk110 }
+    // @formatter:on
 }

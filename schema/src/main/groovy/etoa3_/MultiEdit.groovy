@@ -2,7 +2,9 @@ package etoa3_
 
 import acmi.l2.clientmod.util.defaultio.DefaultIO
 import groovy.transform.CompileStatic
+import groovyx.javafx.beans.FXBindable
 
+@FXBindable
 @DefaultIO
 @CompileStatic
 class MultiEdit extends DefaultProperty {
@@ -10,6 +12,7 @@ class MultiEdit extends DefaultProperty {
     int showRow
     int maxLength
 
+    // @formatter:off
     @Deprecated int getUnk100() { maxRow }
     @Deprecated void setUnk100(int unk100) { this.maxRow = unk100 }
 
@@ -18,4 +21,5 @@ class MultiEdit extends DefaultProperty {
 
     @Deprecated int getUnk102() { maxLength }
     @Deprecated void setUnk102(int unk102) { this.maxLength = unk102 }
+    // @formatter:on
 }

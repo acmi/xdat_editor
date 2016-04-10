@@ -5,15 +5,17 @@ import acmi.l2.clientmod.l2resources.Tex
 import acmi.l2.clientmod.util.Type
 import acmi.l2.clientmod.util.defaultio.DefaultIO
 import groovy.transform.CompileStatic
+import groovyx.javafx.beans.FXBindable
 
+@FXBindable
 @DefaultIO
-@CompileStatic
 class RadarMapCtrl extends DefaultProperty {
 	String mapTextureName
 	float layer
 	@Type(RadarMapCtrlObjectType.class)
     List<RadarMapCtrlObjectType> radarMapCtrlObjectType = []
 
+	@FXBindable
     @DefaultIO
 	static class RadarMapCtrlObjectType implements IOEntity {
 		String typeName

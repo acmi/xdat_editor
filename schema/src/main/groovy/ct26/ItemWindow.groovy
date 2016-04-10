@@ -6,10 +6,10 @@ import acmi.l2.clientmod.util.IOUtil
 import acmi.l2.clientmod.util.StringValue
 import acmi.l2.clientmod.util.Type
 import acmi.l2.clientmod.util.defaultio.DefaultIO
-import groovy.transform.CompileStatic
+import groovyx.javafx.beans.FXBindable
 
+@FXBindable
 @DefaultIO
-@CompileStatic
 class ItemWindow extends DefaultProperty {
     ItemWindowType wndType = ItemWindowType.ScrollType
     int col
@@ -54,6 +54,7 @@ class ItemWindow extends DefaultProperty {
     @Type(ItemWindowInner.class)
     List<ItemWindowInner> expandItem = []
 
+    @FXBindable
     @DefaultIO
     static class ItemWindowInner implements IOEntity {
         int width

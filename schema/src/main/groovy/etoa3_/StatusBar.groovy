@@ -6,9 +6,10 @@ import acmi.l2.clientmod.l2resources.Tex
 import acmi.l2.clientmod.util.Type
 import acmi.l2.clientmod.util.defaultio.DefaultIO
 import groovy.transform.CompileStatic
+import groovyx.javafx.beans.FXBindable
 
+@FXBindable
 @DefaultIO
-@CompileStatic
 class StatusBar extends DefaultProperty {
     String title
     @Sysstr
@@ -48,6 +49,7 @@ class StatusBar extends DefaultProperty {
     @Type(ScaleMark.class)
     List<ScaleMark> unk120 = []
 
+    @FXBindable
     @DefaultIO
     static class ScaleMark implements IOEntity {
         @Tex
@@ -56,6 +58,7 @@ class StatusBar extends DefaultProperty {
         int markWidth
         int markHeight
 
+        // @formatter:off
         @Deprecated String getUnk1() { markTexture }
         @Deprecated void setUnk1(String unk1) { this.markTexture = unk1 }
 
@@ -67,8 +70,10 @@ class StatusBar extends DefaultProperty {
 
         @Deprecated int getUnk4() { markHeight }
         @Deprecated void setUnk4(int unk4) { this.markHeight = unk4 }
+        // @formatter:on
     }
 
+    // @formatter:off
     @Deprecated String getUnk100() { title }
     @Deprecated void setUnk100(String unk100) { this.title = unk100 }
 
@@ -131,4 +136,5 @@ class StatusBar extends DefaultProperty {
 
     @Deprecated int getUnk119() { gaugeFontSizeY }
     @Deprecated void setUnk119(int unk119) { this.gaugeFontSizeY = unk119 }
+    // @formatter:on
 }

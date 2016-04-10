@@ -2,7 +2,9 @@ package ct26
 
 import acmi.l2.clientmod.util.IOUtil
 import acmi.l2.clientmod.util.Type
+import groovyx.javafx.beans.FXBindable
 
+@FXBindable
 class ScrollArea extends DefaultProperty implements Iterable<DefaultProperty> {
     int areaHeight
     @Type(DefaultProperty.class)

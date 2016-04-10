@@ -6,8 +6,10 @@ import acmi.l2.clientmod.util.IOUtil
 import acmi.l2.clientmod.util.IntValue
 import acmi.l2.clientmod.util.defaultio.DefaultIO
 import groovy.transform.CompileStatic
+import groovyx.javafx.beans.FXBindable
 import javafx.scene.paint.Color
 
+@FXBindable
 @DefaultIO
 @CompileStatic
 class TextBox extends DefaultProperty {

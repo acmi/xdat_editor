@@ -4,7 +4,9 @@ import acmi.l2.clientmod.l2resources.Sysstr
 import acmi.l2.clientmod.l2resources.Tex
 import acmi.l2.clientmod.util.*
 import acmi.l2.clientmod.util.defaultio.DefaultIO
+import groovyx.javafx.beans.FXBindable
 
+@FXBindable
 class Window extends DefaultProperty implements Iterable<DefaultProperty> {
     String parent
     @Tex
@@ -299,6 +301,7 @@ class Window extends DefaultProperty implements Iterable<DefaultProperty> {
         this
     }
 
+    // @formatter:off
     @Deprecated String getUnk100() { parent }
     @Deprecated void setUnk100(String unk100) { this.parent = unk100 }
 
@@ -451,4 +454,5 @@ class Window extends DefaultProperty implements Iterable<DefaultProperty> {
 
     @Deprecated int getUnk150() { IOUtil.boolToInt(showInArena) }
     @Deprecated void setUnk150(int unk150) { this.showInArena = IOUtil.intToBool(unk150) }
+    // @formatter:on
 }

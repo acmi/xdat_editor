@@ -4,7 +4,9 @@ import acmi.l2.clientmod.util.IOUtil
 import acmi.l2.clientmod.l2resources.Tex
 import acmi.l2.clientmod.util.defaultio.DefaultIO
 import groovy.transform.CompileStatic
+import groovyx.javafx.beans.FXBindable
 
+@FXBindable
 @DefaultIO
 @CompileStatic
 class SliderCtrl extends DefaultProperty {
@@ -36,6 +38,7 @@ class SliderCtrl extends DefaultProperty {
     String tickTexture = 'L2UI_ch3.Button.slider_mark'
     Boolean thumbBtnInclusive
 
+    // @formatter:off
     @Deprecated int getUnk100() { IOUtil.boolToInt(isVerticalType) }
     @Deprecated void setUnk100(int unk100) { this.isVerticalType = IOUtil.intToBool(unk100) }
 
@@ -77,4 +80,5 @@ class SliderCtrl extends DefaultProperty {
 
     @Deprecated int getUnk113() { IOUtil.boolToInt(thumbBtnInclusive) }
     @Deprecated void setUnk113(int unk113) { this.thumbBtnInclusive = IOUtil.intToBool(unk113) }
+    // @formatter:on
 }

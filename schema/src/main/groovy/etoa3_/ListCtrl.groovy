@@ -6,9 +6,10 @@ import acmi.l2.clientmod.l2resources.Sysstr
 import acmi.l2.clientmod.util.Type
 import acmi.l2.clientmod.util.defaultio.DefaultIO
 import groovy.transform.CompileStatic
+import groovyx.javafx.beans.FXBindable
 
+@FXBindable
 @DefaultIO
-@CompileStatic
 class ListCtrl extends DefaultProperty {
     int maxRow
     int showRow
@@ -20,6 +21,7 @@ class ListCtrl extends DefaultProperty {
     @Type(ListElement.class)
     List<ListElement> values = []
 
+    @FXBindable
     @DefaultIO
     static class ListElement implements IOEntity {
         @Sysstr
@@ -34,6 +36,7 @@ class ListCtrl extends DefaultProperty {
             return getClass().simpleName
         }
 
+        // @formatter:off
         @Deprecated boolean getUnk108() { bAscend }
         @Deprecated void setUnk108(boolean unk108) { this.bAscend = unk108 }
 
@@ -42,8 +45,10 @@ class ListCtrl extends DefaultProperty {
 
         @Deprecated boolean getUnk110() { bNumber }
         @Deprecated void setUnk110(boolean unk110) { this.bNumber = unk110 }
+        // @formatter:on
     }
 
+    // @formatter:off
     @Deprecated int getUnk100() { maxRow }
     @Deprecated void setUnk100(int unk100) { this.maxRow = unk100 }
 
@@ -64,4 +69,5 @@ class ListCtrl extends DefaultProperty {
 
     @Deprecated int getUnk1042() { IOUtil.boolToInt(useWheelForScroll) }
     @Deprecated void setUnk1042(int unk1042) { this.useWheelForScroll = IOUtil.intToBool(unk1042) }
+    // @formatter:on
 }

@@ -5,10 +5,10 @@ import acmi.l2.clientmod.util.IOEntity
 import acmi.l2.clientmod.util.IOUtil
 import acmi.l2.clientmod.util.Type
 import acmi.l2.clientmod.util.defaultio.DefaultIO
-import groovy.transform.CompileStatic
+import groovyx.javafx.beans.FXBindable
 
+@FXBindable
 @DefaultIO
-@CompileStatic
 class ListCtrl extends DefaultProperty {
     int maxRow
     int showRow
@@ -18,6 +18,7 @@ class ListCtrl extends DefaultProperty {
     @Type(ListElement.class)
     List<ListElement> values = []
 
+    @FXBindable
     @DefaultIO
     static class ListElement implements IOEntity {
         @Sysstr

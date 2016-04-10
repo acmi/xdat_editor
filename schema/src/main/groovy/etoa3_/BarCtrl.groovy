@@ -3,7 +3,9 @@ package etoa3_
 import acmi.l2.clientmod.l2resources.Tex
 import acmi.l2.clientmod.util.defaultio.DefaultIO
 import groovy.transform.CompileStatic
+import groovyx.javafx.beans.FXBindable
 
+@FXBindable
 @DefaultIO
 @CompileStatic
 class BarCtrl extends DefaultProperty {
@@ -22,6 +24,7 @@ class BarCtrl extends DefaultProperty {
     int uSize
     int vSize
 
+    // @formatter:off
     @Deprecated String getTexCenter() { foreTexture }
     @Deprecated void setTexCenter(String texCenter) { this.foreTexture = texCenter }
 
@@ -45,4 +48,5 @@ class BarCtrl extends DefaultProperty {
 
     @Deprecated int getUnk107() { vSize }
     @Deprecated void setUnk107(int unk107) { this.vSize = unk107 }
+    // @formatter:on
 }

@@ -3,7 +3,9 @@ package etoa3_
 import acmi.l2.clientmod.util.IOUtil
 import acmi.l2.clientmod.util.defaultio.DefaultIO
 import groovy.transform.CompileStatic
+import groovyx.javafx.beans.FXBindable
 
+@FXBindable
 @DefaultIO
 @CompileStatic
 class ListBox extends DefaultProperty {
@@ -12,6 +14,7 @@ class ListBox extends DefaultProperty {
     Boolean showLastLine
     int lineGap
 
+    // @formatter:off
     @Deprecated int getUnk100() { maxRow }
     @Deprecated void setUnk100(int unk100) { this.maxRow = unk100 }
 
@@ -23,4 +26,5 @@ class ListBox extends DefaultProperty {
 
     @Deprecated int getUnk103() { lineGap }
     @Deprecated void setUnk103(int unk103) { this.lineGap = unk103 }
+    // @formatter:on
 }

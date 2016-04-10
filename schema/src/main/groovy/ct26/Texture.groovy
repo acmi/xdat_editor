@@ -7,8 +7,10 @@ import acmi.l2.clientmod.util.StringValue
 import acmi.l2.clientmod.util.defaultio.DefaultIO
 import acmi.l2.clientmod.util.defaultio.RGBA
 import groovy.transform.CompileStatic
+import groovyx.javafx.beans.FXBindable
 import javafx.scene.paint.Color
 
+@FXBindable
 @DefaultIO
 @CompileStatic
 class Texture extends DefaultProperty {

@@ -5,14 +5,15 @@ import acmi.l2.clientmod.l2resources.Tex
 import acmi.l2.clientmod.util.IOEntity
 import acmi.l2.clientmod.util.Type
 import acmi.l2.clientmod.util.defaultio.DefaultIO
-import groovy.transform.CompileStatic
+import groovyx.javafx.beans.FXBindable
 
+@FXBindable
 @DefaultIO
-@CompileStatic
 class Tab extends DefaultProperty {
     @Type(TabElement.class)
     List<TabElement> tabs = []
 
+    @FXBindable
     @DefaultIO
     static class TabElement implements IOEntity {
         @Sysstr
