@@ -147,7 +147,7 @@ class InterfaceTest {
     }
 
     @Test
-    void Helios4() {
-        test(etoa3___.XDAT, 'interface/Interface_helios+++.xdat')
+    void GrandCrusade() {
+        test(etoa4.XDAT, 'interface/Interface_grand_crusade.xdat')
     }
 }
