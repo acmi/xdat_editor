@@ -1,7 +1,9 @@
 import acmi.l2.clientmod.util.IOEntity
+import org.apache.commons.io.input.CountingInputStream
 import org.junit.Test
 
 import static org.junit.Assert.assertArrayEquals
+import static org.junit.Assert.fail
 
 class InterfaceTest {
     void test(Class<? extends IOEntity> clazz, String resource) {
@@ -9,7 +11,16 @@ class InterfaceTest {
 
         def xdat = clazz.newInstance()
 
-        xdat.read(new ByteArrayInputStream(originalBytes))
+        new CountingInputStream(new ByteArrayInputStream(originalBytes)).with {
+            try {
+                xdat.read(it)
+            } catch (IOException e) {
+                System.err.println("Position: " + it.count)
+                e.printStackTrace(System.err)
+
+                fail("Couldn't read xdat");
+            }
+        }
 
         def baos = new ByteArrayOutputStream(originalBytes.length)
 
