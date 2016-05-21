@@ -1,8 +1,0 @@
-apply plugin: 'java'
-
-dependencies {
-    compile files('libs/l2io.jar')
-    compile files('libs/jsquish.jar')
-    compile group: 'commons-io', name: 'commons-io', version: '2.4'
-    compile group: 'acmi.l2.clientmod', name: 'l2crypt', version: '1.2'
-}

@@ -1,0 +1,9 @@
+[submodule "groovyfx"]
+	path = groovyfx
+	url = https://github.com/acmi/groovyfx-bindable.git
+[submodule "commons"]
+	path = commons
+	url = https://github.com/acmi/xdat_editor_commons.git
+[submodule "schema"]
+	path = schema
+	url = https://github.com/acmi/xdat_editor_schema.git
