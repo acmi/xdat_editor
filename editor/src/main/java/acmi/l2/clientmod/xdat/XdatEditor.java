@@ -37,6 +37,7 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URISyntaxException;
@@ -135,12 +136,13 @@ public class XdatEditor extends Application {
     }
 
     private void postShow() {
+        applicationVersion = "unknown";
+
         try {
             applicationVersion = readAppVersion();
+        } catch (FileNotFoundException ignore) {
         } catch (IOException | URISyntaxException e) {
             log.log(Level.WARNING, "version info load error", e);
-
-            applicationVersion = "unknown";
         }
 
         loadSchema();
