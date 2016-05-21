@@ -22,7 +22,11 @@
 package acmi.l2.clientmod.xdat;
 
 import acmi.l2.clientmod.crypt.L2Crypt;
-import acmi.l2.clientmod.l2resources.*;
+import acmi.l2.clientmod.l2resources.L2Context;
+import acmi.l2.clientmod.l2resources.L2Resources;
+import acmi.l2.clientmod.l2resources.Sysstr;
+import acmi.l2.clientmod.l2resources.Tex;
+import acmi.l2.clientmod.unreal.Environment;
 import acmi.l2.clientmod.util.*;
 import acmi.l2.clientmod.xdat.propertyeditor.*;
 import groovy.lang.GroovyClassLoader;
@@ -104,7 +108,7 @@ public class Controller implements Initializable {
             if (xdatFile.getValue() == null)
                 return null;
 
-            return new Environment(new File(xdatFile.getValue().getParentFile(), "L2.ini"));
+            return Environment.fromIni(new File(xdatFile.getValue().getParentFile(), "L2.ini"));
         }, xdatFile));
         l2resources.bind(Bindings.createObjectBinding(() -> {
             if (environment.getValue() == null)
@@ -176,7 +180,7 @@ public class Controller implements Initializable {
 
             File file = new File(newValue.getParentFile(), "L2.ini");
             try {
-                TexturePropertyEditor.environment = new Environment(file);
+                TexturePropertyEditor.environment = Environment.fromIni(file);
                 TexturePropertyEditor.environment.getPaths().forEach(s -> log.info("environment path: " + s));
             } catch (Exception ignore) {
             }

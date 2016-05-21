@@ -21,9 +21,9 @@
  */
 package acmi.l2.clientmod.xdat.propertyeditor;
 
-import acmi.l2.clientmod.l2resources.Environment;
 import acmi.l2.clientmod.l2resources.texture.Img;
 import acmi.l2.clientmod.l2resources.texture.MipMapInfo;
+import acmi.l2.clientmod.unreal.Environment;
 import javafx.beans.binding.Bindings;
 import javafx.beans.value.ObservableValue;
 import javafx.embed.swing.SwingFXUtils;
@@ -50,7 +50,7 @@ public class TexturePropertyEditor extends AbstractPropertyEditor<String, TextFi
                 return null;
 
             BufferedImage[] image = new BufferedImage[1];
-            environment.getExportEntry(getValue(), entry -> MipMapInfo.isTexture(entry.getFullClassName()))
+            environment.getExportEntry(getValue(), MipMapInfo::isTexture)
                     .ifPresent(texture -> MipMapInfo.getInfo(texture)
                             .ifPresent(info -> {
                                 try {
