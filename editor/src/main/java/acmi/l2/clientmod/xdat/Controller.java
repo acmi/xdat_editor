@@ -47,6 +47,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.apache.commons.io.input.CountingInputStream;
@@ -676,11 +677,27 @@ public class Controller implements Initializable {
 
     @FXML
     private void about() {
-        Dialogs.show(Alert.AlertType.INFORMATION,
-                "About",
-                null,
-                new Label("XDAT Editor\n" +
-                        "Version: " + editor.getApplicationVersion()));
+        Dialog dialog = new Dialog();
+        dialog.initStyle(StageStyle.UTILITY);
+        dialog.setTitle(interfaceResources.getString("about"));
+
+        Label name = new Label("XDAT Editor");
+        Label version = new Label("Version: " + editor.getApplicationVersion());
+        Label jre = new Label("JRE: " + System.getProperty("java.version"));
+        Label jvm = new Label("JVM: " + System.getProperty("java.vm.name") + " by " + System.getProperty("java.vendor"));
+        Hyperlink link = new Hyperlink("GitHub");
+        link.setOnAction(event -> editor.getHostServices().showDocument("https://github.com/acmi/xdat_editor"));
+
+        VBox content = new VBox(name, version, jre, jvm, link);
+        VBox.setMargin(jre, new Insets(10, 0, 0, 0));
+        VBox.setMargin(link, new Insets(10, 0, 0, 0));
+
+        DialogPane pane = new DialogPane();
+        pane.setContent(content);
+        pane.getButtonTypes().addAll(ButtonType.OK);
+        dialog.setDialogPane(pane);
+
+        dialog.showAndWait();
     }
 
     private static class ListHolder {
