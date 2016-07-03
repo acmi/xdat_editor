@@ -21,34 +21,50 @@
  */
 package acmi.l2.clientmod.xdat;
 
-import javafx.scene.Node;
+import javafx.application.Platform;
 import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
 
-import java.util.Optional;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 
 public class Dialogs {
-    public static void show(Alert.AlertType alertType, String title, String headerText, String contentText) {
-        Alert alert = new Alert(alertType);
-        alert.setTitle(title);
-        alert.setHeaderText(headerText);
-        alert.setContentText(contentText);
-        alert.show();
-    }
+    private static final boolean SHOW_STACKTRACE = System.getProperty("xdat_editor.showStackTrace", "false").equalsIgnoreCase("true");
 
-    public static void show(Alert.AlertType alertType, String title, String headerText, Node graphic) {
-        Alert alert = new Alert(alertType);
-        alert.setTitle(title);
-        alert.setHeaderText(headerText);
-        alert.setGraphic(graphic);
-        alert.show();
-    }
+    public static void showException(Alert.AlertType alertType, String title, String text, Throwable ex) {
+        Platform.runLater(() -> {
+            Alert alert = new Alert(alertType);
+            alert.setTitle(title);
+            alert.setHeaderText(null);
+            alert.setContentText(text);
+            if (SHOW_STACKTRACE && ex != null) {
+                StringWriter sw = new StringWriter();
+                PrintWriter pw = new PrintWriter(sw);
+                ex.printStackTrace(pw);
+                String exceptionText = sw.toString();
 
-    public static Optional<ButtonType> showAndWait(Alert.AlertType alertType, String title, String headerText, String contentText) {
-        Alert alert = new Alert(alertType);
-        alert.setTitle(title);
-        alert.setHeaderText(headerText);
-        alert.setContentText(contentText);
-        return alert.showAndWait();
+                Label label = new Label("Exception stacktrace:");
+
+                TextArea textArea = new TextArea(exceptionText);
+                textArea.setEditable(false);
+                textArea.setWrapText(true);
+
+                textArea.setMaxWidth(Double.MAX_VALUE);
+                textArea.setMaxHeight(Double.MAX_VALUE);
+                GridPane.setVgrow(textArea, Priority.ALWAYS);
+                GridPane.setHgrow(textArea, Priority.ALWAYS);
+
+                GridPane expContent = new GridPane();
+                expContent.setMaxWidth(Double.MAX_VALUE);
+                expContent.add(label, 0, 0);
+                expContent.add(textArea, 0, 1);
+
+                alert.getDialogPane().setExpandableContent(expContent);
+            }
+            alert.showAndWait();
+        });
     }
 }

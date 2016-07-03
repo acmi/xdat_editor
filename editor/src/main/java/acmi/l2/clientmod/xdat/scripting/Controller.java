@@ -92,8 +92,9 @@ public class Controller implements Initializable {
             scriptText.setText(getText(scriptFile));
             output.setText("");
         } catch (IOException e) {
-            log.log(Level.WARNING, "Read error", e);
-            Dialogs.show(Alert.AlertType.WARNING, e.getClass().getSimpleName(), null, e.getMessage());
+            String msg = "Read error";
+            log.log(Level.WARNING, msg, e);
+            Dialogs.showException(Alert.AlertType.WARNING, msg, e.getMessage(), e);
         }
     }
 
@@ -108,8 +109,9 @@ public class Controller implements Initializable {
         try (FileWriter writer = new FileWriter(scriptFile)) {
             writer.write(scriptText.getText());
         } catch (IOException e) {
-            log.log(Level.WARNING, "Write error", e);
-            Dialogs.show(Alert.AlertType.WARNING, e.getClass().getSimpleName(), null, e.getMessage());
+            String msg = "Write error";
+            log.log(Level.WARNING, msg, e);
+            Dialogs.showException(Alert.AlertType.WARNING, msg, e.getMessage(), e);
         }
     }
 

@@ -189,6 +189,7 @@ public class Controller implements Initializable {
 
     public void registerVersion(String name, String xdatClass) {
         RadioMenuItem menuItem = new RadioMenuItem(name);
+        menuItem.setMnemonicParsing(false);
         menuItem.selectedProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue) {
                 editor.execute(() -> {
@@ -196,15 +197,13 @@ public class Controller implements Initializable {
                     Platform.runLater(() -> editor.setXdatClass(clazz));
                     return null;
                 }, e -> {
-                    log.log(Level.WARNING, String.format("%s: XDAT class load error", name), e);
+                    String msg = String.format("%s: XDAT class load error", name);
+                    log.log(Level.WARNING, msg, e);
                     Platform.runLater(() -> {
                         version.getToggles().remove(menuItem);
                         versionMenu.getItems().remove(menuItem);
 
-                        Dialogs.show(Alert.AlertType.ERROR,
-                                name + ": XDAT class load error",
-                                null,
-                                e.getClass().getSimpleName() + ": " + e.getMessage());
+                        Dialogs.showException(Alert.AlertType.ERROR, msg, e.getMessage(), e);
                     });
                 });
             }
@@ -274,13 +273,12 @@ public class Controller implements Initializable {
             return;
 
         try {
+            @SuppressWarnings("unchecked")
             List<IOEntity> list = (List<IOEntity>) listField.get(entity);
             if (!listField.isAnnotationPresent(Type.class)) {
-                log.log(Level.WARNING, String.format("XDAT.%s: @Type not defined", listField.getName()));
-                Dialogs.show(Alert.AlertType.ERROR,
-                        "ReflectiveOperationException",
-                        null,
-                        String.format("XDAT.%s: @Type not defined", listField.getName()));
+                String msg = String.format("XDAT.%s: @Type not defined", listField.getName());
+                log.log(Level.WARNING, msg);
+                Dialogs.showException(Alert.AlertType.ERROR, "ReflectiveOperationException", msg, null);
             } else {
                 Class<? extends IOEntity> type = listField.getAnnotation(Type.class).value().asSubclass(IOEntity.class);
                 TreeItem<Object> rootItem = new TreeItem<>(new ListHolder(entity, list, listField.getName(), type));
@@ -294,11 +292,9 @@ public class Controller implements Initializable {
                                 .collect(Collectors.toList()));
             }
         } catch (IllegalAccessException e) {
-            log.log(Level.WARNING, String.format("%s.%s is not accessible", listField.getDeclaringClass().getSimpleName(), listField.getName()), e);
-            Dialogs.show(Alert.AlertType.ERROR,
-                    "ReflectiveOperationException",
-                    null,
-                    listField.getDeclaringClass().getSimpleName() + "." + listField.getName() + " is not accessible");
+            String msg = String.format("%s.%s is not accessible", listField.getDeclaringClass().getSimpleName(), listField.getName());
+            log.log(Level.WARNING, msg, e);
+            Dialogs.showException(Alert.AlertType.ERROR, "ReflectiveOperationException", msg, e);
         }
     }
 
@@ -345,6 +341,7 @@ public class Controller implements Initializable {
                 delete.setOnAction(event -> {
                     ListHolder parent = (ListHolder) selected.getParent().getValue();
 
+                    @SuppressWarnings("SuspiciousMethodCalls")
                     int index = parent.list.indexOf(value);
                     editor.getHistory().valueRemoved(treeItemToScriptString(selected.getParent()), index);
 
@@ -407,11 +404,9 @@ public class Controller implements Initializable {
 
                     editor.getHistory().valueCreated(treeItemToScriptString(selected), toCreate.clazz);
                 } catch (ReflectiveOperationException e) {
-                    log.log(Level.WARNING, String.format("Couldn't instantiate %s", toCreate.clazz.getName()), e);
-                    Dialogs.show(Alert.AlertType.ERROR,
-                            "ReflectiveOperationException",
-                            null,
-                            "Couldn't instantiate " + toCreate.clazz);
+                    String msg = String.format("Couldn't instantiate %s", toCreate.clazz.getName());
+                    log.log(Level.WARNING, msg, e);
+                    Dialogs.showException(Alert.AlertType.ERROR, "ReflectiveOperationException", msg, e);
                 }
             });
         });
@@ -439,22 +434,19 @@ public class Controller implements Initializable {
             try {
                 obj = Optional.ofNullable(field.get(o));
             } catch (IllegalAccessException e) {
-                log.log(Level.WARNING, String.format("%s.%s is not accessible", o.getClass(), field.getName()), e);
-                Dialogs.show(Alert.AlertType.ERROR,
-                        "ReflectiveOperationException",
-                        null,
-                        String.format("%s.%s is not accessible", o.getClass(), field.getName()));
+                String msg = String.format("%s.%s is not accessible", o.getClass(), field.getName());
+                log.log(Level.WARNING, msg, e);
+                Dialogs.showException(Alert.AlertType.ERROR, "ReflectiveOperationException", msg, e);
             }
 
             obj.ifPresent(val -> {
                 if (List.class.isAssignableFrom(field.getType())) {
                     if (!field.isAnnotationPresent(Type.class)) {
-                        log.log(Level.WARNING, String.format("%s.%s: @Type not defined", o.getClass().getName(), field.getName()));
-                        Dialogs.show(Alert.AlertType.ERROR,
-                                "ReflectiveOperationException",
-                                null,
-                                String.format("%s.%s: @Type not defined", o.getClass().getName(), field.getName()));
+                        String msg = String.format("%s.%s: @Type not defined", o.getClass().getName(), field.getName());
+                        log.log(Level.WARNING, msg);
+                        Dialogs.showException(Alert.AlertType.ERROR, "ReflectiveOperationException", msg, null);
                     } else {
+                        @SuppressWarnings("unchecked")
                         List<IOEntity> list = (List<IOEntity>) val;
                         Class<? extends IOEntity> type = field.getAnnotation(Type.class).value().asSubclass(IOEntity.class);
                         TreeItem<Object> listItem = new TreeItem<>(new ListHolder(o, list, field.getName(), type));
@@ -575,6 +567,7 @@ public class Controller implements Initializable {
                 ListHolder holder = (ListHolder) list.get(i).getValue();
                 sb.append('.').append(holder.name);
                 if (i + 1 < list.size()) {
+                    //noinspection SuspiciousMethodCalls
                     sb.append('[')
                             .append(holder.list.indexOf(list.get(++i).getValue()))
                             .append(']');
@@ -613,21 +606,17 @@ public class Controller implements Initializable {
                     xdat.read(is);
 
                     Platform.runLater(() -> editor.setXdatObject(xdat));
-                } catch (Exception e) {
-                    log.log(Level.WARNING, String.format("Read error before offset 0x%x", cis.getCount()), e);
-                    throw e;
+                } catch (Throwable e) {
+                    String msg = String.format("Read error before offset 0x%x", cis.getCount());
+                    log.log(Level.WARNING, msg, e);
+                    throw new IOException(msg, e);
                 }
                 return null;
-            }, e -> Platform.runLater(() -> Dialogs.show(Alert.AlertType.ERROR,
-                    "Read error",
-                    null,
-                    "Try to choose another version")));
+            }, e -> Dialogs.showException(Alert.AlertType.ERROR, "Read error", "Try to choose another version", e));
         } catch (ReflectiveOperationException e) {
-            log.log(Level.WARNING, "XDAT class should have empty public constructor", e);
-            Dialogs.show(Alert.AlertType.ERROR,
-                    "ReflectiveOperationException",
-                    null,
-                    "XDAT class should have empty public constructor");
+            String msg = "XDAT class should have empty public constructor";
+            log.log(Level.WARNING, msg, e);
+            Dialogs.showException(Alert.AlertType.ERROR, "ReflectiveOperationException", msg, e);
         }
     }
 
@@ -642,11 +631,9 @@ public class Controller implements Initializable {
             }
             return null;
         }, e -> {
-            log.log(Level.WARNING, "Write error", e);
-            Platform.runLater(() -> Dialogs.show(Alert.AlertType.ERROR,
-                    e.getClass().getSimpleName(),
-                    null,
-                    e.getMessage()));
+            String msg = "Write error";
+            log.log(Level.WARNING, msg, e);
+            Dialogs.showException(Alert.AlertType.ERROR, msg, e.getMessage(), e);
         });
     }
 

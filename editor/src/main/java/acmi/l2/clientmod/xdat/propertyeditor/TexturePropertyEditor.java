@@ -49,6 +49,9 @@ public class TexturePropertyEditor extends AbstractPropertyEditor<String, TextFi
             if (environment == null)
                 return null;
 
+            if (getValue() == null || getValue().isEmpty())
+                return null;
+
             BufferedImage[] image = new BufferedImage[1];
             environment.getExportEntry(getValue(), MipMapInfo::isTexture)
                     .ifPresent(texture -> MipMapInfo.getInfo(texture)

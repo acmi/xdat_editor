@@ -164,24 +164,22 @@ public class XdatEditor extends Application {
                 controller.registerVersion(name, className);
             }
         } catch (Exception e) {
-            log.log(Level.WARNING, versionsFilePath + " read error", e);
-            Dialogs.show(Alert.AlertType.WARNING,
-                    e.getClass().getSimpleName(),
-                    null,
-                    e.getMessage());
+            String msg = versionsFilePath + " read error";
+            log.log(Level.WARNING, msg, e);
+            Dialogs.showException(Alert.AlertType.WARNING, msg, e.getMessage(), e);
         }
     }
 
-    public void execute(Callable<Void> r, Consumer<Exception> exceptionConsumer) {
+    public void execute(Callable<Void> r, Consumer<Throwable> exceptionConsumer) {
         execute(r, exceptionConsumer, null);
     }
 
-    public void execute(Callable<Void> r, Consumer<Exception> exceptionConsumer, Runnable finallyCallback) {
+    public void execute(Callable<Void> r, Consumer<Throwable> exceptionConsumer, Runnable finallyCallback) {
         executor.execute(() -> {
             Platform.runLater(() -> working.set(true));
             try {
                 r.call();
-            } catch (Exception e) {
+            } catch (Throwable e) {
                 if (exceptionConsumer != null)
                     exceptionConsumer.accept(e);
             } finally {

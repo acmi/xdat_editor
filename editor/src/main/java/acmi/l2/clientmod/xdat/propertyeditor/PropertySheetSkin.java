@@ -94,7 +94,6 @@ public class PropertySheetSkin extends BehaviorSkinBase<PropertySheet, BehaviorB
             setPadding(new Insets(5, 15, 5, 15 + nestingLevel * 10));
             getStyleClass().add("property-pane");
             setItems(properties);
-//            setGridLinesVisible(true);
         }
 
         public void setItems(List<PropertySheet.Item> properties) {
@@ -136,6 +135,7 @@ public class PropertySheetSkin extends BehaviorSkinBase<PropertySheet, BehaviorB
 
         }
 
+        @SuppressWarnings("unchecked")
         private Node getEditor(PropertySheet.Item item) {
             PropertyEditor editor = getSkinnable().getPropertyEditorFactory().call(item);
             if (editor == null) {
