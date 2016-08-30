@@ -3,7 +3,7 @@ apply plugin: 'java'
 dependencies {
     compile project(':commons:io')
     compile project(':commons:l2resources')
-    compile group: 'org.controlsfx', name: 'controlsfx', version: '8.40.10'
+    compile group: 'org.controlsfx', name: 'controlsfx', version: '8.40.11'
     compile group: 'org.codehaus.groovy', name: 'groovy', version: "${groovyVersion}"
     compile group: 'org.apache.commons', name: 'commons-csv', version: '1.2'
     runtime project(':schema')
