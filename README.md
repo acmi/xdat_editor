@@ -15,6 +15,10 @@ git submodule update
 gradlew build -x test
 ```
 
+Run
+---
+`gradlew run`
+
 Requirements
 ------------
 

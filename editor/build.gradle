@@ -1,4 +1,7 @@
 apply plugin: 'java'
+apply plugin: 'application'
+
+mainClassName = 'acmi.l2.clientmod.xdat.XdatEditor'
 
 dependencies {
     compile project(':commons:io')
@@ -12,7 +15,7 @@ dependencies {
 jar {
     manifest {
         attributes 'Version': parent.version,
-                'Main-Class': 'acmi.l2.clientmod.xdat.XdatEditor',
+                'Main-Class': mainClassName,
                 'Class-Path': configurations.runtime.collect { it.name }.join(' ')
     }
 }
