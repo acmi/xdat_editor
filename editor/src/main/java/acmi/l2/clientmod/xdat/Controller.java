@@ -59,13 +59,9 @@ import org.controlsfx.control.PropertySheet;
 import org.controlsfx.control.textfield.TextFields;
 import org.controlsfx.property.editor.PropertyEditor;
 
-import java.beans.BeanInfo;
-import java.beans.IntrospectionException;
-import java.beans.Introspector;
-import java.beans.PropertyDescriptor;
 import java.io.*;
-import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.net.URL;
 import java.util.*;
 import java.util.logging.Level;
@@ -511,42 +507,31 @@ public class Controller implements Initializable {
         Class<?> objClass = obj.getClass();
         List<PropertySheetItem> list = new ArrayList<>();
         while (objClass != Object.class) {
-            try {
-                List<String> names = Arrays.stream(objClass.getDeclaredFields())
-                        .map(field -> field.getName().replace("Prop", ""))
-                        .collect(Collectors.toList());
-                BeanInfo beanInfo = Introspector.getBeanInfo(objClass, objClass.getSuperclass());
-                PropertyDescriptor[] propertyDescriptors = beanInfo.getPropertyDescriptors();
-                Arrays.sort(propertyDescriptors, (pd1, pd2) -> Integer.compare(names.indexOf(pd1.getName()), names.indexOf(pd2.getName())));
-                for (PropertyDescriptor descriptor : propertyDescriptors) {
-                    if ("metaClass".equals(descriptor.getName()))
-                        continue;
+            for (Field field : objClass.getDeclaredFields()) {
+                if (field.isSynthetic() || Modifier.isStatic(field.getModifiers()))
+                    continue;
 
-                    if (Collection.class.isAssignableFrom(descriptor.getPropertyType()))
-                        continue;
+                if (Collection.class.isAssignableFrom(field.getType()))
+                    continue;
 
-                    AnnotatedElement getter = descriptor.getReadMethod();
-                    if (getter.isAnnotationPresent(Deprecated.class) ||
-                            getter.isAnnotationPresent(Hide.class))
-                        continue;
+                if (field.isAnnotationPresent(Hide.class))
+                    continue;
 
-                    String description = "";
-                    if (getter.isAnnotationPresent(Description.class))
-                        description = getter.getAnnotation(Description.class).value();
-                    Class<? extends PropertyEditor<?>> propertyEditorClass = null;
-                    if (descriptor.getPropertyType() == Boolean.class ||
-                            descriptor.getPropertyType() == Boolean.TYPE) {
-                        propertyEditorClass = BooleanPropertyEditor.class;
-                    } else if (getter.isAnnotationPresent(Tex.class)) {
-                        propertyEditorClass = TexturePropertyEditor.class;
-                    } else if (getter.isAnnotationPresent(Sysstr.class)) {
-                        propertyEditorClass = SysstringPropertyEditor.class;
-                    }
-                    BeanProperty property = new BeanProperty(descriptor, objClass.getSimpleName(), description, propertyEditorClass);
-                    list.add(property);
+                String description = "";
+                if (field.isAnnotationPresent(Description.class))
+                    description = field.getAnnotation(Description.class).value();
+                Class<? extends PropertyEditor<?>> propertyEditorClass = null;
+                if (field.getType() == Boolean.class ||
+                        field.getType() == Boolean.TYPE) {
+                    propertyEditorClass = BooleanPropertyEditor.class;
+                } else if (field.isAnnotationPresent(Tex.class)) {
+                    propertyEditorClass = TexturePropertyEditor.class;
+                } else if (field.isAnnotationPresent(Sysstr.class)) {
+                    propertyEditorClass = SysstringPropertyEditor.class;
                 }
-            } catch (IntrospectionException e) {
-                e.printStackTrace();
+                field.setAccessible(true);
+                PropertySheetItem property = new FieldProperty(field, objClass.getSimpleName(), description, propertyEditorClass);
+                list.add(property);
             }
             objClass = objClass.getSuperclass();
         }
