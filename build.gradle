@@ -2,10 +2,6 @@ version = '1.3.4'
 
 apply plugin: 'distribution'
 
-ext {
-    groovyVersion = '2.4.6'
-}
-
 allprojects {
     repositories {
         mavenCentral()
