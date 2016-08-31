@@ -664,9 +664,16 @@ public class Controller implements Initializable {
         Hyperlink link = new Hyperlink("GitHub");
         link.setOnAction(event -> editor.getHostServices().showDocument("https://github.com/acmi/xdat_editor"));
 
-        VBox content = new VBox(name, version, jre, jvm, link);
+        Label license = new Label(interfaceResources.getString("help.open_source_licenses"));
+        Hyperlink licenseApache = new Hyperlink("Apache Commons IO, Apache Commons CSV,\nApache Commons Lang, Groovy");
+        licenseApache.setOnAction(event -> editor.getHostServices().showDocument("http://www.apache.org/licenses/LICENSE-2.0.txt"));
+        Hyperlink licenseControlsFX = new Hyperlink("ControlsFX");
+        licenseControlsFX.setOnAction(event -> editor.getHostServices().showDocument("https://bitbucket.org/controlsfx/controlsfx/raw/15b3171c215f00de751a37d14f6b678d6896f8a2/license.txt"));
+
+        VBox content = new VBox(name, version, jre, jvm, link, license, licenseApache, licenseControlsFX);
         VBox.setMargin(jre, new Insets(10, 0, 0, 0));
         VBox.setMargin(link, new Insets(10, 0, 0, 0));
+        VBox.setMargin(license, new Insets(15, 0, 0, 0));
 
         DialogPane pane = new DialogPane();
         pane.setContent(content);
