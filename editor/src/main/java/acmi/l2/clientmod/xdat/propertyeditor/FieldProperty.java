@@ -5,7 +5,9 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import org.controlsfx.property.editor.PropertyEditor;
 
+import java.beans.PropertyChangeListener;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -18,6 +20,8 @@ public class FieldProperty extends PropertySheetItem {
     private final Class<? extends PropertyEditor<?>> propertyEditorClass;
     private final List<InvalidationListener> invalidationListeners = new ArrayList<>();
     private final List<ChangeListener<? super Object>> changeListeners = new ArrayList<>();
+    private PropertyChangeListener propertyChangeListener = evt -> notifyChanged(evt.getOldValue(), evt.getNewValue());
+    private Method removeListener;
 
     public FieldProperty(Field field, String category, String description, Class<? extends PropertyEditor<?>> propertyEditorClass) {
         this.field = field;
@@ -70,10 +74,7 @@ public class FieldProperty extends PropertySheetItem {
                 field.set(getObject(), newValue);
 
                 if (!Objects.equals(oldValue, newValue)) {
-                    for (InvalidationListener listener : invalidationListeners)
-                        listener.invalidated(this);
-                    for (ChangeListener<? super Object> listener : changeListeners)
-                        listener.changed(this, oldValue, newValue);
+                    notifyChanged(oldValue, newValue);
                 }
             } catch (ReflectiveOperationException e) {
                 e.printStackTrace();
@@ -83,8 +84,29 @@ public class FieldProperty extends PropertySheetItem {
     }
 
     @Override
+    public void setObject(Object object) {
+        if (getObject() != null && removeListener != null) {
+            try {
+                removeListener.invoke(getObject(), getName(), propertyChangeListener);
+            } catch (ReflectiveOperationException ignore) {
+            }
+            removeListener = null;
+        }
+
+        super.setObject(object);
+
+        try {
+            removeListener = object.getClass().getMethod("removePropertyChangeListener", String.class, PropertyChangeListener.class);
+
+            Method addListener = object.getClass().getMethod("addPropertyChangeListener", String.class, PropertyChangeListener.class);
+            addListener.invoke(object, getName(), propertyChangeListener);
+        } catch (ReflectiveOperationException ignore) {
+        }
+    }
+
+    @Override
     public Optional<ObservableValue<?>> getObservableValue() {
-        return Optional.empty();
+        return Optional.of(this);
     }
 
     @Override
@@ -110,5 +132,12 @@ public class FieldProperty extends PropertySheetItem {
     @Override
     public void removeListener(InvalidationListener listener) {
         invalidationListeners.remove(listener);
+    }
+
+    private void notifyChanged(Object oldValue, Object newValue) {
+        for (InvalidationListener listener : invalidationListeners)
+            listener.invalidated(this);
+        for (ChangeListener<? super Object> listener : changeListeners)
+            listener.changed(this, oldValue, newValue);
     }
 }
