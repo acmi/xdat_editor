@@ -24,14 +24,17 @@ package acmi.l2.clientmod.xdat;
 import acmi.l2.clientmod.util.IOEntity;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.beans.InvalidationListener;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
@@ -130,9 +133,44 @@ public class XdatEditor extends Application {
 
         primaryStage.setTitle("XDAT Editor");
         primaryStage.setScene(new Scene(root));
+        primaryStage.setWidth(Double.parseDouble(windowPrefs().get("width", String.valueOf(primaryStage.getWidth()))));
+        primaryStage.setHeight(Double.parseDouble(windowPrefs().get("height", String.valueOf(primaryStage.getHeight()))));
+        if (windowPrefs().getBoolean("maximized", primaryStage.isMaximized())) {
+            primaryStage.setMaximized(true);
+        } else {
+            Rectangle2D bounds = new Rectangle2D(
+                    Double.parseDouble(windowPrefs().get("x", String.valueOf(primaryStage.getX()))),
+                    Double.parseDouble(windowPrefs().get("y", String.valueOf(primaryStage.getY()))),
+                    primaryStage.getWidth(),
+                    primaryStage.getHeight());
+            if (Screen.getScreens()
+                    .stream()
+                    .map(Screen::getVisualBounds)
+                    .anyMatch(r -> r.intersects(bounds))) {
+                primaryStage.setX(bounds.getMinX());
+                primaryStage.setY(bounds.getMinY());
+            }
+        }
         primaryStage.show();
 
-        postShow();
+        Platform.runLater(() -> {
+            InvalidationListener listener = observable -> {
+                if (primaryStage.isMaximized()) {
+                    windowPrefs().putBoolean("maximized", true);
+                } else {
+                    windowPrefs().putBoolean("maximized", false);
+                    windowPrefs().put("x", String.valueOf(Math.round(primaryStage.getX())));
+                    windowPrefs().put("y", String.valueOf(Math.round(primaryStage.getY())));
+                    windowPrefs().put("width", String.valueOf(Math.round(primaryStage.getWidth())));
+                    windowPrefs().put("height", String.valueOf(Math.round(primaryStage.getHeight())));
+                }
+            };
+            primaryStage.xProperty().addListener(listener);
+            primaryStage.yProperty().addListener(listener);
+            primaryStage.widthProperty().addListener(listener);
+            primaryStage.heightProperty().addListener(listener);
+        });
+        Platform.runLater(this::postShow);
     }
 
     private void postShow() {
@@ -194,6 +232,10 @@ public class XdatEditor extends Application {
     }
 
     public static Preferences getPrefs() {
-        return Preferences.userRoot().node("xdat_editor");
+        return Preferences.userRoot().node("l2clientmod").node("xdat_editor");
+    }
+
+    private static Preferences windowPrefs() {
+        return getPrefs().node("window");
     }
 }
