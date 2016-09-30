@@ -582,6 +582,17 @@ public class Controller implements Initializable {
         xdatFile.setValue(selected);
         initialDirectory.setValue(selected.getParentFile());
 
+        try (DataInputStream dis = new DataInputStream(new FileInputStream(selected))) {
+            int i = Integer.reverseBytes(dis.readInt());
+
+            if (i < 0 || i > 0xFFFF) {
+                throw new IOException("File seems to be encrypted.");
+            }
+        } catch (IOException e) {
+            Dialogs.showException(Alert.AlertType.ERROR, "Read error", e.getMessage(), e);
+            return;
+        }
+
         try {
             IOEntity xdat = editor.getXdatClass().getConstructor().newInstance();
 
