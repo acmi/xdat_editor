@@ -46,6 +46,7 @@ import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Priority;
@@ -80,27 +81,27 @@ public class Controller implements Initializable {
         UI_NODE_ICONS.put("BarCtrl", "ToggleButton.png");
         UI_NODE_ICONS.put("Button", "Button.png");
         UI_NODE_ICONS.put("CharacterViewportWindow", "MissingIcon.png");
-        UI_NODE_ICONS.put("ChatWindow", "Text.png");
+        UI_NODE_ICONS.put("ChatWindow", "MissingIcon.png");
         UI_NODE_ICONS.put("CheckBox", "CheckBox.png");
         UI_NODE_ICONS.put("ComboBox", "ComboBox.png");
         UI_NODE_ICONS.put("DrawPanel", "Canvas.png");
         UI_NODE_ICONS.put("EditBox", "TextField.png");
-        UI_NODE_ICONS.put("EffectButton", "Button.png"); //FIXME
+        UI_NODE_ICONS.put("EffectButton", "Button.png");
         UI_NODE_ICONS.put("FishViewportWindow", "MissingIcon.png");
         UI_NODE_ICONS.put("FlashCtrl", "MissingIcon.png");
         UI_NODE_ICONS.put("HtmlCtrl", "HTMLEditor.png");
-        UI_NODE_ICONS.put("InvenWeight", "ToggleButton.png"); //FIXME
+        UI_NODE_ICONS.put("InvenWeight", "ToggleButton.png");
         UI_NODE_ICONS.put("ItemWindow", "GridPane.png");
-        UI_NODE_ICONS.put("ListBox", "MissingIcon.png"); //FIXME
+        UI_NODE_ICONS.put("ListBox", "MissingIcon.png");
         UI_NODE_ICONS.put("ListCtrl", "ListView.png");
-        UI_NODE_ICONS.put("MinimapCtrl", "MeshView.png");
+        UI_NODE_ICONS.put("MinimapCtrl", "MissingIcon.png");
         UI_NODE_ICONS.put("MultiEdit", "MissingIcon.png");
         UI_NODE_ICONS.put("MultiSellItemInfo", "MissingIcon.png");
         UI_NODE_ICONS.put("MultiSellNeededItem", "MissingIcon.png");
         UI_NODE_ICONS.put("NameCtrl", "MissingIcon.png");
         UI_NODE_ICONS.put("Progress", "ProgressBar.png");
         UI_NODE_ICONS.put("PropertyController", "MissingIcon.png");
-        UI_NODE_ICONS.put("Radar", "Sphere.png");
+        UI_NODE_ICONS.put("Radar", "MissingIcon.png");
         UI_NODE_ICONS.put("RadarMapCtrl", "MissingIcon.png");
         UI_NODE_ICONS.put("RadioButton", "RadioButton.png");
         UI_NODE_ICONS.put("ScrollArea", "ScrollPane.png");
@@ -110,7 +111,7 @@ public class Controller implements Initializable {
         UI_NODE_ICONS.put("StatusIconCtrl", "MissingIcon.png");
         UI_NODE_ICONS.put("Tab", "TabPane.png");
         UI_NODE_ICONS.put("TextBox", "Label.png");
-        UI_NODE_ICONS.put("TextListBox", "Label.png"); //FIXME
+        UI_NODE_ICONS.put("TextListBox", "Label.png");
         UI_NODE_ICONS.put("Texture", "Graphic.png");
         UI_NODE_ICONS.put("TreeCtrl", "TreeView.png");
         UI_NODE_ICONS.put("WebBrowserCtrl", "WebView.png");
@@ -306,7 +307,9 @@ public class Controller implements Initializable {
                 } else {
                     setText(item.toString());
                     if (UIEntity.class.isAssignableFrom(item.getClass())) {
-                        setGraphic(new ImageView("/acmi/l2/clientmod/xdat/nodeicons/" + UI_NODE_ICONS.getOrDefault(item.getClass().getSimpleName(), UI_NODE_ICON_DEFAULT)));
+                        try (InputStream is = getClass().getResourceAsStream("/acmi/l2/clientmod/xdat/nodeicons/" + UI_NODE_ICONS.getOrDefault(item.getClass().getSimpleName(), UI_NODE_ICON_DEFAULT))) {
+                            setGraphic(new ImageView(new Image(is)));
+                        } catch (IOException ignore) {}
                     }
                 }
             }
