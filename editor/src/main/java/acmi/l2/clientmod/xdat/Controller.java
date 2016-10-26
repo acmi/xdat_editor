@@ -403,7 +403,11 @@ public class Controller implements Initializable {
 
                     @SuppressWarnings("SuspiciousMethodCalls")
                     int index = parent.list.indexOf(value);
-                    editor.getHistory().valueRemoved(treeItemToScriptString(selected.getParent()), index);
+                    if (value instanceof Named) {
+                        editor.getHistory().valueRemoved(treeItemToScriptString(selected.getParent()), ((Named) value).getName());
+                    } else {
+                        editor.getHistory().valueRemoved(treeItemToScriptString(selected.getParent()), index);
+                    }
 
                     parent.list.remove(index);
                     selected.getParent().getChildren().remove(selected);
@@ -550,7 +554,18 @@ public class Controller implements Initializable {
             List<PropertySheetItem> props = map.get(obj.getClass());
             props.forEach(property -> {
                 property.setObject(obj);
-                ChangeListener<Object> addToHistory = (observable1, oldValue1, newValue) -> editor.getHistory().valueChanged(treeItemToScriptString(newSelection), property.getName(), newValue);
+                ChangeListener<Object> addToHistory = (observable1, oldValue1, newValue1) -> {
+                    String objName = treeItemToScriptString(newSelection);
+                    String propName = ((PropertySheetItem)observable1).getName();
+                    if ("name".equals(propName) || "wnd".equals(propName)){
+                        StringBuilder b = new StringBuilder(objName);
+                        String nv = String.valueOf(newValue1);
+                        int ind = objName.lastIndexOf(nv);
+                        b.replace(ind, ind + nv.length(), String.valueOf(oldValue1) );
+                        objName = b.toString();
+                    }
+                    editor.getHistory().valueChanged(objName, property.getName(), newValue1, property.hashCode());
+                };
                 property.addListener(addToHistory);
 
                 selected.addListener(new InvalidationListener() {
@@ -616,10 +631,15 @@ public class Controller implements Initializable {
                 ListHolder holder = (ListHolder) list.get(i).getValue();
                 sb.append('.').append(holder.name);
                 if (i + 1 < list.size()) {
-                    //noinspection SuspiciousMethodCalls
-                    sb.append('[')
-                            .append(holder.list.indexOf(list.get(++i).getValue()))
-                            .append(']');
+                    sb.append('[');
+                    Object obj = list.get(++i).getValue();
+                    if (obj instanceof Named) {
+                        sb.append('"').append(((Named) obj).getName()).append('"');
+                    } else {
+                        //noinspection SuspiciousMethodCalls
+                        sb.append(holder.list.indexOf(obj));
+                    }
+                    sb.append(']');
                 }
             }
         }

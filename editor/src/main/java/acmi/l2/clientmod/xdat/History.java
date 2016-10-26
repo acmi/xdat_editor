@@ -21,6 +21,8 @@
  */
 package acmi.l2.clientmod.xdat;
 
+import java.util.Objects;
+
 import static acmi.l2.clientmod.util.ScriptMethods.constructorString;
 import static acmi.l2.clientmod.util.ScriptMethods.getClassName;
 import static java.lang.System.lineSeparator;
@@ -28,7 +30,27 @@ import static java.lang.System.lineSeparator;
 public class History implements CharSequence {
     private StringBuilder sb = new StringBuilder();
 
-    public void valueChanged(String obj, String property, Object value) {
+    private StringBuilder tmp = new StringBuilder();
+
+    private String prevObj;
+    private String prevProp;
+    private int prevObjHash;
+
+    public void valueChanged(String obj, String property, Object value, int objHash) {
+        if (!Objects.equals(property, prevProp) || prevObjHash != objHash) {
+            flush();
+
+            prevObj = obj;
+            prevProp = property;
+            prevObjHash = objHash;
+        } else {
+            clearTmp();
+            obj = prevObj;
+        }
+        valueChanged(tmp, obj, property, value);
+    }
+
+    private static void valueChanged(StringBuilder sb, String obj, String property, Object value) {
         sb.append(obj)
                 .append(".")
                 .append(property)
@@ -38,6 +60,7 @@ public class History implements CharSequence {
     }
 
     public void valueCreated(String list, Class clazz) {
+        flush();
         sb.append(list)
                 .append(".add(new ")
                 .append(getClassName(clazz))
@@ -46,6 +69,7 @@ public class History implements CharSequence {
     }
 
     public void valueRemoved(String list, int index) {
+        flush();
         sb.append(list)
                 .append(".remove(")
                 .append(index)
@@ -53,23 +77,47 @@ public class History implements CharSequence {
                 .append(lineSeparator());
     }
 
+    public void valueRemoved(String list, String name) {
+        flush();
+        sb.append(list)
+                .append(".removeByName(\"")
+                .append(name)
+                .append("\")")
+                .append(lineSeparator());
+    }
+
     @Override
     public int length() {
+        flush();
         return sb.length();
     }
 
     @Override
     public char charAt(int index) {
+        flush();
         return sb.charAt(index);
     }
 
     @Override
     public CharSequence subSequence(int start, int end) {
+        flush();
         return sb.subSequence(start, end);
     }
 
     @Override
     public String toString() {
+        flush();
         return sb.toString();
+    }
+
+    private void flush() {
+        if (tmp.length() > 0) {
+            sb.append(tmp);
+            clearTmp();
+        }
+    }
+
+    private void clearTmp() {
+        tmp = new StringBuilder();
     }
 }
