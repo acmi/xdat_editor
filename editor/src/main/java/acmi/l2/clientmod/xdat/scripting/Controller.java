@@ -138,10 +138,9 @@ public class Controller implements Initializable {
     @FXML
     private void execute() {
         Binding binding = new Binding();
-        GroovyShell shell = new GroovyShell(binding);
-
         IOEntity xdat = editor.getXdatObject();
         binding.setVariable("xdat", xdat);
+        GroovyShell shell = new GroovyShell(xdat.getClass().getClassLoader(), binding);
 
         PrintStream out = System.out;
 
