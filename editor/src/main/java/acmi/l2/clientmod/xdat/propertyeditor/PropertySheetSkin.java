@@ -35,13 +35,18 @@ import org.controlsfx.control.PropertySheet;
 import org.controlsfx.property.editor.AbstractPropertyEditor;
 import org.controlsfx.property.editor.PropertyEditor;
 
+import java.lang.reflect.Field;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class PropertySheetSkin extends BehaviorSkinBase<PropertySheet, BehaviorBase<PropertySheet>> {
+    private static final Logger log = Logger.getLogger(PropertySheetSkin.class.getName());
+
     private static final int MIN_COLUMN_WIDTH = 100;
 
     // create category-based accordion
-    private Accordion accordion = new Accordion();
+    private final Accordion accordion = new Accordion();
 
     public PropertySheetSkin(PropertySheet control) {
         super(control, new BehaviorBase<>(control, Collections.emptyList()));
@@ -58,11 +63,7 @@ public class PropertySheetSkin extends BehaviorSkinBase<PropertySheet, BehaviorB
         Map<String, List<PropertySheet.Item>> categoryMap = new TreeMap<>();
         for (PropertySheet.Item p : getSkinnable().getItems()) {
             String category = p.getCategory();
-            List<PropertySheet.Item> list = categoryMap.get(category);
-            if (list == null) {
-                list = new ArrayList<>();
-                categoryMap.put(category, list);
-            }
+            List<PropertySheet.Item> list = categoryMap.computeIfAbsent(category, k -> new ArrayList<>());
             list.add(p);
         }
 
@@ -84,11 +85,11 @@ public class PropertySheetSkin extends BehaviorSkinBase<PropertySheet, BehaviorB
 
     private class PropertyPane extends GridPane {
 
-        public PropertyPane(List<PropertySheet.Item> properties) {
+        PropertyPane(List<PropertySheet.Item> properties) {
             this(properties, 0);
         }
 
-        public PropertyPane(List<PropertySheet.Item> properties, int nestingLevel) {
+        PropertyPane(List<PropertySheet.Item> properties, int nestingLevel) {
             setVgap(5);
             setHgap(5);
             setPadding(new Insets(5, 15, 5, 15 + nestingLevel * 10));
@@ -96,7 +97,7 @@ public class PropertySheetSkin extends BehaviorSkinBase<PropertySheet, BehaviorB
             setItems(properties);
         }
 
-        public void setItems(List<PropertySheet.Item> properties) {
+        void setItems(List<PropertySheet.Item> properties) {
             getChildren().clear();
 
             int row = 0;
@@ -118,6 +119,15 @@ public class PropertySheetSkin extends BehaviorSkinBase<PropertySheet, BehaviorB
                 }
 
                 add(label, 0, row);
+
+                try {
+                    Field changeListeners = item.getClass().getDeclaredField("changeListeners");
+                    changeListeners.setAccessible(true);
+                    List<?> list = (List) changeListeners.get(item);
+                    list.removeIf(listener -> listener.getClass().getName().contains("AbstractPropertyEditor"));
+                } catch (ReflectiveOperationException e) {
+                    log.log(Level.WARNING, "Couldn't remove AbstractPropertyEditor listener", e);
+                }
 
                 // setup property editor
                 Node editor = getEditor(item);
